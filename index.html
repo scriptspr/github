@@ -1,0 +1,293 @@
+@echo off
+title GENERADOR DE PORTAL PARA CLIENTE - v1.0
+color 9F
+mode con: cols=100 lines=40
+chcp 65001 >nul
+
+:: ============================================
+:: CONFIGURACIÓN
+:: ============================================
+set "FECHA=%date:/=-%"
+set "SCRIPT_DIR=%~dp0"
+set "PORTALES_DIR=%SCRIPT_DIR%portales_clientes"
+
+if not exist "%PORTALES_DIR%" mkdir "%PORTALES_DIR%"
+
+:: ============================================
+:: MENÚ
+:: ============================================
+:MENU
+cls
+echo ╔════════════════════════════════════════════════════════════════════════════╗
+echo ║                    GENERADOR DE PORTAL PARA CLIENTE                       ║
+echo ║              Crea una web personalizada para cada cliente                 ║
+echo ╚════════════════════════════════════════════════════════════════════════════╝
+echo.
+echo [1] CREAR NUEVO PORTAL PARA CLIENTE
+echo [2] VER PORTALES CREADOS
+echo [3] ABRIR PORTAL EN NAVEGADOR
+echo [4] ENVIAR PORTAL POR EMAIL
+echo [5] SALIR
+echo.
+set /p opcion="Selecciona: "
+
+if "%opcion%"=="1" goto CREAR_PORTAL
+if "%opcion%"=="2" goto VER_PORTALES
+if "%opcion%"=="3" goto ABRIR_PORTAL
+if "%opcion%"=="4" goto ENVIAR_PORTAL
+if "%opcion%"=="5" goto SALIR
+
+goto MENU
+
+:: ============================================
+:: CREAR PORTAL
+:: ============================================
+:CREAR_PORTAL
+cls
+echo ╔════════════════════════════════════════════════════════════════════════════╗
+echo ║                    CREAR PORTAL PARA CLIENTE                              ║
+echo ╚════════════════════════════════════════════════════════════════════════════╝
+echo.
+
+set /p "CLIENTE=Nombre del cliente: "
+set /p "EMAIL=Email del cliente: "
+set /p "TELEFONO=Teléfono: "
+set "FILE=%PORTALES_DIR%\portal_%CLIENTE%_%FECHA%.html"
+
+:: Detectar equipos de este cliente (si existe base de datos)
+set "EQUIPOS="
+if exist "%SCRIPT_DIR%base_datos_clientes\equipos.csv" (
+    for /f "tokens=1-12 delims=," %%a in ('type "%SCRIPT_DIR%base_datos_clientes\equipos.csv" 2^>nul') do (
+        set "EQUIPOS=%%d %%e (%%g)"
+    )
+)
+
+:: Crear el archivo HTML
+(
+echo ^<!DOCTYPE html^>
+echo ^<html lang="es"^>
+echo ^<head^>
+echo     ^<meta charset="UTF-8"^>
+echo     ^<meta name="viewport" content="width=device-width, initial-scale=1.0"^>
+echo     ^<title^>Portal de %CLIENTE% - Soporte Técnico^</title^>
+echo     ^<style^>
+echo         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+echo         body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+echo         .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+echo         .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; text-align: center; }
+echo         .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+echo         .header p { font-size: 1.2em; opacity: 0.95; }
+echo         .content { padding: 40px; }
+echo         .info-cliente { background: #f8f9fa; border-radius: 15px; padding: 25px; margin-bottom: 30px; border-left: 5px solid #667eea; }
+echo         .info-cliente h2 { color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+echo         .info-cliente p { margin: 10px 0; color: #555; font-size: 1.1em; }
+echo         .estado-equipo { background: white; border: 1px solid #e0e0e0; border-radius: 15px; padding: 25px; margin-bottom: 30px; }
+echo         .estado-equipo h2 { color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+echo         .equipo-card { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+echo         .equipo-info h3 { color: #333; margin-bottom: 5px; }
+echo         .equipo-info p { color: #666; }
+echo         .estado-bueno { background: #10b981; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+echo         .estado-alerta { background: #ef4444; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+echo         .historial { background: white; border: 1px solid #e0e0e0; border-radius: 15px; padding: 25px; margin-bottom: 30px; }
+echo         .historial h2 { color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+echo         .reparacion-item { background: #f8f9fa; border-radius: 10px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+echo         .acciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+echo         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; text-decoration: none; display: inline-block; text-align: center; }
+echo         .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
+echo         .footer { background: #333; color: white; text-align: center; padding: 20px; margin-top: 20px; }
+echo         .footer p { opacity: 0.8; }
+echo     ^</style^>
+echo ^</head^>
+echo ^<body^>
+echo     ^<div class="container"^>
+echo         ^<div class="header"^>
+echo             ^<h1^>🔧 Portal de Soporte Técnico^</h1^>
+echo             ^<p^>Bienvenido, %CLIENTE%^</p^>
+echo         ^</div^>
+echo         ^<div class="content"^>
+echo             ^<div class="info-cliente"^>
+echo                 ^<h2^>📋 Información de Contacto^</h2^>
+echo                 ^<p^>^<strong^>Email:^</strong^> %EMAIL%^</p^>
+echo                 ^<p^>^<strong^>Teléfono:^</strong^> %TELEFONO%^</p^>
+echo                 ^<p^>^<strong^>Técnico asignado:^</strong^> Tu equipo de confianza^</p^>
+echo             ^</div^>
+echo             ^<div class="estado-equipo"^>
+echo                 ^<h2^>💻 Estado de tus Equipos^</h2^>
+echo                 ^<div class="equipo-card"^>
+echo                     ^<div class="equipo-info"^>
+echo                         ^<h3^>PC Principal^</h3^>
+echo                         ^<p^>Windows 11 Pro - Intel i7 - 16GB RAM^</p^>
+echo                     ^</div^>
+echo                     ^<div class="estado-bueno"^>✅ Saludable^</div^>
+echo                 ^</div^>
+echo                 ^<div class="equipo-card"^>
+echo                     ^<div class="equipo-info"^>
+echo                         ^<h3^>Portátil Trabajo^</h3^>
+echo                         ^<p^>Windows 10 - SSD 256GB^</p^>
+echo                     ^</div^>
+echo                     ^<div class="estado-alerta"^>⚠ Requiere atención^</div^>
+echo                 ^</div^>
+echo             ^</div^>
+echo             ^<div class="historial"^>
+echo                 ^<h2^>📜 Últimas Reparaciones^</h2^>
+echo                 ^<div class="reparacion-item"^>
+echo                     ^<span^>🔧 Mantenimiento preventivo^</span^>
+echo                     ^<span^>15/01/2024^</span^>
+echo                 ^</div^>
+echo                 ^<div class="reparacion-item"^>
+echo                     ^<span^>💻 Reparación de pantalla^</span^>
+echo                     ^<span^>03/12/2023^</span^>
+echo                 ^</div^>
+echo                 ^<div class="reparacion-item"^>
+echo                     ^<span^>⚡ Fuente de poder^</span^>
+echo                     ^<span^>20/11/2023^</span^>
+echo                 ^</div^>
+echo             ^</div^>
+echo             ^<div class="acciones"^>
+echo                 ^<a href="#" class="btn"^>📞 Solicitar Soporte Urgente^</a^>
+echo                 ^<a href="#" class="btn"^>📅 Programar Mantenimiento^</a^>
+echo                 ^<a href="#" class="btn"^>📄 Ver Facturas^</a^>
+echo                 ^<a href="#" class="btn"^>💬 Chat con Técnico^</a^>
+echo             ^</div^>
+echo         ^</div^>
+echo         ^<div class="footer"^>
+echo             ^<p^>Portal generado el %FECHA% - Tu taller de confianza^</p^>
+echo             ^<p^>© 2024 - Soporte Técnico Profesional^</p^>
+echo         ^</div^>
+echo     ^</div^>
+echo ^</body^>
+echo ^</html^>
+) > "%FILE%"
+
+echo ✅ Portal creado: "%FILE%"
+echo.
+echo ¿Abrir ahora? (S/N)
+set /p abrir=
+if /i "%abrir%"=="S" start "" "%FILE%"
+
+pause
+goto MENU
+
+:: ============================================
+:: VER PORTALES
+:: ============================================
+:VER_PORTALES
+cls
+echo ╔════════════════════════════════════════════════════════════════════════════╗
+echo ║                    PORTALES CREADOS                                       ║
+echo ╚════════════════════════════════════════════════════════════════════════════╝
+echo.
+
+dir "%PORTALES_DIR%" /B /O-D 2>nul
+echo.
+if %errorlevel% neq 0 echo No hay portales creados
+
+pause
+goto MENU
+
+:: ============================================
+:: ABRIR PORTAL
+:: ============================================
+:ABRIR_PORTAL
+cls
+echo ╔════════════════════════════════════════════════════════════════════════════╗
+echo ║                    ABRIR PORTAL EN NAVEGADOR                              ║
+echo ╚════════════════════════════════════════════════════════════════════════════╝
+echo.
+
+dir "%PORTALES_DIR%" /B /O-D 2>nul
+echo.
+set /p "archivo=Nombre del archivo: "
+
+if exist "%PORTALES_DIR%\%archivo%" (
+    start "" "%PORTALES_DIR%\%archivo%"
+) else (
+    echo ❌ Archivo no encontrado
+)
+
+pause
+goto MENU
+
+:: ============================================
+:: ENVIAR PORTAL POR EMAIL
+:: ============================================
+:ENVIAR_PORTAL
+cls
+echo ╔════════════════════════════════════════════════════════════════════════════╗
+echo ║                    ENVIAR PORTAL POR EMAIL                                ║
+echo ╚════════════════════════════════════════════════════════════════════════════╝
+echo.
+
+dir "%PORTALES_DIR%" /B /O-D 2>nul
+echo.
+set /p "archivo=Nombre del archivo a enviar: "
+
+if not exist "%PORTALES_DIR%\%archivo%" (
+    echo ❌ Archivo no encontrado
+    pause
+    goto MENU
+)
+
+set /p "email=Email del cliente: "
+
+:: Crear script PowerShell para enviar
+set "PS_SCRIPT=%temp%\send_portal.ps1"
+
+(
+echo $smtpServer = "smtp.gmail.com"
+echo $smtpPort = 587
+echo $username = "TU_EMAIL@gmail.com"
+echo $password = "TU_CONTRASEÑA"
+echo $to = "%email%"
+echo $from = "TU_EMAIL@gmail.com"
+echo $subject = "Tu Portal de Soporte Técnico"
+echo $body = @"
+echo Hola,
+echo.
+echo Hemos creado un portal personalizado para que puedas ver el estado de tus equipos y el historial de reparaciones.
+echo Adjunto encontrarás el archivo HTML. Ábrelo en cualquier navegador.
+echo.
+echo Saludos,
+echo Tu equipo de soporte
+echo "@
+echo $attachment = "%PORTALES_DIR%\%archivo%"
+echo.
+echo $mail = New-Object System.Net.Mail.MailMessage
+echo $mail.From = $from
+echo $mail.To.Add($to)
+echo $mail.Subject = $subject
+echo $mail.Body = $body
+echo $attachment = New-Object System.Net.Mail.Attachment($attachment)
+echo $mail.Attachments.Add($attachment)
+echo $smtp = New-Object System.Net.Mail.SmtpClient($smtpServer, $smtpPort)
+echo $smtp.EnableSsl = $true
+echo $smtp.Credentials = New-Object System.Net.NetworkCredential($username, $password)
+echo $smtp.Send($mail)
+echo $attachment.Dispose()
+) > "%PS_SCRIPT%"
+
+echo.
+echo ⚠ Configura tu email en el script antes de enviar
+echo Por ahora, guarda el archivo y envíalo manualmente.
+
+pause
+goto MENU
+
+:: ============================================
+:: SALIR
+:: ============================================
+:SALIR
+cls
+echo ╔════════════════════════════════════════════════════════════════════════════╗
+echo ║                    GENERADOR DE PORTALES - v1.0                           ║
+echo ║              Diferénciate de la competencia                               ║
+echo ╚════════════════════════════════════════════════════════════════════════════╝
+echo.
+echo 📁 Portales guardados en: %PORTALES_DIR%
+echo.
+echo 💡 IDEA: Cada vez que termines un trabajo,
+echo    genera un portal y se lo envías al cliente.
+echo    ¡Le encantará!
+echo.
+pause
+exit
