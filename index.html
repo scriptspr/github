@@ -3,372 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi PC en Línea - Portal del Cliente</title>
+    <title>MI PC EN LÍNEA - Juan Pérez González</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         body {
-            background: #f0f2f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
-
-        .portal-container {
+        .container {
             max-width: 1200px;
-            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
-
-        /* Header con gradiente profesional */
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px 30px;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
         }
-
         .header h1 {
-            font-size: 2.8em;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-
         .header h1 span {
-            background: rgba(255,255,255,0.15);
+            background: #ffd700;
+            color: #333;
+            font-size: 0.4em;
             padding: 5px 15px;
-            border-radius: 40px;
-            font-size: 0.5em;
-            margin-left: 15px;
-            vertical-align: middle;
+            border-radius: 50px;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
-
         .header p {
             font-size: 1.2em;
-            opacity: 0.9;
-            margin-top: 10px;
-        }
-
-        .cliente-badge {
-            display: inline-block;
-            background: #ffd700;
-            color: #1e3c72;
-            padding: 8px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            margin-top: 15px;
-            font-size: 1.1em;
-        }
-
-        /* Grid de tarjetas */
-        .dashboard {
-            background: white;
-            padding: 30px;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .section-title {
-            color: #1e3c72;
-            font-size: 1.8em;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #eef2f6;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .card {
-            background: #ffffff;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #eef2f6;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-            border-color: #2a5298;
-        }
-
-        .card-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            color: #1e3c72;
-            font-size: 1.4em;
+            opacity: 0.95;
             margin-bottom: 10px;
         }
-
-        .card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .status-badge {
+        .header .cliente {
+            background: rgba(255,255,255,0.2);
             display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9em;
-            margin-top: 15px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-top: 10px;
+            font-weight: 500;
         }
-
-        .status-good {
-            background: #e3f9e5;
-            color: #1e7e34;
+        .content {
+            padding: 40px;
         }
-
-        .status-warning {
-            background: #fff3cd;
-            color: #856404;
+        .seccion {
+            margin-bottom: 40px;
         }
-
-        /* Tabla de historial */
-        .history-table {
+        .seccion h2 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .equipo-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .equipo-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .equipo-info p {
+            color: #666;
+        }
+        .estado {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            color: white;
+        }
+        .estado-bueno {
+            background: #10b981;
+        }
+        .estado-alerta {
+            background: #ef4444;
+        }
+        .estado-mant {
+            background: #f59e0b;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
-        .history-table th {
-            background: #f8faff;
-            color: #1e3c72;
-            font-weight: 600;
-            padding: 15px;
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
             text-align: left;
-            border-bottom: 2px solid #2a5298;
         }
-
-        .history-table td {
-            padding: 15px;
-            border-bottom: 1px solid #eef2f6;
-            color: #444;
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
         }
-
-        .history-table tr:hover {
-            background: #f8faff;
+        tr:hover {
+            background: #f8f9fa;
         }
-
-        .badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
+        .servicio-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
-
-        .badge-completed {
-            background: #e3f9e5;
-            color: #1e7e34;
+        .servicio-info h3 {
+            color: #333;
+            margin-bottom: 5px;
         }
-
-        .badge-pending {
-            background: #fff3cd;
-            color: #856404;
+        .servicio-info p {
+            color: #666;
         }
-
-        /* Botones de acción */
-        .actions-grid {
+        .servicio-estado {
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .confirmado {
+            background: #10b981;
+            color: white;
+        }
+        .pendiente {
+            background: #f59e0b;
+            color: white;
+        }
+        .acciones {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-top: 30px;
         }
-
-        .action-btn {
-            background: white;
-            border: 2px solid #eef2f6;
-            padding: 20px;
-            border-radius: 12px;
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #1e3c72;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .action-btn:hover {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-color: transparent;
-            transform: scale(1.02);
-        }
-
-        /* Footer */
-        .footer {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
             text-align: center;
-            padding: 30px;
-            color: #888;
-            font-size: 0.95em;
         }
-
-        /* Responsive */
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .btn-outline {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        .footer p {
+            opacity: 0.8;
+        }
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
+            .content {
+                padding: 20px;
             }
-            .cards-grid {
-                grid-template-columns: 1fr;
+            .equipo-card {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
-    <div class="portal-container">
-        <!-- Header Profesional -->
+    <div class="container">
         <div class="header">
-            <h1>
-                🖥️ MI PC EN LÍNEA
-                <span>PRO</span>
-            </h1>
-            <p>Tu espacio personal de soporte técnico · 24/7</p>
-            <div class="cliente-badge">
-                👤 JUAN PÉREZ GONZÁLEZ · Cliente desde 2023
+            <h1>🖥️ MI PC EN LÍNEA <span>PRO</span></h1>
+            <p>Tu espacio personal de soporte técnico - 24/7</p>
+            <div class="cliente">🔍 JUAN PÉREZ GONZÁLEZ - Cliente desde 2023</div>
+        </div>
+        <div class="content">
+            <!-- ESTADO DE EQUIPOS -->
+            <div class="seccion">
+                <h2>📊 ESTADO DE TUS EQUIPOS</h2>
+                <div class="equipo-card">
+                    <div class="equipo-info">
+                        <h3>PC Principal</h3>
+                        <p>Windows 11 Pro - Intel i7-12700 - 32GB RAM - SSD 1TB</p>
+                    </div>
+                    <div class="estado estado-bueno">✅ Saludable - Último chequeo hoy</div>
+                </div>
+                <div class="equipo-card">
+                    <div class="equipo-info">
+                        <h3>Portátil Trabajo</h3>
+                        <p>Windows 10 Pro - Intel i5-1135G7 - 16GB RAM - SSD 512GB</p>
+                    </div>
+                    <div class="estado estado-alerta">⚠️ Requiere mantenimiento preventivo</div>
+                </div>
+            </div>
+
+            <!-- HISTORIAL DE SERVICIOS -->
+            <div class="seccion">
+                <h2>📜 HISTORIAL DE SERVICIOS</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Equipo</th>
+                            <th>Servicio</th>
+                            <th>Estado</th>
+                            <th>Técnico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15/01/2024</td>
+                            <td>PC Principal</td>
+                            <td>Mantenimiento preventivo - Limpieza - Optimización</td>
+                            <td>✅ Completado</td>
+                            <td>Carlos M.</td>
+                        </tr>
+                        <tr>
+                            <td>03/12/2023</td>
+                            <td>Portátil Trabajo</td>
+                            <td>Reemplazo de pantalla - Diagnóstico</td>
+                            <td>✅ Completado</td>
+                            <td>Ana R.</td>
+                        </tr>
+                        <tr>
+                            <td>20/11/2023</td>
+                            <td>PC Principal</td>
+                            <td>Actualización de RAM - Instalación SSD</td>
+                            <td>✅ Completado</td>
+                            <td>Carlos M.</td>
+                        </tr>
+                        <tr>
+                            <td>05/11/2023</td>
+                            <td>Portátil Trabajo</td>
+                            <td>Diagnóstico por lentitud - Limpieza de software</td>
+                            <td>✅ Completado</td>
+                            <td>Ana R.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PRÓXIMOS SERVICIOS -->
+            <div class="seccion">
+                <h2>📅 PRÓXIMOS SERVICIOS</h2>
+                <div class="servicio-item">
+                    <div class="servicio-info">
+                        <h3>Mantenimiento Programado - PC Principal</h3>
+                        <p><strong>15/02/2024</strong> - Mantenimiento trimestral preventivo</p>
+                    </div>
+                    <div class="servicio-estado confirmado">Confirmado</div>
+                </div>
+                <div class="servicio-item">
+                    <div class="servicio-info">
+                        <h3>Revisión de Rendimiento - Portátil Trabajo</h3>
+                        <p><strong>20/02/2024</strong> - Diagnóstico completo de sistema</p>
+                    </div>
+                    <div class="servicio-estado pendiente">Pendiente confirmación</div>
+                </div>
+            </div>
+
+            <!-- ACCIONES RÁPIDAS -->
+            <div class="acciones">
+                <a href="#" class="btn">🚨 Solicitar Soporte Urgente</a>
+                <a href="#" class="btn">📅 Programar Mantenimiento</a>
+                <a href="#" class="btn">📄 Ver Facturas</a>
+                <a href="#" class="btn">💬 Chat con Técnico</a>
+                <a href="#" class="btn">💰 Solicitar Presupuesto</a>
+                <a href="#" class="btn">🔐 Cambiar Contraseña</a>
+                <a href="#" class="btn btn-outline">📞 CONTACTO DIRECTO</a>
             </div>
         </div>
-
-        <!-- Dashboard Principal -->
-        <div class="dashboard">
-            <!-- Estado de Equipos -->
-            <h2 class="section-title">📊 ESTADO DE TUS EQUIPOS</h2>
-            <div class="cards-grid">
-                <!-- PC Principal -->
-                <div class="card">
-                    <div class="card-icon">🖥️</div>
-                    <h3>PC Principal</h3>
-                    <p>Windows 11 Pro · Intel i7-12700 · 32GB RAM · SSD 1TB</p>
-                    <div class="status-badge status-good">✅ Saludable · Último chequeo hoy</div>
-                </div>
-
-                <!-- Portátil Trabajo -->
-                <div class="card">
-                    <div class="card-icon">💻</div>
-                    <h3>Portátil Trabajo</h3>
-                    <p>Windows 10 Pro · Intel i5-1135G7 · 16GB RAM · SSD 512GB</p>
-                    <div class="status-badge status-warning">⚠ Requiere mantenimiento preventivo</div>
-                </div>
-            </div>
-
-            <!-- Historial de Reparaciones -->
-            <h2 class="section-title">📋 HISTORIAL DE SERVICIOS</h2>
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Equipo</th>
-                        <th>Servicio</th>
-                        <th>Estado</th>
-                        <th>Técnico</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>15/01/2024</td>
-                        <td>PC Principal</td>
-                        <td>Mantenimiento preventivo · Limpieza · Optimización</td>
-                        <td><span class="badge badge-completed">Completado</span></td>
-                        <td>Carlos M.</td>
-                    </tr>
-                    <tr>
-                        <td>03/12/2023</td>
-                        <td>Portátil Trabajo</td>
-                        <td>Reemplazo de pantalla · Diagnóstico</td>
-                        <td><span class="badge badge-completed">Completado</span></td>
-                        <td>Ana R.</td>
-                    </tr>
-                    <tr>
-                        <td>20/11/2023</td>
-                        <td>PC Principal</td>
-                        <td>Actualización de RAM · Instalación SSD</td>
-                        <td><span class="badge badge-completed">Completado</span></td>
-                        <td>Carlos M.</td>
-                    </tr>
-                    <tr>
-                        <td>05/11/2023</td>
-                        <td>Portátil Trabajo</td>
-                        <td>Diagnóstico por lentitud · Limpieza de software</td>
-                        <td><span class="badge badge-completed">Completado</span></td>
-                        <td>Ana R.</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Próximos Servicios -->
-            <h2 class="section-title" style="margin-top: 40px;">📅 PRÓXIMOS SERVICIOS</h2>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon">🔧</div>
-                    <h3>Mantenimiento Programado</h3>
-                    <p>PC Principal · 15/02/2024</p>
-                    <p style="color: #666; margin-top: 10px;">Mantenimiento trimestral preventivo</p>
-                    <div class="status-badge status-warning">Confirmado</div>
-                </div>
-                <div class="card">
-                    <div class="card-icon">⚡</div>
-                    <h3>Revisión de Rendimiento</h3>
-                    <p>Portátil Trabajo · 20/02/2024</p>
-                    <p style="color: #666; margin-top: 10px;">Diagnóstico completo de sistema</p>
-                    <div class="status-badge status-warning">Pendiente confirmación</div>
-                </div>
-            </div>
-
-            <!-- Acciones Rápidas -->
-            <h2 class="section-title">⚡ ACCIONES RÁPIDAS</h2>
-            <div class="actions-grid">
-                <div class="action-btn">📞 Solicitar Soporte Urgente</div>
-                <div class="action-btn">📅 Programar Mantenimiento</div>
-                <div class="action-btn">📄 Ver Facturas</div>
-                <div class="action-btn">💬 Chat con Técnico</div>
-                <div class="action-btn">📊 Solicitar Presupuesto</div>
-                <div class="action-btn">🔐 Cambiar Contraseña</div>
-            </div>
-
-            <!-- Información de Contacto -->
-            <div style="background: #f8faff; border-radius: 15px; padding: 25px; margin-top: 40px;">
-                <h3 style="color: #1e3c72; margin-bottom: 15px;">📞 CONTACTO DIRECTO</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    <div>
-                        <div style="font-weight: 600; color: #1e3c72;">Técnico asignado</div>
-                        <div style="color: #666;">Carlos Martínez</div>
-                    </div>
-                    <div>
-                        <div style="font-weight: 600; color: #1e3c72;">Teléfono directo</div>
-                        <div style="color: #666;">+34 123 456 789</div>
-                    </div>
-                    <div>
-                        <div style="font-weight: 600; color: #1e3c72;">Email</div>
-                        <div style="color: #666;">soporte@mipcenlinea.com</div>
-                    </div>
-                    <div>
-                        <div style="font-weight: 600; color: #1e3c72;">Horario</div>
-                        <div style="color: #666;">Lun-Vie: 9:00-20:00 · Sáb: 10:00-14:00</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
         <div class="footer">
-            <p>🖥️ MI PC EN LÍNEA · Tu taller de confianza · Todos los derechos reservados 2024</p>
-            <p style="margin-top: 10px; font-size: 0.85em;">Este portal es personal e intransferible · Actualizado: 27/01/2024</p>
+            <p>© 2024 MI PC EN LÍNEA - Soporte Técnico Profesional</p>
+            <p>Este portal es personalizado para Juan Pérez González. Si tienes dudas, contacta a tu técnico.</p>
         </div>
     </div>
 </body>
