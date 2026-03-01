@@ -1,0 +1,2348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🚴 CyclingTracker Puerto Rico - Satélite Híbrido</title>
+    <!-- Leaflet CSS cargado directamente -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --secondary: #3498db;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --light: #ffffff;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --gray: #95a5a6;
+            --card-bg: rgba(22, 33, 62, 0.95);
+            --text: #ffffff;
+            --text-secondary: rgba(255,255,255,0.7);
+        }
+
+        [data-theme="light"] {
+            --dark: #f5f5f5;
+            --darker: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333333;
+            --text-secondary: #666666;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            color: var(--text);
+            min-height: 100vh;
+            padding: 12px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            background: rgba(46, 204, 113, 0.2);
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            border: 1px solid var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text);
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .peso-display {
+            background: rgba(46, 204, 113, 0.1);
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .peso-display:hover {
+            background: rgba(46, 204, 113, 0.2);
+            transform: scale(1.05);
+        }
+
+        .gps-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 18px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .gps-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--danger);
+            transition: all 0.3s;
+        }
+
+        .gps-dot.active {
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        .gps-dot.searching {
+            background: var(--warning);
+            animation: pulse 1s infinite;
+        }
+
+        .gps-dot.offline {
+            background: var(--gray);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .satellite-info {
+            margin-left: auto;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 12px 5px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            background: rgba(46, 204, 113, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .speedometer {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(52, 152, 219, 0.2));
+            border-radius: 50px;
+            padding: 15px 25px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .speed-current {
+            font-size: 42px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .speed-details {
+            text-align: right;
+        }
+
+        .speed-detail-item {
+            font-size: 14px;
+            margin: 3px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            justify-content: flex-end;
+        }
+
+        .goals-progress {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .goal-item {
+            flex: 1;
+            min-width: 100px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .location-container {
+            background: #0f0f1f;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 2px solid var(--primary);
+            min-height: 350px;
+        }
+
+        #map {
+            height: 250px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .map-overlay {
+            position: relative;
+        }
+
+        .map-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        .coordinates-panel {
+            background: rgba(10, 10, 26, 0.95);
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .coordinates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .coord-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .coord-label {
+            font-size: 11px;
+            opacity: 0.7;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .coord-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .signal-strength {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .signal-bar {
+            width: 25px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .signal-bar.active {
+            background: linear-gradient(to top, var(--primary), #27ae60);
+        }
+
+        .signal-bar::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+        }
+
+        .signal-bar:nth-child(1)::after { content: '1'; }
+        .signal-bar:nth-child(2)::after { content: '2'; }
+        .signal-bar:nth-child(3)::after { content: '3'; }
+        .signal-bar:nth-child(4)::after { content: '4'; }
+        .signal-bar:nth-child(5)::after { content: '5'; }
+
+        .altitude-chart {
+            height: 100px;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            min-width: 2px;
+            border-radius: 2px 2px 0 0;
+            transition: height 0.3s;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .btn {
+            padding: 15px 10px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, var(--danger), #c0392b);
+            color: white;
+        }
+
+        .btn-pause {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, var(--secondary), #2980b9);
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .tab:hover {
+            background: rgba(46, 204, 113, 0.2);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .segment-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .segment-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .modal-input:focus {
+            outline: 2px solid var(--primary);
+        }
+
+        .modal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        .modal-btn:hover {
+            transform: scale(0.98);
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .history-item:hover {
+            background: rgba(46, 204, 113, 0.15);
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        .history-date {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .history-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 16px;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .history-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 50px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .toast.hidden {
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .weather-widget {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+        }
+
+        .weather-icon {
+            font-size: 24px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .controls {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .speedometer {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .speed-details {
+                text-align: center;
+            }
+            
+            .speed-detail-item {
+                justify-content: center;
+            }
+            
+            .coordinates-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .goals-progress {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="card">
+            <div class="header">
+                <div class="logo">
+                    <span style="font-size: 40px;">🚴</span>
+                    <h1>Puerto Rico Cycling</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="weather-widget" id="weatherWidget">
+                        <span class="weather-icon">🇵🇷</span>
+                        <span id="weatherTemp">--°C</span>
+                    </div>
+                    <div class="peso-display" id="pesoDisplay" onclick="abrirModalPeso()">
+                        <span>⚖️</span>
+                        <span id="pesoValor">154</span> <span>lbs</span>
+                    </div>
+                    <button class="icon-btn" onclick="toggleTema()">🌓</button>
+                    <button class="icon-btn" onclick="abrirModalConfig()">⚙️</button>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span class="badge" id="modo-display">🌐 MODO HÍBRIDO</span>
+                <span class="badge" style="background: rgba(52,152,219,0.2); border-color: #3498db;" id="batteryMode">
+                    🔋 ALTO RENDIMIENTO
+                </span>
+            </div>
+
+            <!-- GPS Status -->
+            <div class="gps-status" id="gpsStatus" onclick="mostrarInfoGPS()">
+                <span class="gps-dot" id="gpsDot"></span>
+                <span id="gpsText">Iniciando GPS...</span>
+                <span class="satellite-info" id="satInfo">
+                    <span id="satCount">🛰️ 0</span>
+                    <span id="precisionGPS">±--m</span>
+                </span>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card" onclick="establecerObjetivo('distancia')">
+                    <div class="stat-value" id="distancia">0.00</div>
+                    <div class="stat-label">📏 KM</div>
+                </div>
+                <div class="stat-card" onclick="establecerObjetivo('tiempo')">
+                    <div class="stat-value" id="tiempo">00:00</div>
+                    <div class="stat-label">⏱️ TIEMPO</div>
+                </div>
+                <div class="stat-card" onclick="establecerObjetivo('calorias')">
+                    <div class="stat-value" id="calorias">0</div>
+                    <div class="stat-label">🔥 KCAL</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="altitud">0</div>
+                    <div class="stat-label">⛰️ ALTURA</div>
+                </div>
+            </div>
+
+            <!-- Speedometer -->
+            <div class="speedometer">
+                <div>
+                    <span class="speed-current" id="velocidad">0.0</span>
+                    <span style="font-size: 16px;">km/h</span>
+                </div>
+                <div class="speed-details">
+                    <div class="speed-detail-item">
+                        <span>⚡ Media:</span>
+                        <span id="velMedia">0.0</span>
+                    </div>
+                    <div class="speed-detail-item">
+                        <span>🚀 Máx:</span>
+                        <span id="velMax">0.0</span>
+                    </div>
+                    <div class="speed-detail-item">
+                        <span>⏱️ Restante:</span>
+                        <span id="tiempoRestante">--:--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Objetivos -->
+            <div class="goals-progress" id="goalsContainer">
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <span>📏 Distancia</span>
+                        <span id="goalDistanciaText">0/20 km</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="goalDistanciaBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <span>🔥 Calorías</span>
+                        <span id="goalCaloriasText">0/500</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="goalCaloriasBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa y Coordenadas -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="location-container">
+                <div class="map-overlay">
+                    <div id="map"></div>
+                    <div class="map-controls">
+                        <button class="icon-btn" onclick="centrarMapa()" title="Centrar en mi posición">🎯</button>
+                        <button class="icon-btn" onclick="toggleTipoMapa()" title="Cambiar tipo de mapa">🗺️</button>
+                        <button class="icon-btn" onclick="irAPuertoRico()" title="Ver Puerto Rico">🇵🇷</button>
+                    </div>
+                </div>
+                
+                <div class="coordinates-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="color: var(--primary);">🛰️ COORDENADAS SATELITALES</h3>
+                        <button class="icon-btn" onclick="copiarCoordenadas()" title="Copiar coordenadas">📋</button>
+                    </div>
+                    
+                    <div class="coordinates-grid">
+                        <div class="coord-item">
+                            <span class="coord-label">Latitud</span>
+                            <span class="coord-value" id="latitud">18.4655° N</span>
+                        </div>
+                        <div class="coord-item">
+                            <span class="coord-label">Longitud</span>
+                            <span class="coord-value" id="longitud">66.1057° O</span>
+                        </div>
+                        <div class="coord-item">
+                            <span class="coord-label">Altitud</span>
+                            <span class="coord-value" id="altura">--- m</span>
+                        </div>
+                        <div class="coord-item">
+                            <span class="coord-label">Precisión</span>
+                            <span class="coord-value" id="precision">--- m</span>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de altitud -->
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>📈 Perfil de altitud</span>
+                            <span id="desnivelInfo">↑0 ↓0 m</span>
+                        </div>
+                        <div class="altitude-chart" id="altitudeChart"></div>
+                    </div>
+
+                    <!-- Barras de señal -->
+                    <div class="signal-strength" id="signalBars">
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 5px;">
+                        <span id="calidadGPS">Esperando GPS...</span>
+                        <span id="hdopInfo">HDOP: --</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="card">
+            <div class="controls">
+                <button class="btn btn-start" onclick="iniciarRuta()" id="btnIniciar">
+                    <span>▶</span> INICIAR
+                </button>
+                <button class="btn btn-pause" onclick="pausarRuta()" id="btnPausar" disabled>
+                    <span>⏸️</span> PAUSA
+                </button>
+                <button class="btn btn-stop" onclick="detenerRuta()" id="btnDetener" disabled>
+                    <span>⏹️</span> DETENER
+                </button>
+                <button class="btn btn-reset" onclick="resetearRuta()" id="btnReset">
+                    <span>🔄</span> RESET
+                </button>
+            </div>
+
+            <!-- Acciones adicionales -->
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <button class="btn" style="flex: 1; background: rgba(52,152,219,0.2);" onclick="compartirRuta()">
+                    <span>📤</span> COMPARTIR
+                </button>
+                <button class="btn" style="flex: 1; background: rgba(46,204,113,0.2);" onclick="exportarGPX()">
+                    <span>📥</span> EXPORTAR
+                </button>
+                <button class="btn" style="flex: 1; background: rgba(155,89,182,0.2);" onclick="marcarWaypoint()">
+                    <span>📍</span> WAYPOINT
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="card">
+            <div class="tabs">
+                <div class="tab active" onclick="cambiarTab('actual')">📊 RUTA ACTUAL</div>
+                <div class="tab" onclick="cambiarTab('segmentos')">📈 SEGMENTOS</div>
+                <div class="tab" onclick="cambiarTab('historial')">📜 HISTORIAL</div>
+            </div>
+
+            <!-- Ruta Actual -->
+            <div id="tabActual">
+                <div style="background: rgba(46,204,113,0.1); border-radius: 15px; padding: 15px;">
+                    <h4>📊 Resumen detallado:</h4>
+                    <div style="display: grid; grid-template-columns: repeat(2,1fr); gap: 15px; margin-top: 15px;">
+                        <div>
+                            <div style="font-size: 12px; opacity: 0.7;">📏 Distancia</div>
+                            <div style="font-size: 20px; color: var(--primary);" id="resDistancia">0.00 km</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; opacity: 0.7;">⏱️ Tiempo</div>
+                            <div style="font-size: 20px; color: var(--primary);" id="resTiempo">00:00:00</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; opacity: 0.7;">🔥 Calorías</div>
+                            <div style="font-size: 20px; color: var(--primary);" id="resCalorias">0</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; opacity: 0.7;">📈 Desnivel</div>
+                            <div style="font-size: 20px; color: var(--primary);" id="resDesnivel">↑0 ↓0 m</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; opacity: 0.7;">⚡ Potencia</div>
+                            <div style="font-size: 20px; color: var(--primary);" id="potenciaEstimada">0 W</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; opacity: 0.7;">❤️ Frecuencia</div>
+                            <div style="font-size: 20px; color: var(--primary);" id="frecuenciaCardiaca">-- bpm</div>
+                        </div>
+                    </div>
+
+                    <!-- Waypoints -->
+                    <div style="margin-top: 15px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>📍 Últimos waypoints</span>
+                            <span style="font-size: 11px; cursor: pointer;" onclick="verTodosWaypoints()">Ver todos →</span>
+                        </div>
+                        <div id="waypointsList" style="margin-top: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segmentos -->
+            <div id="tabSegmentos" class="hidden">
+                <div class="segment-stats" id="segmentosContainer">
+                    <div style="text-align:center; padding:20px;">Completa al menos 5km para ver segmentos</div>
+                </div>
+            </div>
+
+            <!-- Historial -->
+            <div id="tabHistorial" class="hidden">
+                <div id="historialLista"></div>
+                <div style="margin-top: 10px; text-align: center;">
+                    <button class="btn" style="background: rgba(52,152,219,0.2);" onclick="exportarTodosLosDatos()">
+                        📤 EXPORTAR TODOS LOS DATOS
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Peso -->
+    <div class="modal" id="modalPeso">
+        <div class="modal-content">
+            <div class="modal-title">⚖️ AJUSTAR PESO</div>
+            <input type="number" class="modal-input" id="inputPeso" min="30" max="500" step="1" placeholder="Peso en libras">
+            
+            <div style="margin: 15px 0; text-align: center;">
+                <small>Tu peso afecta el cálculo de calorías</small>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="cerrarModalPeso()">CANCELAR</button>
+                <button class="modal-btn modal-btn-primary" onclick="guardarPeso()">GUARDAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Configuración -->
+    <div class="modal" id="modalConfig">
+        <div class="modal-content">
+            <div class="modal-title">⚙️ CONFIGURACIÓN</div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px;">Modo de ahorro de batería</label>
+                <select class="modal-input" id="batterySaverMode">
+                    <option value="off">Desactivado (Máxima precisión)</option>
+                    <option value="on">Activado (Ahorro de batería)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px;">Alertas por voz</label>
+                <select class="modal-input" id="voiceAlerts">
+                    <option value="on">Activadas</option>
+                    <option value="off">Desactivadas</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px;">Objetivo de distancia (km)</label>
+                <input type="number" class="modal-input" id="goalDistance" value="20" min="1" max="200">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px;">Objetivo de calorías</label>
+                <input type="number" class="modal-input" id="goalCalories" value="500" min="50" max="5000">
+            </div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="cerrarModalConfig()">CANCELAR</button>
+                <button class="modal-btn modal-btn-primary" onclick="guardarConfig()">GUARDAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Waypoint -->
+    <div class="modal" id="modalWaypoint">
+        <div class="modal-content">
+            <div class="modal-title">📍 NUEVO WAYPOINT</div>
+            
+            <input type="text" class="modal-input" id="waypointName" placeholder="Nombre del punto (ej. Mirador)">
+            
+            <div style="margin: 15px 0;">
+                <small>Coordenadas actuales se guardarán automáticamente</small>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="cerrarModalWaypoint()">CANCELAR</button>
+                <button class="modal-btn modal-btn-primary" onclick="guardarWaypoint()">GUARDAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden">
+        <span id="toastIcon">✅</span>
+        <span id="toastMessage">Mensaje</span>
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // ============ CLASE RUTA MEJORADA ============
+        class Ruta {
+            constructor(pesoKg) {
+                this.puntos = [];
+                this.distanciaTotalKm = 0;
+                this.desnivelPositivo = 0;
+                this.desnivelNegativo = 0;
+                this.velocidadMaxima = 0;
+                this.ultimaAltitudValida = null;
+                this.pesoKg = pesoKg;
+                this.tiempoInicio = null;
+                this.tiempoPausado = 0;
+                this.ultimoPuntoValido = null;
+                this.waypoints = [];
+                this.segmentos = [];
+                this.ultimoSegmentoKm = 0;
+                this.ultimoAvisoDistancia = 0;
+                this.ultimoAvisoCalorias = 0;
+            }
+
+            agregarPunto(lat, lng, alt, velocidadMs, heading, accuracy) {
+                const timestamp = Date.now();
+                const nuevoPunto = { 
+                    lat, lng, 
+                    alt: alt || 0, 
+                    velocidadMs: velocidadMs || 0, 
+                    heading: heading || 0, 
+                    accuracy: accuracy || 999,
+                    timestamp 
+                };
+
+                // Filtro de ruido GPS (ignorar puntos con mala precisión)
+                if (accuracy > 50) {
+                    console.log('Punto ignorado: baja precisión');
+                    return false;
+                }
+
+                if (this.puntos.length > 0) {
+                    const puntoAnterior = this.puntos[this.puntos.length - 1];
+                    
+                    // Calcular distancia
+                    const dist = this.calcularDistanciaHaversine(
+                        puntoAnterior.lat, puntoAnterior.lng,
+                        nuevoPunto.lat, nuevoPunto.lng
+                    );
+
+                    // Filtrar ruido (distancia mínima 3 metros para contar)
+                    if (dist > 0.003) { // 3 metros
+                        this.distanciaTotalKm += dist;
+
+                        // Calcular desnivel
+                        if (alt !== null && puntoAnterior.alt !== null) {
+                            const difAlt = alt - puntoAnterior.alt;
+                            if (difAlt > 0.5) { // Mínimo 0.5m para contar
+                                this.desnivelPositivo += difAlt;
+                            } else if (difAlt < -0.5) {
+                                this.desnivelNegativo += Math.abs(difAlt);
+                            }
+                        }
+
+                        // Calcular velocidad máxima
+                        if (velocidadMs !== null && velocidadMs > 0) {
+                            const velKmh = velocidadMs * 3.6;
+                            if (velKmh > this.velocidadMaxima) {
+                                this.velocidadMaxima = velKmh;
+                            }
+                        }
+
+                        this.puntos.push(nuevoPunto);
+                        this.ultimoPuntoValido = nuevoPunto;
+
+                        // Crear segmentos cada 5km
+                        if (Math.floor(this.distanciaTotalKm / 5) > this.ultimoSegmentoKm) {
+                            this.crearSegmento();
+                            this.ultimoSegmentoKm = Math.floor(this.distanciaTotalKm / 5);
+                        }
+
+                        return true;
+                    }
+                } else {
+                    // Primer punto
+                    this.puntos.push(nuevoPunto);
+                    this.ultimoPuntoValido = nuevoPunto;
+                    return true;
+                }
+                return false;
+            }
+
+            calcularDistanciaHaversine(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                         Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return R * c;
+            }
+
+            calcularCaloriasMET(velocidadMediaKmh) {
+                if (this.distanciaTotalKm === 0 || !this.pesoKg) return 0;
+                
+                const tiempoHoras = this.distanciaTotalKm / (velocidadMediaKmh || 8);
+                const tiempoMinutos = tiempoHoras * 60;
+
+                // MET basado en velocidad
+                let met = 4.0;
+                if (velocidadMediaKmh < 8) met = 4.0;
+                else if (velocidadMediaKmh < 12) met = 6.0;
+                else if (velocidadMediaKmh < 16) met = 8.0;
+                else if (velocidadMediaKmh < 20) met = 10.0;
+                else if (velocidadMediaKmh < 24) met = 12.0;
+                else met = 14.0;
+
+                // Ajuste por desnivel
+                if (this.distanciaTotalKm > 0) {
+                    met += (this.desnivelPositivo / this.distanciaTotalKm) * 0.5;
+                }
+
+                return Math.round(met * this.pesoKg * tiempoHoras);
+            }
+
+            calcularPotenciaEstimada() {
+                if (this.puntos.length < 2) return 0;
+                
+                const ultimoPunto = this.puntos[this.puntos.length - 1];
+                const pesoTotal = this.pesoKg + 8; // +8kg de bicicleta
+                
+                // Potencia simplificada
+                const velocidad = (ultimoPunto.velocidadMs || 5);
+                const pendiente = this.puntos.length > 1 ? 
+                    (ultimoPunto.alt - this.puntos[this.puntos.length - 2].alt) / 100 : 0;
+                
+                const potenciaGravitacional = pesoTotal * 9.8 * Math.max(0, pendiente) * velocidad;
+                const potenciaAerodinamica = 0.5 * 1.2 * 0.5 * 0.5 * Math.pow(velocidad, 3);
+                
+                return Math.round(potenciaGravitacional + potenciaAerodinamica);
+            }
+
+            crearSegmento() {
+                const kmActual = Math.floor(this.distanciaTotalKm);
+                const puntosSegmento = this.puntos.slice(-10); // Últimos 10 puntos
+                
+                if (puntosSegmento.length < 2) return;
+
+                const distSegmento = puntosSegmento.reduce((acc, punto, i) => {
+                    if (i === 0) return 0;
+                    return acc + this.calcularDistanciaHaversine(
+                        puntosSegmento[i-1].lat, puntosSegmento[i-1].lng,
+                        punto.lat, punto.lng
+                    );
+                }, 0);
+
+                const tiempoSegmento = (puntosSegmento[puntosSegmento.length-1].timestamp - 
+                                       puntosSegmento[0].timestamp) / 1000 / 60; // minutos
+                
+                const velMedia = tiempoSegmento > 0 ? (distSegmento / (tiempoSegmento / 60)) : 0;
+
+                this.segmentos.push({
+                    km: kmActual,
+                    distancia: distSegmento,
+                    tiempo: tiempoSegmento,
+                    velocidadMedia: velMedia,
+                    desnivel: puntosSegmento[puntosSegmento.length-1].alt - puntosSegmento[0].alt
+                });
+            }
+
+            getResumen() {
+                const velocidadMedia = this.calcularVelocidadMedia();
+                return {
+                    distancia: this.distanciaTotalKm.toFixed(2),
+                    tiempo: this.calcularTiempoTranscurrido(),
+                    calorias: this.calcularCaloriasMET(velocidadMedia),
+                    desnivelPositivo: Math.round(this.desnivelPositivo),
+                    desnivelNegativo: Math.round(this.desnivelNegativo),
+                    velocidadMaxima: this.velocidadMaxima.toFixed(1),
+                    velocidadMedia: velocidadMedia.toFixed(1),
+                    puntos: this.puntos.length,
+                    potencia: this.calcularPotenciaEstimada()
+                };
+            }
+
+            calcularVelocidadMedia() {
+                if (this.puntos.length < 2) return 0;
+                const tiempoTotal = (this.puntos[this.puntos.length-1].timestamp - this.puntos[0].timestamp) / 1000 / 3600;
+                return tiempoTotal > 0 ? this.distanciaTotalKm / tiempoTotal : 0;
+            }
+
+            calcularTiempoTranscurrido() {
+                if (this.puntos.length < 2) return 0;
+                return Math.floor((this.puntos[this.puntos.length-1].timestamp - this.puntos[0].timestamp) / 1000);
+            }
+
+            agregarWaypoint(nombre) {
+                if (this.ultimoPuntoValido) {
+                    this.waypoints.push({
+                        nombre: nombre,
+                        lat: this.ultimoPuntoValido.lat,
+                        lng: this.ultimoPuntoValido.lng,
+                        alt: this.ultimoPuntoValido.alt,
+                        timestamp: Date.now(),
+                        km: this.distanciaTotalKm.toFixed(2)
+                    });
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // ============ VARIABLES GLOBALES ============
+        let rutaActual = null;
+        let map = null;
+        let marker = null;
+        let pathLine = null;
+        let tracking = false;
+        let pausado = false;
+        let watchId = null;
+        let timerInterval = null;
+        let peso = 154; // libras
+        let modoMapa = 'satelite';
+        let tema = 'dark';
+        let voiceAlerts = true;
+        let batterySaver = false;
+        let goalDistance = 20;
+        let goalCalories = 500;
+        const MAX_CHART_POINTS = 50;
+        
+        // Coordenadas de Puerto Rico (centro aproximado)
+        const PUERTO_RICO_CENTER = [18.2208, -66.5901];
+        const PUERTO_RICO_ZOOM = 9;
+
+        // ============ INICIALIZACIÓN ============
+        function init() {
+            console.log('Inicializando CyclingTracker Puerto Rico...');
+            
+            // Cargar configuración guardada
+            cargarConfiguracion();
+            
+            // Inicializar ruta con peso actual
+            actualizarPesoRuta();
+            
+            // Mostrar peso
+            document.getElementById('pesoValor').textContent = peso;
+            
+            // Detectar modo online/offline
+            actualizarModoDisplay();
+            
+            // Inicializar mapa (siempre, aunque no haya GPS)
+            inicializarMapaPuertoRico();
+            
+            // Iniciar GPS
+            iniciarGPS();
+            
+            // Cargar historial
+            actualizarHistorial();
+            
+            // Actualizar objetivos
+            actualizarObjetivos();
+            
+            // Escuchar cambios de conexión
+            window.addEventListener('online', actualizarModoDisplay);
+            window.addEventListener('offline', actualizarModoDisplay);
+        }
+
+        function cargarConfiguracion() {
+            try {
+                const config = JSON.parse(localStorage.getItem('cyclingConfig') || '{}');
+                peso = config.peso || 154;
+                tema = config.tema || 'dark';
+                voiceAlerts = config.voiceAlerts !== false;
+                batterySaver = config.batterySaver || false;
+                goalDistance = config.goalDistance || 20;
+                goalCalories = config.goalCalories || 500;
+                
+                document.body.setAttribute('data-theme', tema);
+                document.getElementById('batteryMode').textContent = 
+                    batterySaver ? '🔋 AHORRO BATERÍA' : '🔋 ALTO RENDIMIENTO';
+            } catch (e) {
+                console.log('Error cargando configuración:', e);
+            }
+        }
+
+        function actualizarPesoRuta() {
+            const pesoKg = peso * 0.453592;
+            rutaActual = new Ruta(pesoKg);
+        }
+
+        // ============ MAPA DE PUERTO RICO ============
+        function inicializarMapaPuertoRico() {
+            console.log('Inicializando mapa de Puerto Rico...');
+            
+            // Verificar si el mapa ya existe
+            if (map) {
+                console.log('Mapa ya existe');
+                return;
+            }
+
+            try {
+                // Crear mapa centrado en Puerto Rico
+                map = L.map('map').setView(PUERTO_RICO_CENTER, PUERTO_RICO_ZOOM);
+                
+                // Capa satelital de Esri (gratuita, no requiere API key)
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '© Esri, Maxar, Earthstar',
+                    maxZoom: 19,
+                    minZoom: 8
+                }).addTo(map);
+
+                // Añadir capa de nombres de lugares (opcional, para referencia)
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+                    attribution: '©CartoDB',
+                    maxZoom: 19
+                }).addTo(map);
+
+                // Marcador personalizado
+                const bikeIcon = L.divIcon({
+                    html: '<div style="font-size: 32px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));">🚴</div>',
+                    className: 'bike-marker',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16]
+                });
+
+                marker = L.marker(PUERTO_RICO_CENTER, { icon: bikeIcon }).addTo(map);
+                pathLine = L.polyline([], { color: '#2ecc71', weight: 5, opacity: 0.8 }).addTo(map);
+                
+                // Añadir escala
+                L.control.scale({ imperial: false, metric: true }).addTo(map);
+                
+                console.log('Mapa inicializado correctamente');
+                
+                // Intentar obtener ubicación para centrar
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            const { latitude, longitude } = pos.coords;
+                            map.setView([latitude, longitude], 15);
+                            marker.setLatLng([latitude, longitude]);
+                        },
+                        (error) => {
+                            console.log('Usando ubicación por defecto (Puerto Rico)');
+                        }
+                    );
+                }
+            } catch (error) {
+                console.error('Error inicializando mapa:', error);
+            }
+        }
+
+        function irAPuertoRico() {
+            if (map) {
+                map.setView(PUERTO_RICO_CENTER, PUERTO_RICO_ZOOM);
+                mostrarToast('🇵🇷 Vista de Puerto Rico');
+            }
+        }
+
+        function toggleTipoMapa() {
+            if (!map) return;
+            
+            modoMapa = modoMapa === 'satelite' ? 'calle' : 'satelite';
+            
+            // Eliminar capas actuales
+            map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            if (modoMapa === 'satelite') {
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '© Esri',
+                    maxZoom: 19
+                }).addTo(map);
+                mostrarToast('🗺️ Mapa satelital');
+            } else {
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap',
+                    maxZoom: 19
+                }).addTo(map);
+                mostrarToast('🗺️ Mapa de calles');
+            }
+            
+            // Restaurar marcador y línea
+            if (marker) marker.addTo(map);
+            if (pathLine) pathLine.addTo(map);
+        }
+
+        function centrarMapa() {
+            if (map && rutaActual && rutaActual.ultimoPuntoValido) {
+                map.setView([rutaActual.ultimoPuntoValido.lat, rutaActual.ultimoPuntoValido.lng], 16);
+                mostrarToast('🎯 Mapa centrado en tu posición');
+            } else if (map) {
+                map.setView(PUERTO_RICO_CENTER, PUERTO_RICO_ZOOM);
+            }
+        }
+
+        // ============ GPS Y POSICIÓN ============
+        function iniciarGPS() {
+            if (!navigator.geolocation) {
+                document.getElementById('gpsText').textContent = '❌ GPS no disponible';
+                document.getElementById('gpsDot').className = 'gps-dot offline';
+                mostrarToast('❌ GPS no disponible en este dispositivo', 'error');
+                return;
+            }
+
+            document.getElementById('gpsText').textContent = 'Buscando satélites...';
+            document.getElementById('gpsDot').className = 'gps-dot searching';
+
+            const options = {
+                enableHighAccuracy: !batterySaver,
+                timeout: batterySaver ? 15000 : 10000,
+                maximumAge: batterySaver ? 60000 : 0
+            };
+
+            // Obtener posición inicial
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    actualizarEstadoGPS(true);
+                    actualizarSatelites(pos);
+                    actualizarPosicionUI(pos);
+                    
+                    // Actualizar mapa
+                    if (map) {
+                        const { latitude, longitude } = pos.coords;
+                        map.setView([latitude, longitude], 16);
+                        if (marker) marker.setLatLng([latitude, longitude]);
+                    }
+                },
+                error => manejarErrorGPS(error),
+                options
+            );
+        }
+
+        function iniciarRuta() {
+            if (!navigator.geolocation) {
+                mostrarToast('❌ GPS no disponible', 'error');
+                return;
+            }
+
+            tracking = true;
+            pausado = false;
+            
+            // Reiniciar ruta si es nueva
+            if (rutaActual.puntos.length === 0) {
+                rutaActual.tiempoInicio = Date.now();
+            }
+
+            document.getElementById('btnIniciar').disabled = true;
+            document.getElementById('btnPausar').disabled = false;
+            document.getElementById('btnDetener').disabled = false;
+
+            const options = {
+                enableHighAccuracy: !batterySaver,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+            watchId = navigator.geolocation.watchPosition(
+                pos => {
+                    if (tracking && !pausado) {
+                        procesarPosicionGPS(pos);
+                    }
+                },
+                error => manejarErrorGPS(error),
+                options
+            );
+
+            iniciarTimer();
+            mostrarToast('🚴 Ruta iniciada en Puerto Rico');
+            
+            if (voiceAlerts) {
+                hablar('Ruta iniciada. Buen paseo!');
+            }
+        }
+
+        function procesarPosicionGPS(pos) {
+            const { latitude, longitude, speed, altitude, accuracy, heading } = pos.coords;
+            
+            // Procesar punto en la ruta
+            const puntoAgregado = rutaActual.agregarPunto(
+                latitude, longitude, 
+                altitude, speed, 
+                heading, accuracy
+            );
+
+            if (puntoAgregado) {
+                // Actualizar UI
+                actualizarPosicionUI(pos);
+                actualizarEstadisticas();
+                actualizarMapa(latitude, longitude);
+                actualizarGraficoAltitud();
+                
+                // Verificar objetivos
+                verificarObjetivos();
+                
+                // Actualizar segmentos si cambió
+                actualizarSegmentos();
+            }
+        }
+
+        function actualizarPosicionUI(pos) {
+            const { latitude, longitude, altitude, accuracy, heading } = pos.coords;
+            
+            // Formatear coordenadas para Puerto Rico (hemisferio norte, oeste)
+            const latDir = latitude >= 0 ? 'N' : 'S';
+            const lngDir = longitude >= 0 ? 'E' : 'O';
+            
+            document.getElementById('latitud').textContent = `${Math.abs(latitude).toFixed(6)}° ${latDir}`;
+            document.getElementById('longitud').textContent = `${Math.abs(longitude).toFixed(6)}° ${lngDir}`;
+            document.getElementById('altura').textContent = altitude ? altitude.toFixed(1) + ' m' : '---';
+            document.getElementById('precision').textContent = accuracy ? accuracy.toFixed(1) + ' m' : '---';
+            document.getElementById('precisionGPS').textContent = accuracy ? `±${accuracy.toFixed(1)}m` : '±--m';
+            document.getElementById('hdopInfo').textContent = accuracy ? `HDOP: ${(accuracy/5).toFixed(1)}` : 'HDOP: --';
+            
+            actualizarCalidadGPS(accuracy);
+        }
+
+        function actualizarEstadisticas() {
+            if (!rutaActual) return;
+            
+            const resumen = rutaActual.getResumen();
+            
+            // Valores principales
+            document.getElementById('distancia').textContent = resumen.distancia;
+            document.getElementById('resDistancia').textContent = resumen.distancia + ' km';
+            document.getElementById('calorias').textContent = resumen.calorias;
+            document.getElementById('resCalorias').textContent = resumen.calorias;
+            document.getElementById('velMax').textContent = resumen.velocidadMaxima;
+            document.getElementById('velMedia').textContent = resumen.velocidadMedia;
+            document.getElementById('potenciaEstimada').textContent = resumen.potencia + ' W';
+            
+            // Desnivel
+            document.getElementById('resDesnivel').textContent = 
+                `↑${resumen.desnivelPositivo} ↓${resumen.desnivelNegativo} m`;
+            document.getElementById('desnivelInfo').textContent = 
+                `↑${resumen.desnivelPositivo}m ↓${resumen.desnivelNegativo}m`;
+            
+            // Altitud actual
+            if (rutaActual.ultimoPuntoValido && rutaActual.ultimoPuntoValido.alt) {
+                document.getElementById('altitud').textContent = 
+                    Math.round(rutaActual.ultimoPuntoValido.alt);
+            }
+
+            // Velocidad actual
+            if (rutaActual.ultimoPuntoValido && rutaActual.ultimoPuntoValido.velocidadMs) {
+                const velActual = (rutaActual.ultimoPuntoValido.velocidadMs * 3.6).toFixed(1);
+                document.getElementById('velocidad').textContent = velActual;
+            } else {
+                document.getElementById('velocidad').textContent = '0.0';
+            }
+
+            // Tiempo restante estimado
+            if (rutaActual.distanciaTotalKm > 0 && resumen.velocidadMedia > 0) {
+                const kmRestantes = goalDistance - rutaActual.distanciaTotalKm;
+                if (kmRestantes > 0) {
+                    const minutosRestantes = (kmRestantes / parseFloat(resumen.velocidadMedia)) * 60;
+                    const horas = Math.floor(minutosRestantes / 60);
+                    const mins = Math.floor(minutosRestantes % 60);
+                    document.getElementById('tiempoRestante').textContent = 
+                        `${horas.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}`;
+                } else {
+                    document.getElementById('tiempoRestante').textContent = '¡Meta!';
+                }
+            } else {
+                document.getElementById('tiempoRestante').textContent = '--:--';
+            }
+
+            // Frecuencia cardíaca simulada (basada en esfuerzo)
+            const fc = 60 + Math.min(120, Math.round(parseFloat(resumen.velocidadMedia) * 5));
+            document.getElementById('frecuenciaCardiaca').textContent = fc + ' bpm';
+            
+            // Actualizar objetivos
+            actualizarObjetivos();
+        }
+
+        function actualizarMapa(lat, lng) {
+            if (map && marker) {
+                marker.setLatLng([lat, lng]);
+                
+                if (rutaActual && rutaActual.puntos.length > 1) {
+                    const puntosMapa = rutaActual.puntos.map(p => [p.lat, p.lng]);
+                    pathLine.setLatLngs(puntosMapa);
+                }
+                
+                // Centrar mapa suavemente
+                map.panTo([lat, lng]);
+            }
+        }
+
+        function actualizarGraficoAltitud() {
+            if (!rutaActual || !rutaActual.puntos.length) return;
+            
+            // Obtener últimas altitudes
+            const altitudes = rutaActual.puntos
+                .slice(-MAX_CHART_POINTS)
+                .map(p => p.alt || 0);
+            
+            const maxAlt = Math.max(...altitudes, 1);
+            const minAlt = Math.min(...altitudes, 0);
+            const rango = maxAlt - minAlt || 1;
+            
+            // Crear barras
+            const chartHtml = altitudes.map(alt => {
+                const alturaRelativa = ((alt - minAlt) / rango) * 100;
+                return `<div class="chart-bar" style="height: ${Math.max(5, alturaRelativa)}%;"></div>`;
+            }).join('');
+            
+            document.getElementById('altitudeChart').innerHTML = chartHtml;
+        }
+
+        function pausarRuta() {
+            pausado = !pausado;
+            const btn = document.getElementById('btnPausar');
+            
+            if (pausado) {
+                if (watchId) {
+                    navigator.geolocation.clearWatch(watchId);
+                    watchId = null;
+                }
+                clearInterval(timerInterval);
+                btn.innerHTML = '<span>▶</span> REANUDAR';
+                mostrarToast('⏸️ Ruta pausada');
+                if (voiceAlerts) hablar('Ruta pausada');
+            } else {
+                if (rutaActual.tiempoInicio) {
+                    rutaActual.tiempoInicio = Date.now() - (rutaActual.calcularTiempoTranscurrido() * 1000);
+                }
+                iniciarRuta();
+                btn.innerHTML = '<span>⏸️</span> PAUSAR';
+                mostrarToast('▶️ Ruta reanudada');
+                if (voiceAlerts) hablar('Ruta reanudada');
+            }
+        }
+
+        function detenerRuta() {
+            if (!tracking) return;
+
+            if (confirm('¿Finalizar la ruta actual? Se guardará en el historial.')) {
+                tracking = false;
+                pausado = false;
+                
+                if (watchId) {
+                    navigator.geolocation.clearWatch(watchId);
+                    watchId = null;
+                }
+                clearInterval(timerInterval);
+
+                document.getElementById('btnIniciar').disabled = false;
+                document.getElementById('btnPausar').disabled = true;
+                document.getElementById('btnDetener').disabled = true;
+
+                if (rutaActual && rutaActual.puntos.length > 5) {
+                    guardarRuta();
+                }
+
+                mostrarToast('✅ Ruta finalizada');
+                if (voiceAlerts) hablar('Ruta finalizada');
+            }
+        }
+
+        function resetearRuta() {
+            if (tracking) {
+                if (!confirm('¿Resetear la ruta actual? Se perderá el progreso.')) {
+                    return;
+                }
+                detenerRuta();
+            }
+            
+            actualizarPesoRuta();
+            
+            if (pathLine) pathLine.setLatLngs([]);
+            
+            // Resetear UI
+            document.getElementById('distancia').textContent = '0.00';
+            document.getElementById('resDistancia').textContent = '0.00 km';
+            document.getElementById('calorias').textContent = '0';
+            document.getElementById('resCalorias').textContent = '0';
+            document.getElementById('velocidad').textContent = '0.0';
+            document.getElementById('velMedia').textContent = '0.0';
+            document.getElementById('velMax').textContent = '0.0';
+            document.getElementById('tiempo').textContent = '00:00';
+            document.getElementById('resTiempo').textContent = '00:00:00';
+            document.getElementById('resDesnivel').textContent = '↑0 ↓0 m';
+            document.getElementById('desnivelInfo').textContent = '↑0m ↓0m';
+            document.getElementById('altitud').textContent = '0';
+            document.getElementById('potenciaEstimada').textContent = '0 W';
+            document.getElementById('tiempoRestante').textContent = '--:--';
+            document.getElementById('altitudeChart').innerHTML = '';
+            document.getElementById('segmentosContainer').innerHTML = '<div style="text-align:center; padding:20px;">Completa al menos 5km para ver segmentos</div>';
+            document.getElementById('waypointsList').innerHTML = '';
+            
+            actualizarObjetivos();
+            mostrarToast('🔄 Ruta reseteada');
+        }
+
+        // ============ TIMER ============
+        function iniciarTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                if (tracking && !pausado && rutaActual && rutaActual.tiempoInicio) {
+                    const elapsed = Math.floor((Date.now() - rutaActual.tiempoInicio) / 1000);
+                    const horas = Math.floor(elapsed / 3600);
+                    const minutos = Math.floor((elapsed % 3600) / 60);
+                    const segundos = elapsed % 60;
+                    
+                    const tiempoStr = `${horas.toString().padStart(2,'0')}:${minutos.toString().padStart(2,'0')}:${segundos.toString().padStart(2,'0')}`;
+                    document.getElementById('tiempo').textContent = `${minutos}:${segundos.toString().padStart(2,'0')}`;
+                    document.getElementById('resTiempo').textContent = tiempoStr;
+                }
+            }, 1000);
+        }
+
+        // ============ OBJETIVOS ============
+        function actualizarObjetivos() {
+            if (!rutaActual) return;
+            
+            const resumen = rutaActual.getResumen();
+            const distPercent = Math.min(100, (rutaActual.distanciaTotalKm / goalDistance) * 100);
+            const calPercent = Math.min(100, (resumen.calorias / goalCalories) * 100);
+            
+            document.getElementById('goalDistanciaBar').style.width = distPercent + '%';
+            document.getElementById('goalCaloriasBar').style.width = calPercent + '%';
+            
+            document.getElementById('goalDistanciaText').textContent = 
+                `${rutaActual.distanciaTotalKm.toFixed(1)}/${goalDistance} km`;
+            document.getElementById('goalCaloriasText').textContent = 
+                `${resumen.calorias}/${goalCalories}`;
+        }
+
+        function verificarObjetivos() {
+            if (!rutaActual) return;
+            
+            const resumen = rutaActual.getResumen();
+            
+            // Verificar distancia
+            if (rutaActual.distanciaTotalKm >= goalDistance && 
+                rutaActual.distanciaTotalKm - (rutaActual.ultimoAvisoDistancia || 0) > 0.1) {
+                rutaActual.ultimoAvisoDistancia = rutaActual.distanciaTotalKm;
+                mostrarToast('🎉 ¡Objetivo de distancia alcanzado!', 'success');
+                if (voiceAlerts) hablar('¡Felicidades! Has alcanzado tu objetivo de distancia');
+            }
+            
+            // Verificar calorías
+            if (resumen.calorias >= goalCalories && 
+                resumen.calorias - (rutaActual.ultimoAvisoCalorias || 0) > 10) {
+                rutaActual.ultimoAvisoCalorias = resumen.calorias;
+                mostrarToast('🔥 ¡Objetivo de calorías alcanzado!', 'success');
+                if (voiceAlerts) hablar('¡Excelente! Has quemado las calorías objetivo');
+            }
+        }
+
+        function establecerObjetivo(tipo) {
+            abrirModalConfig();
+        }
+
+        // ============ WAYPOINTS ============
+        function marcarWaypoint() {
+            if (!tracking || pausado) {
+                mostrarToast('⚠️ Inicia una ruta para marcar waypoints', 'warning');
+                return;
+            }
+            document.getElementById('modalWaypoint').classList.add('active');
+        }
+
+        function guardarWaypoint() {
+            const nombre = document.getElementById('waypointName').value.trim();
+            if (!nombre) {
+                mostrarToast('⚠️ Ingresa un nombre para el waypoint', 'warning');
+                return;
+            }
+            
+            if (rutaActual && rutaActual.agregarWaypoint(nombre)) {
+                actualizarListaWaypoints();
+                cerrarModalWaypoint();
+                mostrarToast('📍 Waypoint guardado: ' + nombre);
+                if (voiceAlerts) hablar('Waypoint guardado: ' + nombre);
+            } else {
+                mostrarToast('❌ No se pudo guardar el waypoint', 'error');
+            }
+        }
+
+        function actualizarListaWaypoints() {
+            if (!rutaActual || !rutaActual.waypoints.length) {
+                document.getElementById('waypointsList').innerHTML = '<div style="opacity:0.5;">Sin waypoints</div>';
+                return;
+            }
+            
+            const waypoints = rutaActual.waypoints.slice(-5).reverse();
+            const html = waypoints.map(w => `
+                <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin: 5px 0; font-size: 12px;">
+                    <strong>📍 ${w.nombre}</strong> - Km ${w.km}
+                </div>
+            `).join('');
+            
+            document.getElementById('waypointsList').innerHTML = html;
+        }
+
+        function verTodosWaypoints() {
+            if (!rutaActual || rutaActual.waypoints.length === 0) {
+                mostrarToast('No hay waypoints guardados', 'info');
+                return;
+            }
+            
+            const lista = rutaActual.waypoints.map(w => 
+                `${w.nombre}: Km ${w.km} (${w.lat.toFixed(4)}, ${w.lng.toFixed(4)})`
+            ).join('\n');
+            
+            alert('📍 WAYPOINTS:\n\n' + lista);
+        }
+
+        function cerrarModalWaypoint() {
+            document.getElementById('modalWaypoint').classList.remove('active');
+            document.getElementById('waypointName').value = '';
+        }
+
+        // ============ SEGMENTOS ============
+        function actualizarSegmentos() {
+            if (!rutaActual || !rutaActual.segmentos || !rutaActual.segmentos.length) {
+                return;
+            }
+            
+            const segmentos = rutaActual.segmentos.slice(-6);
+            const container = document.getElementById('segmentosContainer');
+            
+            container.innerHTML = segmentos.map(s => `
+                <div class="segment-item">
+                    <div><strong>Km ${s.km}</strong></div>
+                    <div>⚡ ${s.velocidadMedia.toFixed(1)} km/h</div>
+                    <div>⏱️ ${Math.round(s.tiempo || 0)} min</div>
+                    <div>📈 ${Math.round(s.desnivel || 0)} m</div>
+                </div>
+            `).join('');
+        }
+
+        // ============ COMPARTIR Y EXPORTAR ============
+        function compartirRuta() {
+            if (!rutaActual) return;
+            
+            const resumen = rutaActual.getResumen();
+            const texto = `🚴 Mi ruta en Puerto Rico:\n📏 ${resumen.distancia} km\n⏱️ ${resumen.tiempo}s\n🔥 ${resumen.calorias} kcal\n⚡ Media: ${resumen.velocidadMedia} km/h`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mi ruta de ciclismo en Puerto Rico',
+                    text: texto,
+                }).catch(() => {
+                    copiarAlPortapapeles(texto);
+                });
+            } else {
+                copiarAlPortapapeles(texto);
+            }
+        }
+
+        function copiarAlPortapapeles(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                mostrarToast('📋 Copiado al portapapeles');
+            }).catch(() => {
+                prompt('Copia este texto:', texto);
+            });
+        }
+
+        function copiarCoordenadas() {
+            if (!rutaActual || !rutaActual.ultimoPuntoValido) {
+                mostrarToast('No hay coordenadas disponibles', 'warning');
+                return;
+            }
+            
+            const p = rutaActual.ultimoPuntoValido;
+            const latDir = p.lat >= 0 ? 'N' : 'S';
+            const lngDir = p.lng >= 0 ? 'E' : 'O';
+            
+            const texto = `${Math.abs(p.lat).toFixed(6)}° ${latDir}, ${Math.abs(p.lng).toFixed(6)}° ${lngDir}`;
+            copiarAlPortapapeles(texto);
+        }
+
+        function exportarGPX() {
+            if (!rutaActual || rutaActual.puntos.length < 2) {
+                mostrarToast('No hay suficientes puntos para exportar', 'warning');
+                return;
+            }
+            
+            let gpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="CyclingTracker Puerto Rico">
+    <metadata>
+        <name>Ruta en Puerto Rico ${new Date().toLocaleDateString()}</name>
+    </metadata>
+    <trk>
+        <name>Ruta ${new Date().toLocaleDateString()}</name>
+        <trkseg>`;
+            
+            rutaActual.puntos.forEach(p => {
+                gpx += `
+            <trkpt lat="${p.lat}" lon="${p.lng}">
+                <ele>${p.alt || 0}</ele>
+                <time>${new Date(p.timestamp).toISOString()}</time>
+            </trkpt>`;
+            });
+            
+            gpx += `
+        </trkseg>
+    </trk>
+</gpx>`;
+            
+            descargarArchivo(gpx, `ruta_pr_${Date.now()}.gpx`, 'application/gpx+xml');
+        }
+
+        function exportarTodosLosDatos() {
+            const rutas = JSON.parse(localStorage.getItem('rutas') || '[]');
+            const datos = JSON.stringify(rutas, null, 2);
+            descargarArchivo(datos, `todas_rutas_pr_${Date.now()}.json`, 'application/json');
+        }
+
+        function descargarArchivo(contenido, nombreArchivo, tipo) {
+            const blob = new Blob([contenido], { type: tipo });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombreArchivo;
+            a.click();
+            URL.revokeObjectURL(url);
+            mostrarToast(`📥 Descargando ${nombreArchivo}`);
+        }
+
+        // ============ VOICE ALERTS ============
+        function hablar(texto) {
+            if (!voiceAlerts || !window.speechSynthesis) return;
+            
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(texto);
+            utterance.lang = 'es-ES';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // ============ HISTORIAL ============
+        function guardarRuta() {
+            if (!rutaActual) return;
+            
+            const rutas = JSON.parse(localStorage.getItem('rutas') || '[]');
+            const resumen = rutaActual.getResumen();
+            
+            const ruta = {
+                id: Date.now(),
+                fecha: new Date().toLocaleString(),
+                distancia: resumen.distancia,
+                tiempo: resumen.tiempo,
+                calorias: resumen.calorias,
+                velMedia: resumen.velocidadMedia,
+                velMax: resumen.velocidadMaxima,
+                desnivelPos: resumen.desnivelPositivo,
+                desnivelNeg: resumen.desnivelNegativo,
+                puntos: rutaActual.puntos.slice(0, 100), // Guardar máximo 100 puntos
+                waypoints: rutaActual.waypoints
+            };
+
+            rutas.push(ruta);
+            localStorage.setItem('rutas', JSON.stringify(rutas));
+            
+            actualizarHistorial();
+        }
+
+        function actualizarHistorial() {
+            const rutas = JSON.parse(localStorage.getItem('rutas') || '[]');
+            const lista = document.getElementById('historialLista');
+            
+            if (rutas.length === 0) {
+                lista.innerHTML = '<div style="text-align:center; padding:20px;">🚴 No hay rutas guardadas en Puerto Rico</div>';
+                return;
+            }
+
+            lista.innerHTML = rutas.reverse().map(r => `
+                <div class="history-item">
+                    <div style="flex:1;" onclick="cargarRutaHistorial('${r.id}')">
+                        <div style="font-weight:bold;">📅 ${r.fecha}</div>
+                        <div class="history-date">
+                            ${r.distancia} km • ${r.tiempo}s • ${r.calorias} kcal
+                        </div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="history-btn" onclick="exportarRuta('${r.id}')" title="Exportar">📥</button>
+                        <button class="history-btn" onclick="eliminarRuta('${r.id}')" title="Eliminar">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function cargarRutaHistorial(id) {
+            const rutas = JSON.parse(localStorage.getItem('rutas') || '[]');
+            const rutaGuardada = rutas.find(r => r.id == id);
+            
+            if (!rutaGuardada || !map) return;
+
+            if (tracking) {
+                if (!confirm('¿Cargar ruta del historial? Se perderá la ruta actual.')) return;
+                resetearRuta();
+            }
+
+            // Restaurar puntos
+            rutaActual.puntos = rutaGuardada.puntos || [];
+            rutaActual.distanciaTotalKm = parseFloat(rutaGuardada.distancia) || 0;
+            rutaActual.desnivelPositivo = rutaGuardada.desnivelPos || 0;
+            rutaActual.desnivelNegativo = rutaGuardada.desnivelNeg || 0;
+            rutaActual.velocidadMaxima = parseFloat(rutaGuardada.velMax) || 0;
+            rutaActual.waypoints = rutaGuardada.waypoints || [];
+            
+            if (pathLine) {
+                pathLine.setLatLngs(rutaActual.puntos.map(p => [p.lat, p.lng]));
+                if (rutaActual.puntos.length > 0) {
+                    map.fitBounds(pathLine.getBounds());
+                }
+            }
+            
+            actualizarEstadisticas();
+            actualizarGraficoAltitud();
+            actualizarListaWaypoints();
+            cambiarTab('actual');
+            
+            mostrarToast('📂 Ruta cargada: ' + rutaGuardada.fecha);
+        }
+
+        function eliminarRuta(id) {
+            if (!confirm('¿Eliminar esta ruta del historial?')) return;
+            
+            let rutas = JSON.parse(localStorage.getItem('rutas') || '[]');
+            rutas = rutas.filter(r => r.id != id);
+            localStorage.setItem('rutas', JSON.stringify(rutas));
+            
+            actualizarHistorial();
+            mostrarToast('🗑️ Ruta eliminada');
+        }
+
+        function exportarRuta(id) {
+            const rutas = JSON.parse(localStorage.getItem('rutas') || '[]');
+            const ruta = rutas.find(r => r.id == id);
+            
+            if (ruta) {
+                const datos = JSON.stringify(ruta, null, 2);
+                descargarArchivo(datos, `ruta_pr_${id}.json`, 'application/json');
+            }
+        }
+
+        // ============ CALIDAD GPS ============
+        function actualizarCalidadGPS(accuracy) {
+            if (!accuracy) return;
+            
+            const bars = document.getElementById('signalBars').children;
+            const calidad = document.getElementById('calidadGPS');
+            
+            for (let bar of bars) {
+                bar.className = 'signal-bar';
+            }
+
+            if (accuracy < 3) {
+                for (let i = 0; i < 5; i++) bars[i].className = 'signal-bar active';
+                calidad.textContent = 'Excelente';
+                calidad.style.color = '#2ecc71';
+            } else if (accuracy < 5) {
+                for (let i = 0; i < 4; i++) bars[i].className = 'signal-bar active';
+                calidad.textContent = 'Buena';
+                calidad.style.color = '#2ecc71';
+            } else if (accuracy < 10) {
+                for (let i = 0; i < 3; i++) bars[i].className = 'signal-bar active';
+                calidad.textContent = 'Regular';
+                calidad.style.color = '#f39c12';
+            } else if (accuracy < 20) {
+                for (let i = 0; i < 2; i++) bars[i].className = 'signal-bar active';
+                calidad.textContent = 'Baja';
+                calidad.style.color = '#f39c12';
+            } else {
+                for (let i = 0; i < 1; i++) bars[i].className = 'signal-bar active';
+                calidad.textContent = 'Mala';
+                calidad.style.color = '#e74c3c';
+            }
+        }
+
+        function actualizarSatelites(pos) {
+            const accuracy = pos.coords.accuracy;
+            let satelites = 0;
+            
+            if (accuracy < 3) satelites = 16;
+            else if (accuracy < 5) satelites = 14;
+            else if (accuracy < 10) satelites = 12;
+            else if (accuracy < 20) satelites = 10;
+            else if (accuracy < 50) satelites = 8;
+            else satelites = 6;
+
+            document.getElementById('satCount').innerHTML = `🛰️ ${satelites}`;
+        }
+
+        function actualizarEstadoGPS(activo) {
+            const dot = document.getElementById('gpsDot');
+            const text = document.getElementById('gpsText');
+
+            if (activo) {
+                dot.className = 'gps-dot active';
+                text.textContent = 'GPS Satelital Conectado';
+            } else {
+                dot.className = 'gps-dot searching';
+                text.textContent = 'Buscando señal GPS...';
+            }
+        }
+
+        function manejarErrorGPS(error) {
+            console.error('Error GPS:', error);
+            
+            let mensaje = 'Error de GPS';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    mensaje = '❌ Permiso de GPS denegado';
+                    document.getElementById('gpsDot').className = 'gps-dot offline';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    mensaje = '📡 Señal GPS no disponible';
+                    document.getElementById('gpsDot').className = 'gps-dot searching';
+                    break;
+                case error.TIMEOUT:
+                    mensaje = '⏱️ Tiempo de espera agotado';
+                    document.getElementById('gpsDot').className = 'gps-dot searching';
+                    break;
+                default:
+                    mensaje = '📍 GPS no disponible';
+                    document.getElementById('gpsDot').className = 'gps-dot offline';
+            }
+            
+            document.getElementById('gpsText').textContent = mensaje;
+            mostrarToast(mensaje, 'error');
+        }
+
+        function mostrarInfoGPS() {
+            if (rutaActual && rutaActual.ultimoPuntoValido) {
+                const p = rutaActual.ultimoPuntoValido;
+                const latDir = p.lat >= 0 ? 'N' : 'S';
+                const lngDir = p.lng >= 0 ? 'E' : 'O';
+                
+                const info = `📍 Posición actual:\n` +
+                    `Lat: ${Math.abs(p.lat).toFixed(6)}° ${latDir}\n` +
+                    `Lng: ${Math.abs(p.lng).toFixed(6)}° ${lngDir}\n` +
+                    `Precisión: ±${p.accuracy?.toFixed(1) || '?'}m\n` +
+                    `Altitud: ${p.alt?.toFixed(1) || '?'}m`;
+                alert(info);
+            } else {
+                alert('📍 Esperando señal GPS...\nMostrando ubicación aproximada de Puerto Rico');
+            }
+        }
+
+        // ============ TABS ============
+        function cambiarTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('tabActual').classList.add('hidden');
+            document.getElementById('tabSegmentos').classList.add('hidden');
+            document.getElementById('tabHistorial').classList.add('hidden');
+            
+            if (tab === 'actual') {
+                document.getElementById('tabActual').classList.remove('hidden');
+            } else if (tab === 'segmentos') {
+                document.getElementById('tabSegmentos').classList.remove('hidden');
+                if (rutaActual) actualizarSegmentos();
+            } else if (tab === 'historial') {
+                document.getElementById('tabHistorial').classList.remove('hidden');
+                actualizarHistorial();
+            }
+        }
+
+        // ============ MODALES ============
+        function abrirModalPeso() {
+            document.getElementById('inputPeso').value = peso;
+            document.getElementById('modalPeso').classList.add('active');
+        }
+
+        function cerrarModalPeso() {
+            document.getElementById('modalPeso').classList.remove('active');
+        }
+
+        function guardarPeso() {
+            const nuevoPeso = parseInt(document.getElementById('inputPeso').value);
+            if (nuevoPeso && nuevoPeso >= 30 && nuevoPeso <= 500) {
+                peso = nuevoPeso;
+                actualizarPesoRuta();
+                
+                const config = JSON.parse(localStorage.getItem('cyclingConfig') || '{}');
+                config.peso = peso;
+                localStorage.setItem('cyclingConfig', JSON.stringify(config));
+                
+                document.getElementById('pesoValor').textContent = peso;
+                cerrarModalPeso();
+                mostrarToast(`✅ Peso actualizado: ${peso} lbs`);
+                
+                if (tracking) actualizarEstadisticas();
+            } else {
+                mostrarToast('❌ Ingresa un peso válido (30-500 lbs)', 'error');
+            }
+        }
+
+        function abrirModalConfig() {
+            document.getElementById('batterySaverMode').value = batterySaver ? 'on' : 'off';
+            document.getElementById('voiceAlerts').value = voiceAlerts ? 'on' : 'off';
+            document.getElementById('goalDistance').value = goalDistance;
+            document.getElementById('goalCalories').value = goalCalories;
+            
+            document.getElementById('modalConfig').classList.add('active');
+        }
+
+        function cerrarModalConfig() {
+            document.getElementById('modalConfig').classList.remove('active');
+        }
+
+        function guardarConfig() {
+            batterySaver = document.getElementById('batterySaverMode').value === 'on';
+            voiceAlerts = document.getElementById('voiceAlerts').value === 'on';
+            goalDistance = parseFloat(document.getElementById('goalDistance').value) || 20;
+            goalCalories = parseInt(document.getElementById('goalCalories').value) || 500;
+            
+            const config = {
+                peso: peso,
+                tema: tema,
+                voiceAlerts: voiceAlerts,
+                batterySaver: batterySaver,
+                goalDistance: goalDistance,
+                goalCalories: goalCalories
+            };
+            
+            localStorage.setItem('cyclingConfig', JSON.stringify(config));
+            
+            document.getElementById('batteryMode').textContent = 
+                batterySaver ? '🔋 AHORRO BATERÍA' : '🔋 ALTO RENDIMIENTO';
+            
+            cerrarModalConfig();
+            actualizarObjetivos();
+            mostrarToast('⚙️ Configuración guardada');
+        }
+
+        // ============ TEMA ============
+        function toggleTema() {
+            tema = tema === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', tema);
+            
+            const config = JSON.parse(localStorage.getItem('cyclingConfig') || '{}');
+            config.tema = tema;
+            localStorage.setItem('cyclingConfig', JSON.stringify(config));
+        }
+
+        // ============ MODO DISPLAY ============
+        function actualizarModoDisplay() {
+            const modoDisplay = document.getElementById('modo-display');
+            modoDisplay.innerHTML = navigator.onLine ? 
+                '🌐 MODO HÍBRIDO (Online)' : 
+                '📴 MODO OFFLINE (Solo GPS)';
+        }
+
+        // ============ TOAST ============
+        function mostrarToast(mensaje, tipo = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const message = document.getElementById('toastMessage');
+            
+            const iconos = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            icon.textContent = iconos[tipo] || '✅';
+            message.textContent = mensaje;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        // Iniciar cuando cargue la página
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
