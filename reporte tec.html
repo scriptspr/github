@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reporte Técnico PC</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#050b14;
+    --bg2:#080f1c;
+    --card:#0c1528;
+    --card2:#101e35;
+    --border:#1a3a6b;
+    --border2:#0f2a52;
+    --blue:#00a8ff;
+    --blue2:#0078d4;
+    --blue-glow:#00a8ff33;
+    --cyan:#00e5ff;
+    --green:#00ff88;
+    --red:#ff4d6a;
+    --yellow:#ffc107;
+    --text:#e8f0ff;
+    --gray:#5a7a9f;
+    --gray2:#3a5a7f;
+  }
+
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:1.5rem 1rem 3rem;
+    background-image:
+      radial-gradient(ellipse 80% 40% at 50% -10%, #001a3a 0%, transparent 70%),
+      linear-gradient(rgba(0,168,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,168,255,0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+  }
+
+  /* scanline effect */
+  body::after{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);
+  }
+
+  /* HEADER */
+  .header{text-align:center;margin-bottom:2.5rem;position:relative;}
+  .header::before{
+    content:'';display:block;width:120px;height:2px;
+    background:linear-gradient(90deg,transparent,var(--blue),transparent);
+    margin:0 auto 1.5rem;
+  }
+  .header .icon{font-size:2.8rem;margin-bottom:.5rem;filter:drop-shadow(0 0 12px var(--blue));}
+  .header h1{
+    font-size:1.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    background:linear-gradient(135deg,var(--cyan),var(--blue));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    text-shadow:none;
+  }
+  .header p{color:var(--gray);font-size:.82rem;margin-top:.4rem;letter-spacing:.05em;}
+  .header .blink{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:.4rem;animation:blink 1.2s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+  /* CARDS */
+  .card{
+    background:var(--card);
+    border:1px solid var(--border2);
+    border-radius:10px;
+    padding:1.6rem;
+    margin-bottom:1rem;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 0 30px rgba(0,40,80,.5), inset 0 1px 0 rgba(0,168,255,.08);
+  }
+  .card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--blue),transparent);
+    opacity:.6;
+  }
+  .card h2{
+    font-size:.85rem;font-weight:600;margin-bottom:1.25rem;
+    display:flex;align-items:center;gap:.5rem;
+    text-transform:uppercase;letter-spacing:.1em;
+    color:var(--blue);
+  }
+  .card h2 span{font-size:1.1rem;}
+  .card h2::after{
+    content:'';flex:1;height:1px;
+    background:linear-gradient(90deg,var(--border),transparent);
+    margin-left:.5rem;
+  }
+
+  /* CORNER BRACKETS */
+  .card::after{
+    content:'';position:absolute;bottom:8px;right:8px;
+    width:16px;height:16px;
+    border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border);
+    opacity:.5;
+  }
+
+  /* FORM */
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:520px){.form-row{grid-template-columns:1fr;}}
+  .field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem;}
+  .field:last-child{margin-bottom:0;}
+  label{
+    font-size:.72rem;font-weight:600;color:var(--gray);
+    text-transform:uppercase;letter-spacing:.1em;
+  }
+  input,textarea,select{
+    border:1px solid var(--border2);
+    border-radius:6px;padding:.75rem 1rem;
+    font-family:'Inter',sans-serif;font-size:.9rem;
+    color:var(--text);background:var(--bg2);
+    outline:none;transition:all .2s;width:100%;
+  }
+  input:focus,textarea:focus,select:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px var(--blue-glow), 0 0 15px rgba(0,168,255,.1);
+    background:#06101e;
+  }
+  input::placeholder,textarea::placeholder{color:var(--gray2);}
+  select option{background:#0c1528;}
+  textarea{resize:vertical;min-height:95px;}
+  input.error,textarea.error{border-color:var(--red);box-shadow:0 0 8px rgba(255,77,106,.2);}
+
+  /* PROBLEMS */
+  .problems-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:.55rem;}
+  .prob-btn{
+    border:1px solid var(--border2);border-radius:8px;padding:.65rem .7rem;
+    background:var(--bg2);cursor:pointer;font-size:.78rem;font-weight:500;
+    display:flex;align-items:center;gap:.45rem;transition:all .2s;
+    text-align:left;color:var(--gray);font-family:'Inter',sans-serif;
+  }
+  .prob-btn .prob-icon{font-size:1rem;flex-shrink:0;}
+  .prob-btn:hover{border-color:var(--blue);color:var(--blue);background:#0a1625;box-shadow:0 0 10px var(--blue-glow);}
+  .prob-btn.active{
+    border-color:var(--cyan);background:rgba(0,229,255,.08);color:var(--cyan);
+    box-shadow:0 0 12px rgba(0,229,255,.2);
+  }
+
+  /* TAGS */
+  .tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem;}
+  .tag{
+    background:rgba(0,168,255,.12);color:var(--blue);
+    border:1px solid rgba(0,168,255,.25);
+    border-radius:4px;padding:.25rem .75rem;font-size:.75rem;font-weight:600;
+    display:inline-flex;align-items:center;gap:.35rem;
+  }
+  .tag button{background:none;border:none;cursor:pointer;color:var(--blue);font-size:.85rem;line-height:1;padding:0;}
+
+  /* URGENCY */
+  .urgency-row{display:flex;gap:.75rem;flex-wrap:wrap;}
+  .urg-btn{
+    flex:1;min-width:80px;border:1px solid var(--border2);border-radius:8px;
+    padding:.65rem .5rem;cursor:pointer;font-size:.82rem;font-weight:600;
+    background:var(--bg2);transition:all .2s;text-align:center;
+    color:var(--gray);font-family:'Inter',sans-serif;
+  }
+  .urg-btn:hover{opacity:.85;}
+  .urg-btn.active-low{border-color:var(--green);background:rgba(0,255,136,.08);color:var(--green);box-shadow:0 0 12px rgba(0,255,136,.2);}
+  .urg-btn.active-med{border-color:var(--yellow);background:rgba(255,193,7,.08);color:var(--yellow);box-shadow:0 0 12px rgba(255,193,7,.2);}
+  .urg-btn.active-high{border-color:var(--red);background:rgba(255,77,106,.08);color:var(--red);box-shadow:0 0 12px rgba(255,77,106,.2);}
+
+  /* BUTTONS */
+  .btn-generate{
+    width:100%;padding:1.05rem;
+    background:linear-gradient(135deg,var(--blue2),var(--blue));
+    color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:700;
+    cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.6rem;
+    box-shadow:0 4px 20px rgba(0,168,255,.35), 0 0 40px rgba(0,168,255,.1);
+    letter-spacing:.05em;text-transform:uppercase;font-family:'Inter',sans-serif;
+  }
+  .btn-generate:hover{
+    box-shadow:0 6px 30px rgba(0,168,255,.5), 0 0 60px rgba(0,168,255,.2);
+    transform:translateY(-1px);
+  }
+  .btn-wa{
+    width:100%;padding:1.05rem;
+    background:linear-gradient(135deg,#128c3e,#25D366);
+    color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:700;
+    cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.6rem;
+    box-shadow:0 4px 20px rgba(37,211,102,.3);margin-top:.75rem;
+    text-decoration:none;letter-spacing:.05em;text-transform:uppercase;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-wa:hover{box-shadow:0 6px 30px rgba(37,211,102,.5);transform:translateY(-1px);}
+
+  /* PREVIEW */
+  #preview-box{display:none;}
+  .preview-text{
+    background:var(--bg);border:1px solid var(--border2);border-radius:8px;
+    padding:1.25rem;font-size:.82rem;line-height:1.8;white-space:pre-wrap;
+    font-family:'Share Tech Mono',monospace;color:var(--cyan);
+    max-height:320px;overflow-y:auto;
+    box-shadow:inset 0 0 20px rgba(0,168,255,.05);
+  }
+  .preview-text::-webkit-scrollbar{width:4px;}
+  .preview-text::-webkit-scrollbar-track{background:var(--bg2);}
+  .preview-text::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+  .error-msg{color:var(--red);font-size:.75rem;margin-top:.2rem;display:none;}
+  .required-star{color:var(--red);}
+
+  /* STATUS BAR */
+  .status-bar{
+    display:flex;align-items:center;gap:.5rem;
+    font-size:.7rem;color:var(--gray);letter-spacing:.08em;
+    margin-bottom:1.5rem;font-family:'Share Tech Mono',monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="icon">🖥️</div>
+  <h1>Reporte Técnico</h1>
+  <p><span class="blink"></span>Sistema de diagnóstico en línea</p>
+</div>
+
+<div class="status-bar">
+  <span style="color:var(--green)">◉</span> SISTEMA ACTIVO &nbsp;|&nbsp; 
+  <span id="fecha-bar"></span>
+</div>
+
+<!-- DATOS PERSONALES -->
+<div class="card">
+  <h2><span>👤</span> Datos del Cliente</h2>
+  <div class="form-row">
+    <div class="field">
+      <label>Nombre <span class="required-star">*</span></label>
+      <input type="text" id="nombre" placeholder="Ej: Carlos"/>
+      <span class="error-msg" id="err-nombre">Campo requerido</span>
+    </div>
+    <div class="field">
+      <label>Apellido <span class="required-star">*</span></label>
+      <input type="text" id="apellido" placeholder="Ej: García"/>
+      <span class="error-msg" id="err-apellido">Campo requerido</span>
+    </div>
+  </div>
+  <div class="field">
+    <label>Teléfono <span class="required-star">*</span></label>
+    <input type="tel" id="telefono" placeholder="Ej: +1 787 555 0000"/>
+    <span class="error-msg" id="err-telefono">Campo requerido</span>
+  </div>
+</div>
+
+<!-- TIPO DE EQUIPO -->
+<div class="card">
+  <h2><span>💻</span> Tipo de Equipo</h2>
+  <div class="form-row">
+    <div class="field">
+      <label>Tipo</label>
+      <select id="tipo-equipo">
+        <option value="">— Seleccionar —</option>
+        <option>Desktop / PC de escritorio</option>
+        <option>Laptop</option>
+        <option>Mac / iMac</option>
+        <option>MacBook</option>
+        <option>Todo en uno (AIO)</option>
+        <option>Servidor</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Marca (opcional)</label>
+      <input type="text" id="marca" placeholder="Ej: HP, Dell, Lenovo…"/>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMAS COMUNES -->
+<div class="card">
+  <h2><span>⚠️</span> Problemas Comunes</h2>
+  <div class="problems-grid" id="problems-grid"></div>
+  <div class="tags" id="selected-tags"></div>
+</div>
+
+<!-- DESCRIPCIÓN -->
+<div class="card">
+  <h2><span>📝</span> Descripción Adicional</h2>
+  <div class="field">
+    <label>Detalles del problema</label>
+    <textarea id="descripcion" placeholder="Describe cuándo comenzó el problema, si hubo algún evento antes (actualización, caída, virus), etc."></textarea>
+  </div>
+</div>
+
+<!-- URGENCIA -->
+<div class="card">
+  <h2><span>🚦</span> Nivel de Urgencia</h2>
+  <div class="urgency-row">
+    <button class="urg-btn" onclick="setUrgency('Baja 🟢',this,'active-low')">🟢 Baja</button>
+    <button class="urg-btn" onclick="setUrgency('Media 🟡',this,'active-med')">🟡 Media</button>
+    <button class="urg-btn" onclick="setUrgency('Alta 🔴',this,'active-high')">🔴 Alta</button>
+  </div>
+</div>
+
+<button class="btn-generate" onclick="generarReporte()">
+  ⚡ Generar Reporte
+</button>
+
+<!-- PREVIEW -->
+<div class="card" id="preview-box" style="margin-top:1rem;">
+  <h2><span>📋</span> Vista Previa del Reporte</h2>
+  <div class="preview-text" id="preview-text"></div>
+  <a class="btn-wa" id="wa-btn" href="#" target="_blank">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.534 5.858L.057 23.5l5.797-1.52A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.807 9.807 0 01-5.003-1.368l-.36-.214-3.44.902.918-3.352-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+    Enviar por WhatsApp
+  </a>
+</div>
+
+<script>
+  // Fecha en status bar
+  document.getElementById('fecha-bar').textContent = new Date().toLocaleString('es-PR',{dateStyle:'medium',timeStyle:'short'});
+
+  const PROBLEMS = [
+    {icon:'⚡',text:'No prende / No enciende'},
+    {icon:'🔵',text:'Pantalla azul (BSOD)'},
+    {icon:'🐢',text:'Muy lenta / Tarda mucho'},
+    {icon:'🔄',text:'Se reinicia sola'},
+    {icon:'🌡️',text:'Se calienta / Sobrecalentamiento'},
+    {icon:'🔇',text:'Sin sonido'},
+    {icon:'🖥️',text:'Pantalla negra'},
+    {icon:'📶',text:'Sin internet / Wi-Fi'},
+    {icon:'🦠',text:'Posible virus / Malware'},
+    {icon:'💾',text:'Disco duro con errores'},
+    {icon:'🔋',text:'Batería no carga'},
+    {icon:'⌨️',text:'Teclado / Mouse no funciona'},
+    {icon:'💿',text:'No lee CD/USB'},
+    {icon:'🪟',text:'Windows no inicia'},
+    {icon:'📷',text:'Cámara no funciona'},
+    {icon:'❄️',text:'Se congela / Cuelga'},
+    {icon:'🔌',text:'No carga / Conector dañado'},
+    {icon:'🖨️',text:'No reconoce impresora'},
+  ];
+
+  let selectedProblems = [], urgency = '';
+
+  const grid = document.getElementById('problems-grid');
+  PROBLEMS.forEach((p,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'prob-btn';
+    btn.dataset.idx = i;
+    btn.innerHTML = `<span class="prob-icon">${p.icon}</span>${p.text}`;
+    btn.onclick = () => toggleProblem(i, btn, p.text);
+    grid.appendChild(btn);
+  });
+
+  function toggleProblem(idx, btn, text) {
+    if (selectedProblems.includes(text)) {
+      selectedProblems = selectedProblems.filter(x => x !== text);
+      btn.classList.remove('active');
+    } else {
+      selectedProblems.push(text);
+      btn.classList.add('active');
+    }
+    renderTags();
+  }
+
+  function renderTags() {
+    const c = document.getElementById('selected-tags');
+    c.innerHTML = selectedProblems.map(p =>
+      `<span class="tag">${p} <button onclick="removeTag('${p.replace(/'/g,"\\'")}')">✕</button></span>`
+    ).join('');
+  }
+
+  function removeTag(text) {
+    selectedProblems = selectedProblems.filter(x => x !== text);
+    document.querySelectorAll('.prob-btn').forEach(btn => {
+      if (btn.textContent.trim().includes(text)) btn.classList.remove('active');
+    });
+    renderTags();
+  }
+
+  function setUrgency(val, btn, cls) {
+    urgency = val;
+    document.querySelectorAll('.urg-btn').forEach(b => b.className = 'urg-btn');
+    btn.classList.add(cls);
+  }
+
+  function validar() {
+    let ok = true;
+    ['nombre','apellido','telefono'].forEach(id => {
+      const el = document.getElementById(id);
+      const err = document.getElementById('err-'+id);
+      if (!el.value.trim()) {
+        el.classList.add('error'); err.style.display = 'block'; ok = false;
+      } else {
+        el.classList.remove('error'); err.style.display = 'none';
+      }
+    });
+    return ok;
+  }
+
+  function generarReporte() {
+    if (!validar()) { document.getElementById('nombre').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+
+    const nombre   = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const tipo     = document.getElementById('tipo-equipo').value || 'No especificado';
+    const marca    = document.getElementById('marca').value.trim() || 'No especificado';
+    const desc     = document.getElementById('descripcion').value.trim() || 'Sin descripción adicional';
+    const urg      = urgency || 'No indicada';
+    const fecha    = new Date().toLocaleString('es-PR',{dateStyle:'full',timeStyle:'short'});
+    const problemas = selectedProblems.length
+      ? selectedProblems.map(p => `   • ${p}`).join('\n')
+      : '   • No seleccionados';
+
+    const reporte =
+`🖥️ *REPORTE TÉCNICO PC*
+━━━━━━━━━━━━━━━━━━━━━━
+📅 *Fecha:* ${fecha}
+
+👤 *DATOS DEL CLIENTE*
+• Nombre: ${nombre} ${apellido}
+• Teléfono: ${telefono}
+
+💻 *EQUIPO*
+• Tipo: ${tipo}
+• Marca/Modelo: ${marca}
+
+⚠️ *PROBLEMAS REPORTADOS*
+${problemas}
+
+📝 *DESCRIPCIÓN*
+${desc}
+
+🚦 *URGENCIA:* ${urg}
+━━━━━━━━━━━━━━━━━━━━━━
+_Reporte generado automáticamente_`;
+
+    document.getElementById('preview-text').textContent = reporte;
+    document.getElementById('preview-box').style.display = 'block';
+
+    const WA_NUMBER = '19392716820';
+    document.getElementById('wa-btn').href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(reporte)}`;
+    document.getElementById('preview-box').scrollIntoView({behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
