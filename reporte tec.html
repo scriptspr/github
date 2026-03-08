@@ -189,6 +189,14 @@
     font-family:'Inter',sans-serif;
   }
   .btn-wa:hover{box-shadow:0 6px 30px rgba(37,211,102,.5);transform:translateY(-1px);}
+  .btn-clear{
+    width:100%;padding:.85rem;
+    background:transparent;
+    color:var(--gray);border:1px solid var(--border2);border-radius:10px;font-size:.88rem;font-weight:600;
+    cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.6rem;
+    letter-spacing:.05em;text-transform:uppercase;font-family:'Inter',sans-serif;margin-top:.6rem;
+  }
+  .btn-clear:hover{border-color:var(--red);color:var(--red);background:rgba(255,77,106,.06);box-shadow:0 0 15px rgba(255,77,106,.15);}
 
   /* PREVIEW */
   #preview-box{display:none;}
@@ -301,6 +309,9 @@
 <button class="btn-generate" onclick="generarReporte()">
   ⚡ Generar Reporte
 </button>
+<button class="btn-clear" onclick="limpiarTodo()">
+  🗑️ Limpiar Todo
+</button>
 
 <!-- PREVIEW -->
 <div class="card" id="preview-box" style="margin-top:1rem;">
@@ -335,11 +346,6 @@
     {icon:'❄️',text:'Se congela / Cuelga'},
     {icon:'🔌',text:'No carga / Conector dañado'},
     {icon:'🖨️',text:'No reconoce impresora'},
-    {icon:'📱',text:'Quiero una App Móvil'},
-    {icon:'🌐',text:'Quiero una Página Web'},
-    {icon:'🛒',text:'Tienda Online / E-commerce'},
-    {icon:'🎨',text:'Rediseño de sitio web'},
-    {icon:'⚙️',text:'Sistema / Software a medida'},
   ];
 
   let selectedProblems = [], urgency = '';
@@ -398,6 +404,26 @@
       }
     });
     return ok;
+  }
+
+  function limpiarTodo() {
+    ['nombre','apellido','telefono','marca','descripcion'].forEach(id => {
+      const el = document.getElementById(id);
+      el.value = '';
+      el.classList.remove('error');
+    });
+    ['err-nombre','err-apellido','err-telefono'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+    document.getElementById('tipo-equipo').selectedIndex = 0;
+    selectedProblems = [];
+    document.querySelectorAll('.prob-btn').forEach(b => b.classList.remove('active'));
+    renderTags();
+    urgency = '';
+    document.querySelectorAll('.urg-btn').forEach(b => b.className = 'urg-btn');
+    document.getElementById('preview-box').style.display = 'none';
+    document.getElementById('preview-text').textContent = '';
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   function generarReporte() {
