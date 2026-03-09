@@ -213,18 +213,21 @@
 
     <div class="container" id="contacto">
         <h2 class="section-title">Cotiza tu Proyecto</h2>
-        <form action="#" method="POST">
+
+        <!-- FORMULARIO CONECTADO A WHATSAPP -->
+        <form onsubmit="sendToWhatsApp(event)">
             <label>Nombre:</label>
-            <input type="text" placeholder="Tu nombre o empresa" required>
+            <input id="nombre" type="text" placeholder="Tu nombre o empresa" required>
 
             <label>¿Qué servicio necesitas?</label>
-            <input type="text" placeholder="Ej: Necesito una app, Reparar PC..." required>
+            <input id="servicio" type="text" placeholder="Ej: Necesito una app, Reparar PC..." required>
 
             <label>Mensaje:</label>
-            <textarea rows="4" placeholder="Cuéntanos más detalles..." required></textarea>
+            <textarea id="mensaje" rows="4" placeholder="Cuéntanos más detalles..." required></textarea>
 
             <button type="submit">Enviar Mensaje</button>
         </form>
+
     </div>
 
     <footer>
@@ -235,6 +238,21 @@
     <a href="https://wa.me/19392716820?text=Hola,%20me%20interesa%20un%20servicio%20tecnológico" class="whatsapp-btn" target="_blank">
         💬
     </a>
+
+    <!-- Script WhatsApp -->
+    <script>
+        function sendToWhatsApp(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById("nombre").value;
+            const servicio = document.getElementById("servicio").value;
+            const mensaje = document.getElementById("mensaje").value;
+
+            const texto = `Hola, soy ${nombre}.%0AQuiero: ${servicio}.%0A%0ADetalles:%0A${mensaje}`;
+
+            window.open(`https://wa.me/19392716820?text=${texto}`, "_blank");
+        }
+    </script>
 
     <!-- Service Worker -->
     <script>
