@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Fábrica de Anodizados - Con Alertas y Reportes</title>
+    <!-- Librerías -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0b2b4a, #1e4a7a);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .header h1 {
+            font-size: clamp(18px, 5vw, 24px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fecha {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+        }
+
+        .buscador {
+            flex: 1;
+            min-width: 200px;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .buscador input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .buscador::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 8px;
+            font-size: 16px;
+            opacity: 0.6;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 12px 5px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .stat-card h3 {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .stat-numero {
+            font-size: clamp(16px, 4vw, 22px);
+            font-weight: bold;
+            color: #0b2b4a;
+        }
+
+        /* Indicador de alertas */
+        .alerta-temp {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            animation: parpadeo 1s infinite;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        @keyframes parpadeo {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Botones de acción */
+        .acciones-rapidas {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex: 1 1 auto;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary { background: #0b2b4a; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-warning { background: #ffc107; color: #000; }
+        .btn-info { background: #17a2b8; color: white; }
+        .btn-purple { background: #6f42c1; color: white; }
+
+        /* Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 1000px) {
+            .main-layout {
+                grid-template-columns: 1.2fr 1.8fr;
+            }
+        }
+
+        /* Tarjetas */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eef2f7;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: #0b2b4a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Tabla responsiva */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -5px;
+            padding: 0 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 600px;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 8px;
+            background: #f8f9fa;
+            color: #0b2b4a;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .badge-proceso { background: #fff3cd; color: #856404; }
+        .badge-completado { background: #d4edda; color: #155724; }
+        .badge-alerta { background: #dc3545; color: white; animation: parpadeo 1s infinite; }
+
+        .progress-mini {
+            width: 60px;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-mini-bar { height: 100%; background: #0b2b4a; }
+
+        /* Panel de información */
+        .info-empleado-pieza {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .info-campo {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .info-campo label {
+            font-size: 10px;
+            color: #666;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .info-campo .valor {
+            font-size: 15px;
+            font-weight: bold;
+            color: #0b2b4a;
+        }
+
+        .info-campo input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        /* Grid de procesos con temperaturas */
+        .procesos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .proceso-card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            padding: 12px 8px;
+            text-align: center;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .proceso-card.activo {
+            border-color: #28a745;
+            background: #f0fff4;
+            box-shadow: 0 0 15px rgba(40,167,69,0.3);
+        }
+
+        .proceso-card.completado {
+            border-color: #0b2b4a;
+            background: #e8f0fe;
+        }
+
+        .proceso-card.alerta {
+            border-color: #dc3545;
+            background: #ffebee;
+            animation: parpadeo-borde 1s infinite;
+        }
+
+        @keyframes parpadeo-borde {
+            0% { border-color: #dc3545; }
+            50% { border-color: #ff0000; }
+            100% { border-color: #dc3545; }
+        }
+
+        .proceso-icono {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .proceso-nombre {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        /* Indicador de temperatura */
+        .proceso-temperatura {
+            background: #f8f9fa;
+            padding: 4px;
+            border-radius: 20px;
+            font-size: 11px;
+            margin: 5px 0;
+            display: inline-block;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .temp-limpieza { background: #e3f2fd; color: #0b5e8a; }
+        .temp-decapado { background: #fff3e0; color: #b45f06; }
+        .temp-anodizado { background: #f3e5f5; color: #6a1b9a; }
+        .temp-sellado { background: #e8f5e9; color: #1e5e2e; }
+        .temp-calidad { background: #ffebee; color: #b71c1c; }
+
+        .proceso-temporizador {
+            font-size: clamp(18px, 5vw, 24px);
+            font-weight: bold;
+            font-family: monospace;
+            padding: 5px;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+
+        .tiempo-limpieza { color: #17a2b8; }
+        .tiempo-decapado { color: #fd7e14; }
+        .tiempo-anodizado { color: #6f42c1; }
+        .tiempo-sellado { color: #28a745; }
+        .tiempo-calidad { color: #dc3545; }
+
+        .proceso-estado {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        .estado-activo { background: #28a745; color: white; }
+        .estado-pausado { background: #ffc107; color: #000; }
+        .estado-completado { background: #0b2b4a; color: white; }
+        .estado-alerta { background: #dc3545; color: white; animation: parpadeo 1s infinite; }
+
+        /* Controles */
+        .controles {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .btn-control {
+            padding: 15px 5px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            color: white;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            touch-action: manipulation;
+        }
+
+        .btn-control:active {
+            transform: scale(0.95);
+        }
+
+        .btn-play { background: #28a745; }
+        .btn-pause { background: #ffc107; color: #000; }
+        .btn-stop { background: #dc3545; }
+        .btn-next { background: #17a2b8; }
+
+        /* Sección de reportes */
+        .reportes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .reporte-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid #0b2b4a;
+        }
+
+        .reporte-card h3 {
+            font-size: 13px;
+            color: #0b2b4a;
+            margin-bottom: 8px;
+        }
+
+        .reporte-valor {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+
+        .reporte-label {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            padding: 5px 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #0b2b4a;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Utilidades */
+        .text-center { text-align: center; }
+        .w-100 { width: 100%; }
+        .mt-3 { margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header con buscador -->
+        <div class="header">
+            <div class="header-top">
+                <h1>
+                    <span>🏭</span>
+                    ANODIZADOS - ALERTAS Y REPORTES
+                </h1>
+                <div class="fecha" id="fechaActual"></div>
+            </div>
+            <div class="buscador">
+                <input type="text" id="buscador" placeholder="Buscar orden, cliente, pieza..." onkeyup="filtrarOrdenes()">
+            </div>
+        </div>
+
+        <!-- Stats con indicador de alertas -->
+        <div class="stats-grid">
+            <div class="stat-card" onclick="verReporteDiario()">
+                <div class="stat-icon">📋</div>
+                <h3>ÓRDENES</h3>
+                <div class="stat-numero" id="statsTotal">0</div>
+            </div>
+            <div class="stat-card" onclick="verReporteDiario()">
+                <div class="stat-icon">👤</div>
+                <h3>EMPLEADOS</h3>
+                <div class="stat-numero" id="statsEmpleados">0</div>
+            </div>
+            <div class="stat-card" onclick="verReporteDiario()">
+                <div class="stat-icon">🔧</div>
+                <h3>PIEZAS</h3>
+                <div class="stat-numero" id="statsPiezas">0</div>
+            </div>
+            <div class="stat-card" onclick="verReporteDiario()">
+                <div class="stat-icon">⚙️</div>
+                <h3>ACTIVAS</h3>
+                <div class="stat-numero" id="statsActivas">0</div>
+            </div>
+            <div class="stat-card" onclick="verReporteDiario()" id="tempStatCard">
+                <div class="stat-icon">🌡️</div>
+                <h3>TEMP PROM</h3>
+                <div class="stat-numero" id="statsTemp">0°F</div>
+                <span id="alertaTempCount" class="alerta-temp" style="display: none;">0</span>
+            </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="acciones-rapidas">
+            <button class="btn btn-primary" onclick="abrirModalNueva()">
+                <span>➕</span> NUEVA
+            </button>
+            <button class="btn btn-success" onclick="exportarExcel()">
+                <span>📊</span> EXCEL
+            </button>
+            <button class="btn btn-warning" onclick="verReporteDiario()">
+                <span>📈</span> REPORTE DIARIO
+            </button>
+            <button class="btn btn-info" onclick="silenciarAlertas()">
+                <span>🔔</span> SILENCIAR
+            </button>
+        </div>
+
+        <!-- Layout principal -->
+        <div class="main-layout">
+            <!-- Lista de órdenes -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>📋 ÓRDENES DE TRABAJO</h2>
+                    <button class="btn btn-danger" onclick="eliminarTodas()" style="padding: 5px 10px;">🗑️</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="tablaOrdenes">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>CLIENTE</th>
+                                <th>EMPLEADO</th>
+                                <th>PIEZA</th>
+                                <th>ESTADO</th>
+                                <th>%</th>
+                                <th>ACCIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaOrdenesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Panel de control -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>⚙️ CONTROL DE TEMPERATURAS (°F)</h2>
+                    <span class="badge" style="background: #0b2b4a; color: white;" id="ordenActual">SELECCIONAR</span>
+                </div>
+                <div id="panelControl">
+                    <p class="text-center" style="color: #999; padding: 40px;">
+                        👆 Selecciona una orden de la lista
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporte diario (visible) -->
+        <div class="card" id="reporteDiario">
+            <div class="card-header">
+                <h2>📊 REPORTE DIARIO - <span id="fechaReporte"></span></h2>
+                <button class="btn btn-success" onclick="exportarReportePDF()">
+                    <span>📥</span> GUARDAR REPORTE
+                </button>
+            </div>
+            <div class="reportes-grid">
+                <div class="reporte-card">
+                    <h3>Órdenes Completadas Hoy</h3>
+                    <div class="reporte-valor" id="reporteCompletadas">0</div>
+                    <div class="reporte-label">de <span id="reporteTotal">0</span> totales</div>
+                </div>
+                <div class="reporte-card">
+                    <h3>Tiempo Promedio</h3>
+                    <div class="reporte-valor" id="reporteTiempo">0</div>
+                    <div class="reporte-label">minutos por proceso</div>
+                </div>
+                <div class="reporte-card">
+                    <h3>Alertas de Temperatura</h3>
+                    <div class="reporte-valor" style="color: #dc3545;" id="reporteAlertas">0</div>
+                    <div class="reporte-label">fuera de rango</div>
+                </div>
+                <div class="reporte-card">
+                    <h3>Piezas Procesadas</h3>
+                    <div class="reporte-valor" id="reportePiezas">0</div>
+                    <div class="reporte-label">unidades hoy</div>
+                </div>
+                <div class="reporte-card">
+                    <h3>Eficiencia</h3>
+                    <div class="reporte-valor" id="reporteEficiencia">0%</div>
+                    <div class="reporte-label">vs tiempo estimado</div>
+                </div>
+                <div class="reporte-card">
+                    <h3>Empleados Activos</h3>
+                    <div class="reporte-valor" id="reporteEmpleados">0</div>
+                    <div class="reporte-label">trabajando ahora</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal nueva orden -->
+    <div class="modal" id="modalNueva">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 NUEVA ORDEN</h2>
+                <span class="close" onclick="cerrarModalNueva()">&times;</span>
+            </div>
+            <form onsubmit="crearOrden(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ID EMPLEADO</label>
+                        <input type="text" class="form-control" id="empleadoId" placeholder="EMP001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>NOMBRE EMPLEADO</label>
+                        <input type="text" class="form-control" id="empleadoNombre" placeholder="Nombre" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>PART NUMBER</label>
+                        <input type="text" class="form-control" id="partNumber" placeholder="PN-001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>NOMBRE PIEZA</label>
+                        <input type="text" class="form-control" id="piezaNombre" placeholder="Nombre pieza" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>CANTIDAD</label>
+                    <input type="number" class="form-control" id="cantidad" min="1" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>CLIENTE</label>
+                    <input type="text" class="form-control" id="cliente" placeholder="Cliente" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>MATERIAL</label>
+                        <select class="form-control" id="material">
+                            <option>Aluminio 6061</option>
+                            <option>Aluminio 6063</option>
+                            <option>Aluminio 7075</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>COLOR</label>
+                        <select class="form-control" id="color">
+                            <option>Natural</option>
+                            <option>Negro</option>
+                            <option>Bronce</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100" style="padding: 15px;">✅ CREAR ORDEN</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal reporte diario detallado -->
+    <div class="modal" id="modalReporte">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 REPORTE COMPLETO</h2>
+                <span class="close" onclick="cerrarModalReporte()">&times;</span>
+            </div>
+            <div id="reporteDetallado"></div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // CONFIGURACIÓN DE ALERTAS
+        // =============================================
+        let alertasActivas = true;
+        let audioContext = null;
+        let alertasMostradas = {};
+
+        // =============================================
+        // RANGOS DE TEMPERATURA EN FAHRENHEIT (°F)
+        // =============================================
+        const RANGOS_TEMPERATURA = {
+            limpieza: { min: 140, max: 158, ideal: 149, unidad: '°F' },
+            decapado: { min: 68, max: 77, ideal: 72, unidad: '°F' },
+            anodizado: { min: 64, max: 72, ideal: 68, unidad: '°F' },
+            sellado: { min: 203, max: 212, ideal: 208, unidad: '°F' },
+            calidad: { min: 68, max: 77, ideal: 72, unidad: '°F' }
+        };
+
+        // =============================================
+        // DATOS INICIALES
+        // =============================================
+        let ordenes = [
+            {
+                id: '001',
+                empleado: { id: 'EMP001', nombre: 'Carlos Ruiz' },
+                pieza: { partNumber: 'PN-MOT-001', nombre: 'Soporte motor', cantidad: 150 },
+                cliente: 'Industrias Martínez',
+                material: 'Aluminio 6061',
+                color: 'Negro',
+                estado: 'proceso',
+                progreso: 40,
+                procesoActual: 'decapado',
+                fechaInicio: new Date().toLocaleDateString(),
+                horaInicio: new Date().toLocaleTimeString(),
+                temperaturas: {
+                    limpieza: { actual: 149, registrada: true },
+                    decapado: { actual: 73, registrada: true },
+                    anodizado: { actual: 68, registrada: true },
+                    sellado: { actual: 208, registrada: true },
+                    calidad: { actual: 72, registrada: true }
+                },
+                tiempos: {
+                    limpieza: { completado: true, tiempo: 600 },
+                    decapado: { completado: false, tiempo: 120, iniciado: Date.now() - 45000 },
+                    anodizado: { completado: false, tiempo: 1800 },
+                    sellado: { completado: false, tiempo: 900 },
+                    calidad: { completado: false, tiempo: 300 }
+                },
+                pausado: false,
+                tiempoPausa: null,
+                alertas: []
+            },
+            {
+                id: '002',
+                empleado: { id: 'EMP002', nombre: 'Ana García' },
+                pieza: { partNumber: 'PN-PER-002', nombre: 'Perfil ventana', cantidad: 200 },
+                cliente: 'Talleres del Sur',
+                material: 'Aluminio 6063',
+                color: 'Natural',
+                estado: 'proceso',
+                progreso: 20,
+                procesoActual: 'limpieza',
+                fechaInicio: new Date().toLocaleDateString(),
+                horaInicio: new Date().toLocaleTimeString(),
+                temperaturas: {
+                    limpieza: { actual: 170, registrada: true }, // ALTA
+                    decapado: { actual: 75, registrada: true },
+                    anodizado: { actual: 66, registrada: true },
+                    sellado: { actual: 190, registrada: true }, // BAJA
+                    calidad: { actual: 73, registrada: true }
+                },
+                tiempos: {
+                    limpieza: { completado: false, tiempo: 600, iniciado: Date.now() - 120000 },
+                    decapado: { completado: false, tiempo: 120 },
+                    anodizado: { completado: false, tiempo: 1800 },
+                    sellado: { completado: false, tiempo: 900 },
+                    calidad: { completado: false, tiempo: 300 }
+                },
+                pausado: false,
+                tiempoPausa: null,
+                alertas: []
+            },
+            {
+                id: '003',
+                empleado: { id: 'EMP003', nombre: 'Luis Torres' },
+                pieza: { partNumber: 'PN-BRA-003', nombre: 'Brazo robótico', cantidad: 75 },
+                cliente: 'Componentes López',
+                material: 'Aluminio 7075',
+                color: 'Bronce',
+                estado: 'completado',
+                progreso: 100,
+                procesoActual: 'calidad',
+                fechaInicio: new Date().toLocaleDateString(),
+                horaInicio: new Date().toLocaleTimeString(),
+                fechaFin: new Date().toLocaleDateString(),
+                horaFin: new Date().toLocaleTimeString(),
+                temperaturas: {
+                    limpieza: { actual: 151, registrada: true },
+                    decapado: { actual: 72, registrada: true },
+                    anodizado: { actual: 70, registrada: true },
+                    sellado: { actual: 210, registrada: true },
+                    calidad: { actual: 72, registrada: true }
+                },
+                tiempos: {
+                    limpieza: { completado: true, tiempo: 580 },
+                    decapado: { completado: true, tiempo: 115 },
+                    anodizado: { completado: true, tiempo: 1750 },
+                    sellado: { completado: true, tiempo: 890 },
+                    calidad: { completado: true, tiempo: 290 }
+                },
+                pausado: false,
+                tiempoPausa: null,
+                alertas: []
+            }
+        ];
+
+        let ordenesFiltradas = [...ordenes];
+        let ordenSeleccionada = null;
+
+        // =============================================
+        // INICIALIZACIÓN
+        // =============================================
+        function iniciar() {
+            document.getElementById('fechaActual').textContent = new Date().toLocaleDateString('es-ES', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('fechaReporte').textContent = new Date().toLocaleDateString();
+            
+            // Iniciar audio context
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch(e) {
+                console.log('Audio no soportado');
+            }
+            
+            actualizarTodo();
+            setInterval(actualizarTodo, 1000);
+            setInterval(verificarAlertas, 5000); // Verificar alertas cada 5 segundos
+        }
+
+        // =============================================
+        // SISTEMA DE ALERTAS
+        // =============================================
+        function verificarAlertas() {
+            let alertasCount = 0;
+            const alertasIds = [];
+
+            ordenes.forEach(orden => {
+                if (orden.estado === 'proceso') {
+                    const proceso = orden.procesoActual;
+                    const temp = orden.temperaturas[proceso]?.actual;
+                    const rango = RANGOS_TEMPERATURA[proceso];
+                    
+                    if (temp && rango) {
+                        if (temp < rango.min || temp > rango.max) {
+                            alertasCount++;
+                            const alertaId = `${orden.id}-${proceso}`;
+                            
+                            // Si es una alerta nueva, reproducir sonido
+                            if (!alertasMostradas[alertaId]) {
+                                alertasMostradas[alertaId] = true;
+                                reproducirAlerta();
+                                
+                                // Registrar alerta en la orden
+                                if (!orden.alertas) orden.alertas = [];
+                                orden.alertas.push({
+                                    timestamp: new Date().toLocaleTimeString(),
+                                    proceso: proceso,
+                                    temperatura: temp,
+                                    mensaje: `Temperatura ${temp}°F fuera de rango (${rango.min}-${rango.max}°F)`
+                                });
+                            }
+                        } else {
+                            // Limpiar alerta si la temperatura vuelve a rango
+                            const alertaId = `${orden.id}-${proceso}`;
+                            delete alertasMostradas[alertaId];
+                        }
+                    }
+                }
+            });
+
+            // Actualizar contador de alertas
+            const alertaElement = document.getElementById('alertaTempCount');
+            if (alertasCount > 0) {
+                alertaElement.textContent = alertasCount;
+                alertaElement.style.display = 'inline-block';
+                document.getElementById('tempStatCard').style.background = '#fff3f3';
+            } else {
+                alertaElement.style.display = 'none';
+                document.getElementById('tempStatCard').style.background = '';
+            }
+
+            // Actualizar reporte
+            document.getElementById('reporteAlertas').textContent = alertasCount;
+        }
+
+        function reproducirAlerta() {
+            if (!alertasActivas || !audioContext) return;
+
+            // Crear sonido simple (beep)
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 880; // Nota A5
+            gainNode.gain.value = 0.5;
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        function silenciarAlertas() {
+            alertasActivas = !alertasActivas;
+            alert(`Alertas ${alertasActivas ? 'activadas' : 'silenciadas'}`);
+        }
+
+        // =============================================
+        // REPORTE DIARIO
+        // =============================================
+        function actualizarReporteDiario() {
+            const hoy = new Date().toLocaleDateString();
+            
+            // Órdenes completadas hoy
+            const completadasHoy = ordenes.filter(o => 
+                o.estado === 'completado' && o.fechaFin === hoy
+            ).length;
+            
+            // Tiempo promedio
+            let tiempoTotal = 0;
+            let procesosCount = 0;
+            ordenes.forEach(o => {
+                Object.values(o.tiempos).forEach(t => {
+                    if (t.tiempo > 0) {
+                        tiempoTotal += t.tiempo;
+                        procesosCount++;
+                    }
+                });
+            });
+            const tiempoProm = procesosCount > 0 ? Math.round(tiempoTotal / procesosCount / 60) : 0;
+            
+            // Piezas procesadas hoy
+            const piezasHoy = ordenes
+                .filter(o => o.estado === 'completado' && o.fechaFin === hoy)
+                .reduce((sum, o) => sum + o.pieza.cantidad, 0);
+            
+            // Eficiencia (comparando tiempos reales vs estimados)
+            let eficienciaTotal = 0;
+            let eficienciaCount = 0;
+            ordenes.forEach(o => {
+                if (o.estado === 'completado') {
+                    const procesos = ['limpieza', 'decapado', 'anodizado', 'sellado', 'calidad'];
+                    let tiempoRealTotal = 0;
+                    let tiempoEstimadoTotal = 0;
+                    
+                    procesos.forEach(p => {
+                        tiempoRealTotal += o.tiempos[p].tiempo || 0;
+                        tiempoEstimadoTotal += RANGOS_TEMPERATURA[p]?.ideal ? 600 : 0; // Simplificado
+                    });
+                    
+                    if (tiempoEstimadoTotal > 0) {
+                        const eficiencia = (tiempoEstimadoTotal / tiempoRealTotal) * 100;
+                        eficienciaTotal += eficiencia;
+                        eficienciaCount++;
+                    }
+                }
+            });
+            const eficiencia = eficienciaCount > 0 ? Math.round(eficienciaTotal / eficienciaCount) : 100;
+            
+            // Empleados activos
+            const empleadosActivos = new Set(
+                ordenes.filter(o => o.estado === 'proceso').map(o => o.empleado.id)
+            ).size;
+
+            // Actualizar UI
+            document.getElementById('reporteCompletadas').textContent = completadasHoy;
+            document.getElementById('reporteTotal').textContent = ordenes.length;
+            document.getElementById('reporteTiempo').textContent = tiempoProm;
+            document.getElementById('reportePiezas').textContent = piezasHoy;
+            document.getElementById('reporteEficiencia').textContent = eficiencia + '%';
+            document.getElementById('reporteEmpleados').textContent = empleadosActivos;
+        }
+
+        function verReporteDiario() {
+            // Generar reporte detallado
+            let html = `
+                <div style="padding: 10px;">
+                    <h3>Resumen del Día - ${new Date().toLocaleDateString()}</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                        <tr style="background: #f8f9fa;">
+                            <th style="padding: 8px; text-align: left;">Métrica</th>
+                            <th style="padding: 8px; text-align: right;">Valor</th>
+                        </tr>
+            `;
+
+            const metricas = [
+                ['📋 Órdenes totales', ordenes.length],
+                ['✅ Completadas hoy', document.getElementById('reporteCompletadas').textContent],
+                ['⚙️ En proceso', ordenes.filter(o => o.estado === 'proceso').length],
+                ['👥 Empleados activos', document.getElementById('reporteEmpleados').textContent],
+                ['🔧 Piezas procesadas', document.getElementById('reportePiezas').textContent],
+                ['⏱️ Tiempo promedio', document.getElementById('reporteTiempo').textContent + ' min'],
+                ['📊 Eficiencia', document.getElementById('reporteEficiencia').textContent],
+                ['⚠️ Alertas hoy', document.getElementById('reporteAlertas').textContent]
+            ];
+
+            metricas.forEach(([label, valor]) => {
+                html += `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px;">${label}</td>
+                        <td style="padding: 8px; text-align: right; font-weight: bold;">${valor}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </table>
+                    
+                    <h4 style="margin-top: 20px;">⏱️ Tiempos por Proceso</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="background: #f8f9fa;">
+                            <th style="padding: 8px;">Proceso</th>
+                            <th style="padding: 8px; text-align: right;">Tiempo Promedio</th>
+                        </tr>
+            `;
+
+            const procesos = ['limpieza', 'decapado', 'anodizado', 'sellado', 'calidad'];
+            const nombres = ['Limpieza', 'Decapado', 'Anodizado', 'Sellado', 'Calidad'];
+            
+            procesos.forEach((p, i) => {
+                let total = 0;
+                let count = 0;
+                ordenes.forEach(o => {
+                    if (o.tiempos[p].tiempo > 0) {
+                        total += o.tiempos[p].tiempo;
+                        count++;
+                    }
+                });
+                const prom = count > 0 ? Math.round(total / count / 60) : 0;
+                
+                html += `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px;">${nombres[i]}</td>
+                        <td style="padding: 8px; text-align: right;">${prom} min</td>
+                    </tr>
+                `;
+            });
+
+            html += '</table></div>';
+
+            document.getElementById('reporteDetallado').innerHTML = html;
+            document.getElementById('modalReporte').style.display = 'flex';
+        }
+
+        function cerrarModalReporte() {
+            document.getElementById('modalReporte').style.display = 'none';
+        }
+
+        function exportarReportePDF() {
+            // Crear contenido para PDF
+            const contenido = `
+                REPORTE DIARIO - ${new Date().toLocaleDateString()}
+                
+                Órdenes Completadas: ${document.getElementById('reporteCompletadas').textContent}
+                Tiempo Promedio: ${document.getElementById('reporteTiempo').textContent} min
+                Alertas: ${document.getElementById('reporteAlertas').textContent}
+                Piezas Procesadas: ${document.getElementById('reportePiezas').textContent}
+                Eficiencia: ${document.getElementById('reporteEficiencia').textContent}
+                Empleados Activos: ${document.getElementById('reporteEmpleados').textContent}
+                
+                Generado: ${new Date().toLocaleString()}
+            `;
+            
+            // Crear archivo de texto
+            const blob = new Blob([contenido], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `reporte_anodizados_${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+        }
+
+        // =============================================
+        // ACTUALIZACIÓN GENERAL
+        // =============================================
+        function actualizarTodo() {
+            filtrarOrdenes();
+            actualizarStats();
+            if (ordenSeleccionada) {
+                actualizarPanelProcesos();
+            }
+            actualizarReporteDiario();
+        }
+
+        // =============================================
+        // FILTRO DE BÚSQUEDA
+        // =============================================
+        function filtrarOrdenes() {
+            const texto = document.getElementById('buscador').value.toLowerCase();
+            
+            if (!texto) {
+                ordenesFiltradas = [...ordenes];
+            } else {
+                ordenesFiltradas = ordenes.filter(o => 
+                    o.id.toLowerCase().includes(texto) ||
+                    o.cliente.toLowerCase().includes(texto) ||
+                    o.empleado.nombre.toLowerCase().includes(texto) ||
+                    o.pieza.nombre.toLowerCase().includes(texto) ||
+                    o.pieza.partNumber.toLowerCase().includes(texto)
+                );
+            }
+            
+            renderizarTabla();
+        }
+
+        // =============================================
+        // RENDERIZADO DE TABLA
+        // =============================================
+        function renderizarTabla() {
+            let html = '';
+            ordenesFiltradas.forEach(o => {
+                let badge = o.estado === 'proceso' ? 'badge-proceso' : 'badge-completado';
+                
+                // Verificar si tiene alertas activas
+                const tieneAlerta = o.alertas && o.alertas.length > 0 && 
+                    o.alertas[o.alertas.length - 1]?.timestamp === new Date().toLocaleTimeString().slice(0,5);
+                
+                html += `
+                    <tr>
+                        <td><strong>${o.id}</strong></td>
+                        <td>${o.cliente.substring(0, 15)}</td>
+                        <td>${o.empleado.nombre.split(' ')[0]}</td>
+                        <td>${o.pieza.nombre.substring(0, 12)}</td>
+                        <td><span class="badge ${tieneAlerta ? 'badge-alerta' : badge}">${o.estado}</span></td>
+                        <td>
+                            <div class="progress-mini">
+                                <div class="progress-mini-bar" style="width: ${o.progreso}%"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn" style="padding: 4px 8px; background: #0b2b4a; color: white;" 
+                                onclick="seleccionarOrden('${o.id}')">VER</button>
+                            <button class="btn" style="padding: 4px 8px; background: #dc3545; color: white;" 
+                                onclick="eliminarOrden('${o.id}')">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            if (ordenesFiltradas.length === 0) {
+                html = '<tr><td colspan="7" class="text-center" style="padding: 30px;">🔍 No se encontraron órdenes</td></tr>';
+            }
+            
+            document.getElementById('tablaOrdenesBody').innerHTML = html;
+        }
+
+        // =============================================
+        // ESTADÍSTICAS
+        // =============================================
+        function actualizarStats() {
+            document.getElementById('statsTotal').textContent = ordenes.length;
+            
+            const empleadosUnicos = new Set(ordenes.map(o => o.empleado.id)).size;
+            document.getElementById('statsEmpleados').textContent = empleadosUnicos;
+            
+            const totalPiezas = ordenes.reduce((sum, o) => sum + (o.pieza.cantidad || 0), 0);
+            document.getElementById('statsPiezas').textContent = totalPiezas;
+            
+            document.getElementById('statsActivas').textContent = ordenes.filter(o => o.estado === 'proceso').length;
+            
+            // Temperatura promedio
+            let tempSum = 0;
+            let tempCount = 0;
+            ordenes.forEach(o => {
+                Object.values(o.temperaturas).forEach(t => {
+                    if (t.actual) {
+                        tempSum += t.actual;
+                        tempCount++;
+                    }
+                });
+            });
+            const tempProm = tempCount > 0 ? Math.round(tempSum / tempCount) : 0;
+            document.getElementById('statsTemp').textContent = tempProm + '°F';
+        }
+
+        // =============================================
+        // SELECCIÓN DE ORDEN
+        // =============================================
+        function seleccionarOrden(id) {
+            ordenSeleccionada = ordenes.find(o => o.id === id);
+            document.getElementById('ordenActual').textContent = `ORDEN ${id}`;
+            actualizarPanelProcesos();
+        }
+
+        // =============================================
+        // PANEL DE CONTROL
+        // =============================================
+        function actualizarPanelProcesos() {
+            if (!ordenSeleccionada) return;
+
+            const o = ordenSeleccionada;
+            const procesos = ['limpieza', 'decapado', 'anodizado', 'sellado', 'calidad'];
+            const nombres = {
+                limpieza: '🧹 LIMPIEZA',
+                decapado: '⚗️ DECAPADO',
+                anodizado: '⚡ ANODIZADO',
+                sellado: '🌊 SELLADO',
+                calidad: '✓ CALIDAD'
+            };
+            const colores = {
+                limpieza: 'tiempo-limpieza',
+                decapado: 'tiempo-decapado',
+                anodizado: 'tiempo-anodizado',
+                sellado: 'tiempo-sellado',
+                calidad: 'tiempo-calidad'
+            };
+            const tempColors = {
+                limpieza: 'temp-limpieza',
+                decapado: 'temp-decapado',
+                anodizado: 'temp-anodizado',
+                sellado: 'temp-sellado',
+                calidad: 'temp-calidad'
+            };
+
+            // Info empleado y pieza
+            const infoHtml = `
+                <div class="info-empleado-pieza">
+                    <div class="info-campo">
+                        <label>👤 EMPLEADO</label>
+                        <div class="valor">${o.empleado.nombre}</div>
+                        <div>ID: ${o.empleado.id}</div>
+                        <input type="text" placeholder="Cambiar empleado" value="${o.empleado.nombre}" 
+                            onchange="actualizarEmpleado('${o.id}', this.value)">
+                    </div>
+                    <div class="info-campo">
+                        <label>🔧 PIEZA</label>
+                        <div class="valor">${o.pieza.nombre}</div>
+                        <div>PN: ${o.pieza.partNumber} | Cant: ${o.pieza.cantidad}</div>
+                        <input type="text" placeholder="Cambiar Part Number" value="${o.pieza.partNumber}" 
+                            onchange="actualizarPartNumber('${o.id}', this.value)">
+                    </div>
+                    <div class="info-campo">
+                        <label>📋 CLIENTE</label>
+                        <div class="valor">${o.cliente}</div>
+                        <div>${o.material} - ${o.color}</div>
+                        <div>Inicio: ${o.fechaInicio} ${o.horaInicio}</div>
+                    </div>
+                </div>
+            `;
+
+            // Procesos con temporizadores
+            let procesosHtml = '<div class="procesos-grid">';
+            
+            procesos.forEach(p => {
+                const proc = o.tiempos[p];
+                const temp = o.temperaturas[p]?.actual || 0;
+                const rango = RANGOS_TEMPERATURA[p];
+                let tiempoRestante = 0;
+                let claseCard = 'proceso-card';
+                let estadoTexto = '';
+                let claseEstado = '';
+                let alertaTemp = false;
+
+                // Verificar temperatura
+                if (temp < rango.min || temp > rango.max) {
+                    alertaTemp = true;
+                    claseEstado = 'estado-alerta';
+                }
+
+                if (proc.completado) {
+                    tiempoRestante = 0;
+                    claseCard += ' completado';
+                    estadoTexto = 'COMPLETADO';
+                    claseEstado = 'estado-completado';
+                } else if (o.procesoActual === p) {
+                    claseCard += ' activo';
+                    if (alertaTemp) claseCard += ' alerta';
+                    
+                    if (o.pausado) {
+                        estadoTexto = 'PAUSADO';
+                        claseEstado = 'estado-pausado';
+                        if (proc.iniciado && o.tiempoPausa) {
+                            tiempoRestante = Math.max(0, Math.ceil((proc.tiempo * 1000 - (o.tiempoPausa - proc.iniciado)) / 1000));
+                        } else {
+                            tiempoRestante = proc.tiempo;
+                        }
+                    } else {
+                        estadoTexto = alertaTemp ? '⚠️ TEMP ALTA' : 'EN PROCESO';
+                        if (proc.iniciado) {
+                            tiempoRestante = Math.max(0, Math.ceil((proc.tiempo * 1000 - (Date.now() - proc.iniciado)) / 1000));
+                        } else {
+                            tiempoRestante = proc.tiempo;
+                        }
+                    }
+                } else {
+                    tiempoRestante = proc.tiempo;
+                    estadoTexto = 'PENDIENTE';
+                    claseEstado = 'badge-pendiente';
+                }
+
+                let minutos = Math.floor(tiempoRestante / 60);
+                let segundos = tiempoRestante % 60;
+                let tiempoStr = `${minutos}:${segundos.toString().padStart(2,'0')}`;
+
+                procesosHtml += `
+                    <div class="${claseCard}" onclick="cambiarProceso('${o.id}', '${p}')">
+                        <div class="proceso-icono">${nombres[p].split(' ')[0]}</div>
+                        <div class="proceso-nombre">${nombres[p]}</div>
+                        <div class="proceso-temperatura ${tempColors[p]}">
+                            🌡️ ${temp}°F (ideal: ${rango.ideal}°F)
+                        </div>
+                        <div class="proceso-temporizador ${colores[p]}">${tiempoStr}</div>
+                        <div><span class="proceso-estado ${claseEstado}">${estadoTexto}</span></div>
+                        <div style="font-size: 9px; margin-top: 5px;">
+                            Rango: ${rango.min}-${rango.max}°F
+                        </div>
+                    </div>
+                `;
+            });
+
+            procesosHtml += '</div>';
+
+            // Control de temperatura
+            const procesoActual = o.procesoActual;
+            const tempActual = o.temperaturas[procesoActual]?.actual || 0;
+            const rangoActual = RANGOS_TEMPERATURA[procesoActual];
+
+            const controlTempHtml = `
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; margin: 15px 0;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <div style="flex: 1;">
+                            <label style="font-size: 12px; color: #666;">🌡️ CONTROL DE TEMPERATURA (°F) - ${procesoActual.toUpperCase()}</label>
+                            <input type="range" min="${rangoActual.min - 20}" max="${rangoActual.max + 20}" value="${tempActual}" 
+                                style="width: 100%;" onchange="cambiarTemperatura('${o.id}', '${procesoActual}', this.value)">
+                            <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                                <span>${rangoActual.min - 20}°F</span>
+                                <span style="color: #28a745; font-weight: bold;">IDEAL: ${rangoActual.ideal}°F</span>
+                                <span>${rangoActual.max + 20}°F</span>
+                            </div>
+                        </div>
+                        <div style="text-align: center; min-width: 80px;">
+                            <div style="font-size: 28px; font-weight: bold; color: ${tempActual >= rangoActual.min && tempActual <= rangoActual.max ? '#28a745' : '#dc3545'}">
+                                ${tempActual}°F
+                            </div>
+                            <div style="font-size: 11px;">Temperatura actual</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Controles
+            const controlesHtml = `
+                <div class="controles">
+                    <button class="btn-control btn-play" onclick="iniciarProceso('${o.id}')">
+                        <span>▶️</span> INICIAR
+                    </button>
+                    <button class="btn-control btn-pause" onclick="pausarProceso('${o.id}')">
+                        <span>⏸️</span> PAUSAR
+                    </button>
+                    <button class="btn-control btn-stop" onclick="detenerProceso('${o.id}')">
+                        <span>⏹️</span> DETENER
+                    </button>
+                    <button class="btn-control btn-next" onclick="completarProceso('${o.id}')">
+                        <span>⏭️</span> COMPLETAR
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('panelControl').innerHTML = infoHtml + procesosHtml + controlTempHtml + controlesHtml;
+        }
+
+        // =============================================
+        // CAMBIAR TEMPERATURA
+        // =============================================
+        function cambiarTemperatura(id, proceso, valor) {
+            const o = ordenes.find(o => o.id === id);
+            if (o && o.temperaturas[proceso]) {
+                o.temperaturas[proceso].actual = parseInt(valor);
+                o.temperaturas[proceso].registrada = true;
+                actualizarPanelProcesos();
+                actualizarStats();
+            }
+        }
+
+        // =============================================
+        // FUNCIONES DE PROCESOS
+        // =============================================
+        function iniciarProceso(id) {
+            const o = ordenes.find(o => o.id === id);
+            if (!o || o.estado === 'completado') return;
+
+            // Verificar temperatura antes de iniciar
+            const tempActual = o.temperaturas[o.procesoActual]?.actual;
+            const rango = RANGOS_TEMPERATURA[o.procesoActual];
+            
+            if (tempActual < rango.min || tempActual > rango.max) {
+                if (!confirm(`⚠️ La temperatura actual (${tempActual}°F) está fuera del rango recomendado (${rango.min}-${rango.max}°F). ¿Iniciar de todos modos?`)) {
+                    return;
+                }
+            }
+
+            const proc = o.tiempos[o.procesoActual];
+            
+            if (!proc.iniciado) {
+                proc.iniciado = Date.now();
+                o.pausado = false;
+                o.tiempoPausa = null;
+            } else if (o.pausado) {
+                const tiempoTranscurrido = o.tiempoPausa - proc.iniciado;
+                proc.iniciado = Date.now() - tiempoTranscurrido;
+                o.pausado = false;
+                o.tiempoPausa = null;
+            }
+
+            actualizarPanelProcesos();
+        }
+
+        function pausarProceso(id) {
+            const o = ordenes.find(o => o.id === id);
+            if (!o || !o.tiempos[o.procesoActual]?.iniciado || o.pausado) return;
+
+            o.pausado = true;
+            o.tiempoPausa = Date.now();
+            actualizarPanelProcesos();
+        }
+
+        function detenerProceso(id) {
+            const o = ordenes.find(o => o.id === id);
+            if (!o || !o.tiempos[o.procesoActual]?.iniciado) return;
+
+            const proc = o.tiempos[o.procesoActual];
+            delete proc.iniciado;
+            o.pausado = false;
+            o.tiempoPausa = null;
+            actualizarPanelProcesos();
+        }
+
+        function completarProceso(id) {
+            const o = ordenes.find(o => o.id === id);
+            if (!o || o.estado === 'completado') return;
+
+            // Registrar tiempo
+            if (o.tiempos[o.procesoActual].iniciado) {
+                const tiempoFinal = o.tiempoPausa || Date.now();
+                const minutos = Math.floor((tiempoFinal - o.tiempos[o.procesoActual].iniciado) / 1000);
+                o.tiempos[o.procesoActual].tiempo = minutos;
+            }
+
+            const proc = o.tiempos[o.procesoActual];
+            proc.completado = true;
+            delete proc.iniciado;
+            o.pausado = false;
+            o.tiempoPausa = null;
+
+            const procesos = ['limpieza', 'decapado', 'anodizado', 'sellado', 'calidad'];
+            const index = procesos.indexOf(o.procesoActual);
+            
+            if (index < procesos.length - 1) {
+                o.procesoActual = procesos[index + 1];
+                o.progreso = ((index + 1) / procesos.length) * 100;
+            } else {
+                o.estado = 'completado';
+                o.progreso = 100;
+                o.fechaFin = new Date().toLocaleDateString();
+                o.horaFin = new Date().toLocaleTimeString();
+            }
+
+            actualizarPanelProcesos();
+            actualizarTodo();
+        }
+
+        function cambiarProceso(id, nuevoProceso) {
+            const o = ordenes.find(o => o.id === id);
+            if (!o) return;
+
+            const procesos = ['limpieza', 'decapado', 'anodizado', 'sellado', 'calidad'];
+            const indexNuevo = procesos.indexOf(nuevoProceso);
+            
+            for (let i = 0; i < indexNuevo; i++) {
+                if (!o.tiempos[procesos[i]].completado) {
+                    alert(`Primero debe completar ${procesos[i]}`);
+                    return;
+                }
+            }
+
+            if (o.tiempos[o.procesoActual]?.iniciado) {
+                detenerProceso(id);
+            }
+
+            o.procesoActual = nuevoProceso;
+            actualizarPanelProcesos();
+        }
+
+        // =============================================
+        // ACTUALIZAR DATOS
+        // =============================================
+        function actualizarEmpleado(id, nuevoNombre) {
+            const o = ordenes.find(o => o.id === id);
+            if (o && nuevoNombre.trim()) {
+                o.empleado.nombre = nuevoNombre;
+                actualizarTodo();
+            }
+        }
+
+        function actualizarPartNumber(id, nuevoPartNumber) {
+            const o = ordenes.find(o => o.id === id);
+            if (o && nuevoPartNumber.trim()) {
+                o.pieza.partNumber = nuevoPartNumber;
+                actualizarPanelProcesos();
+            }
+        }
+
+        // =============================================
+        // EXPORTAR A EXCEL
+        // =============================================
+        function exportarExcel() {
+            const datos = ordenes.map(o => ({
+                'ID Orden': o.id,
+                'Cliente': o.cliente,
+                'Empleado ID': o.empleado.id,
+                'Empleado Nombre': o.empleado.nombre,
+                'Part Number': o.pieza.partNumber,
+                'Pieza': o.pieza.nombre,
+                'Cantidad': o.pieza.cantidad,
+                'Material': o.material,
+                'Color': o.color,
+                'Estado': o.estado,
+                'Progreso %': o.progreso,
+                'Fecha Inicio': o.fechaInicio,
+                'Hora Inicio': o.horaInicio,
+                'Fecha Fin': o.fechaFin || '',
+                'Hora Fin': o.horaFin || '',
+                'Temp Limpieza': o.temperaturas.limpieza.actual + '°F',
+                'Temp Decapado': o.temperaturas.decapado.actual + '°F',
+                'Temp Anodizado': o.temperaturas.anodizado.actual + '°F',
+                'Temp Sellado': o.temperaturas.sellado.actual + '°F',
+                'Temp Calidad': o.temperaturas.calidad.actual + '°F',
+                'Alertas': o.alertas ? o.alertas.length : 0
+            }));
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(datos);
+            XLSX.utils.book_append_sheet(wb, ws, 'Anodizados');
+            XLSX.writeFile(wb, `anodizados_${new Date().toISOString().slice(0,10)}.xlsx`);
+        }
+
+        // =============================================
+        // NUEVA ORDEN
+        // =============================================
+        function abrirModalNueva() {
+            document.getElementById('modalNueva').style.display = 'flex';
+        }
+
+        function cerrarModalNueva() {
+            document.getElementById('modalNueva').style.display = 'none';
+        }
+
+        function crearOrden(event) {
+            event.preventDefault();
+            
+            // Temperaturas iniciales
+            const temperaturasIniciales = {
+                limpieza: { actual: 149, registrada: true },
+                decapado: { actual: 72, registrada: true },
+                anodizado: { actual: 68, registrada: true },
+                sellado: { actual: 208, registrada: true },
+                calidad: { actual: 72, registrada: true }
+            };
+
+            const ahora = new Date();
+            
+            const nueva = {
+                id: String(ordenes.length + 1).padStart(3, '0'),
+                empleado: {
+                    id: document.getElementById('empleadoId').value,
+                    nombre: document.getElementById('empleadoNombre').value
+                },
+                pieza: {
+                    partNumber: document.getElementById('partNumber').value,
+                    nombre: document.getElementById('piezaNombre').value,
+                    cantidad: parseInt(document.getElementById('cantidad').value)
+                },
+                cliente: document.getElementById('cliente').value,
+                material: document.getElementById('material').value,
+                color: document.getElementById('color').value,
+                estado: 'proceso',
+                progreso: 0,
+                procesoActual: 'limpieza',
+                fechaInicio: ahora.toLocaleDateString(),
+                horaInicio: ahora.toLocaleTimeString(),
+                temperaturas: temperaturasIniciales,
+                tiempos: {
+                    limpieza: { completado: false, tiempo: 600 },
+                    decapado: { completado: false, tiempo: 120 },
+                    anodizado: { completado: false, tiempo: 1800 },
+                    sellado: { completado: false, tiempo: 900 },
+                    calidad: { completado: false, tiempo: 300 }
+                },
+                pausado: false,
+                tiempoPausa: null,
+                alertas: []
+            };
+
+            ordenes.push(nueva);
+            cerrarModalNueva();
+            actualizarTodo();
+            seleccionarOrden(nueva.id);
+            
+            // Limpiar formulario
+            document.getElementById('empleadoId').value = '';
+            document.getElementById('empleadoNombre').value = '';
+            document.getElementById('partNumber').value = '';
+            document.getElementById('piezaNombre').value = '';
+            document.getElementById('cantidad').value = '1';
+            document.getElementById('cliente').value = '';
+        }
+
+        // =============================================
+        // ELIMINAR
+        // =============================================
+        function eliminarOrden(id) {
+            if (confirm('¿Eliminar esta orden?')) {
+                const index = ordenes.findIndex(o => o.id === id);
+                if (index !== -1) {
+                    ordenes.splice(index, 1);
+                    if (ordenSeleccionada?.id === id) {
+                        ordenSeleccionada = null;
+                        document.getElementById('ordenActual').textContent = 'SELECCIONAR';
+                        document.getElementById('panelControl').innerHTML = 
+                            '<p class="text-center" style="color: #999; padding: 40px;">👆 Selecciona una orden</p>';
+                    }
+                    actualizarTodo();
+                }
+            }
+        }
+
+        function eliminarTodas() {
+            if (ordenes.length === 0) return;
+            if (confirm(`¿Eliminar TODAS las órdenes (${ordenes.length})?`)) {
+                ordenes = [];
+                ordenSeleccionada = null;
+                document.getElementById('ordenActual').textContent = 'SELECCIONAR';
+                document.getElementById('panelControl').innerHTML = 
+                    '<p class="text-center" style="color: #999; padding: 40px;">👆 Selecciona una orden</p>';
+                actualizarTodo();
+            }
+        }
+
+        // =============================================
+        // EVENTOS
+        // =============================================
+        window.onclick = function(e) {
+            if (e.target === document.getElementById('modalNueva')) {
+                cerrarModalNueva();
+            }
+            if (e.target === document.getElementById('modalReporte')) {
+                cerrarModalReporte();
+            }
+        }
+
+        // Iniciar
+        iniciar();
+    </script>
+</body>
+</html>
