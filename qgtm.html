@@ -23,7 +23,6 @@
             margin: 0 auto;
         }
         
-        /* Header */
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -69,7 +68,6 @@
             opacity: 0.8;
         }
         
-        /* Grid Layout */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -83,7 +81,6 @@
             }
         }
         
-        /* Cards */
         .card {
             background: white;
             border-radius: 15px;
@@ -103,16 +100,6 @@
             gap: 10px;
         }
         
-        .card h3 {
-            color: #555;
-            margin: 15px 0 10px 0;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        /* Formulario */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -160,7 +147,6 @@
             -moz-appearance: textfield;
         }
         
-        /* Sección de operadores en VERTICAL */
         .operadores-vertical {
             background: #f8f9fa;
             border-radius: 8px;
@@ -267,7 +253,6 @@
             background: #e0a800;
         }
         
-        /* Botones */
         .submit-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -328,7 +313,6 @@
             background: #0056b3;
         }
         
-        /* Tabla de registros */
         .table-container {
             overflow-x: auto;
             max-height: 600px;
@@ -411,7 +395,6 @@
             color: #dc3545;
         }
         
-        /* Gestión de inspectores */
         .inspectores-list {
             margin-bottom: 15px;
             max-height: 200px;
@@ -446,7 +429,6 @@
             width: 100%;
         }
         
-        /* Filtros */
         .filters {
             display: flex;
             gap: 10px;
@@ -462,7 +444,6 @@
             border-radius: 4px;
         }
         
-        /* Resumen cliente */
         .client-summary {
             background: #f8f9fa;
             border-radius: 8px;
@@ -482,7 +463,6 @@
             gap: 10px;
         }
         
-        /* Reporte modal */
         .report-modal {
             display: none;
             position: fixed;
@@ -567,7 +547,6 @@
             font-weight: bold;
         }
         
-        /* TABLA DEL REPORTE - CORREGIDA */
         .report-table-container {
             overflow-x: auto;
             max-width: 100%;
@@ -646,7 +625,6 @@
             background: #5a67d8;
         }
         
-        /* Email modal con gestión de supervisores INTEGRADA */
         .email-modal {
             display: none;
             position: fixed;
@@ -671,7 +649,6 @@
             overflow-y: auto;
         }
         
-        /* Sección de gestión de supervisores DENTRO del modal */
         .supervisores-gestion {
             background: #f8f9fa;
             border-radius: 8px;
@@ -985,7 +962,7 @@
                         <button class="export-btn" onclick="exportarExcel()">📊 Exportar Excel</button>
                     </div>
                     
-                    <!-- BOTÓN PARA ENVIAR TESKS REPORT - AHORA EL ÚNICO BOTÓN -->
+                    <!-- BOTÓN PARA ENVIAR TESKS REPORT -->
                     <button class="send-report-btn" onclick="mostrarOpcionesReporte()">
                         📧 Enviar TESKS REPORT
                     </button>
@@ -1142,7 +1119,7 @@
             <span class="report-close" onclick="cerrarEmailModal()">&times;</span>
             <h2 style="margin-bottom: 20px; text-align: center;">📧 Enviar TESKS REPORT</h2>
             
-            <!-- GESTIÓN DE SUPERVISORES (OCULTA HASTA QUE SE ABRE EL MODAL) -->
+            <!-- GESTIÓN DE SUPERVISORES -->
             <div class="supervisores-gestion">
                 <h4>👥 Gestión de Supervisores</h4>
                 <div class="supervisores-lista" id="supervisoresLista">
@@ -1432,7 +1409,7 @@
         }
         
         // ============================================
-        // SUPERVISORES - AHORA SOLO DENTRO DEL MODAL
+        // SUPERVISORES
         // ============================================
         function cargarSupervisoresListaModal() {
             const container = document.getElementById('supervisoresLista');
@@ -1526,20 +1503,27 @@
             else if (piezasBuenas === 0) resultado = 'No Pasa';
             else resultado = 'Mixto';
             
+            // ✅ FORMATO DE HORA CORREGIDO: 12 HORAS CON AM/PM
             const nuevaInspeccion = {
-            id: Date.now(),
-            fecha: new Date().toLocaleString('es-MX', { 
-               year: 'numeric', 
-               month: '2-digit', 
-               day: '2-digit', 
-               hour: '2-digit', 
-               minute: '2-digit', 
-               hour12: true 
-            }),
-    cliente, partNumber, empleado, cantidadTotal, piezasBuenas, piezasMalas, resultado,
-    operadores: operadores,
-    observaciones: observaciones || 'Sin observaciones'
-};
+                id: Date.now(),
+                fecha: new Date().toLocaleString('es-MX', { 
+                    year: 'numeric', 
+                    month: '2-digit', 
+                    day: '2-digit', 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    hour12: true 
+                }),
+                cliente: cliente,
+                partNumber: partNumber,
+                empleado: empleado,
+                cantidadTotal: cantidadTotal,
+                piezasBuenas: piezasBuenas,
+                piezasMalas: piezasMalas,
+                resultado: resultado,
+                operadores: operadores,
+                observaciones: observaciones || 'Sin observaciones'
+            };
             
             inspecciones.push(nuevaInspeccion);
             localStorage.setItem('inspecciones', JSON.stringify(inspecciones));
@@ -1887,7 +1871,7 @@ Obs: ${ins.observaciones}
         }
         
         // ============================================
-        // EMAIL CON SUPERVISORES (GESTIÓN INTEGRADA)
+        // EMAIL
         // ============================================
         function seleccionarServicio(servicio) {
             servicioSeleccionado = servicio;
