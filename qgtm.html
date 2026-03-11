@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Quality Control - Piezas Aluminio + Supervisores</title>
+    <title>Quality Control - Piezas Aluminio</title>
     <style>
         * {
             margin: 0;
@@ -254,22 +254,23 @@
         }
         
         .submit-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 18px;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
             transition: transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
         }
         
         .export-btn {
@@ -870,6 +871,19 @@
             margin-bottom: 10px;
             text-align: center;
         }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -881,10 +895,21 @@
         </div>
 
         <div class="grid">
-            <!-- Columna izquierda -->
+            <!-- Columna izquierda - CON FLUJO VISUAL CLARO -->
             <div>
+                <!-- 1️⃣ PRIMERO: Gestión de Inspectores -->
                 <div class="card">
-                    <h2>📝 Nueva Inspección</h2>
+                    <h2><span class="step-number">1</span> 👥 ¿QUIÉN SOY? - Selecciona tu nombre como Inspector</h2>
+                    <div class="inspectores-list" id="inspectoresList"></div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="nuevoInspector" placeholder="Nombre del inspector" style="flex: 1; padding: 8px;">
+                        <button class="add-btn" onclick="agregarInspector()">➕ Agregar</button>
+                    </div>
+                </div>
+                
+                <!-- 2️⃣ SEGUNDO: Nueva Inspección -->
+                <div class="card">
+                    <h2><span class="step-number">2</span> 📝 ¿QUÉ PIEZA? - Datos de la Inspección</h2>
                     
                     <form id="inspectionForm">
                         <div class="form-row">
@@ -910,7 +935,7 @@
                             <div class="form-group">
                                 <label>👤 Inspector *</label>
                                 <select id="empleado" required>
-                                    <option value="">Seleccionar...</option>
+                                    <option value="">Seleccionar inspector...</option>
                                 </select>
                             </div>
                         </div>
@@ -927,34 +952,26 @@
                             </div>
                         </div>
                         
-                        <!-- SECCIÓN DE OPERADORES EN VERTICAL -->
+                        <!-- 3️⃣ TERCERO: Operadores de Máquina -->
                         <div class="operadores-vertical">
-                            <h3>🔧 Datos de Operadores de Máquina (Opcional)</h3>
+                            <h3><span class="step-number">3</span> 🔧 ¿QUIÉN LA HIZO? - Operadores de Máquina (Opcional)</h3>
                             <div id="operadoresContainer"></div>
                             <button type="button" class="add-operador-btn" onclick="agregarOperadorVertical()">➕ Agregar Operador</button>
                         </div>
                         
+                        <!-- 4️⃣ CUARTO: Observaciones -->
                         <div class="form-group">
-                            <label>📋 Observaciones</label>
+                            <label><span class="step-number">4</span> 📋 ¿QUÉ PASÓ? - Observaciones</label>
                             <textarea id="observaciones" rows="2" placeholder="Ej: Porosidad superficial, rayones..."></textarea>
                         </div>
                         
-                        <button type="submit" class="submit-btn">✅ Guardar Inspección</button>
+                        <!-- 5️⃣ BOTÓN GUARDAR -->
+                        <button type="submit" class="submit-btn">✅ <span class="step-number">5</span> ¡GUARDAR INSPECCIÓN!</button>
                     </form>
-                </div>
-                
-                <!-- Gestión de inspectores -->
-                <div class="card">
-                    <h2>👥 Gestión de Inspectores</h2>
-                    <div class="inspectores-list" id="inspectoresList"></div>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="nuevoInspector" placeholder="Nombre del inspector" style="flex: 1; padding: 8px;">
-                        <button class="add-btn" onclick="agregarInspector()">➕ Agregar</button>
-                    </div>
                 </div>
             </div>
             
-            <!-- Columna derecha -->
+            <!-- Columna derecha (sin cambios) -->
             <div>
                 <div class="card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
@@ -1005,7 +1022,7 @@
         </div>
     </div>
     
-    <!-- Modal del TESKS REPORT -->
+    <!-- Modales (sin cambios) -->
     <div id="reportModal" class="report-modal">
         <div class="report-content">
             <span class="report-close" onclick="cerrarReporte()">&times;</span>
@@ -1113,18 +1130,14 @@
         </div>
     </div>
     
-    <!-- Modal para email con GESTIÓN DE SUPERVISORES INTEGRADA -->
     <div id="emailModal" class="email-modal">
         <div class="email-content">
             <span class="report-close" onclick="cerrarEmailModal()">&times;</span>
             <h2 style="margin-bottom: 20px; text-align: center;">📧 Enviar TESKS REPORT</h2>
             
-            <!-- GESTIÓN DE SUPERVISORES -->
             <div class="supervisores-gestion">
                 <h4>👥 Gestión de Supervisores</h4>
-                <div class="supervisores-lista" id="supervisoresLista">
-                    <!-- Se llena dinámicamente -->
-                </div>
+                <div class="supervisores-lista" id="supervisoresLista"></div>
                 
                 <div class="agregar-supervisor">
                     <input type="text" id="nuevoSupNombre" placeholder="Nombre">
@@ -1134,13 +1147,11 @@
                 <div class="info-text">Los supervisores se guardan automáticamente</div>
             </div>
             
-            <!-- SELECCIÓN DE SUPERVISORES -->
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 10px; font-weight: bold;">Selecciona supervisores:</label>
                 <div id="supervisoresCheckbox" class="supervisores-checkbox"></div>
             </div>
             
-            <!-- EMAIL MANUAL -->
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 10px; font-weight: bold;">O agrega email manual:</label>
                 <div style="display: flex; gap: 10px;">
@@ -1149,13 +1160,11 @@
                 </div>
             </div>
             
-            <!-- LISTA DE DESTINATARIOS -->
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 10px; font-weight: bold;">Destinatarios:</label>
                 <div id="emailList" class="email-list"></div>
             </div>
             
-            <!-- SELECCIÓN DE SERVICIO -->
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 10px; font-weight: bold;">Servicio de correo:</label>
                 <div class="service-selector">
@@ -1164,7 +1173,6 @@
                 </div>
             </div>
             
-            <!-- BOTONES DE ACCIÓN -->
             <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
                 <button class="export-btn" onclick="cerrarEmailModal()" style="background: #6c757d;">Cancelar</button>
                 <button class="report-email-btn" onclick="enviarReporteEmail()" style="background: #007bff; color: white;">📨 Enviar</button>
@@ -1191,7 +1199,6 @@
         
         let inspecciones = JSON.parse(localStorage.getItem('inspecciones')) || [];
         
-        // Para autocompletado
         let clientesUnicos = [];
         let partNumbersUnicos = [];
         
@@ -1244,7 +1251,7 @@
         });
         
         // ============================================
-        // AUTOCOMPLETADO
+        // FUNCIONES
         // ============================================
         function actualizarListasAutocompletado() {
             const clientesSet = new Set();
@@ -1277,9 +1284,6 @@
             });
         }
         
-        // ============================================
-        // OPERADORES
-        // ============================================
         function agregarOperadorVertical() {
             operadorCount++;
             const container = document.getElementById('operadoresContainer');
@@ -1340,9 +1344,6 @@
             return operadores;
         }
         
-        // ============================================
-        // INSPECTORES
-        // ============================================
         function actualizarSelectInspectores() {
             const select = document.getElementById('empleado');
             select.innerHTML = '<option value="">Seleccionar inspector...</option>';
@@ -1408,9 +1409,6 @@
             localStorage.setItem('inspectores', JSON.stringify(inspectores));
         }
         
-        // ============================================
-        // SUPERVISORES
-        // ============================================
         function cargarSupervisoresListaModal() {
             const container = document.getElementById('supervisoresLista');
             if (!container) return;
@@ -1428,7 +1426,6 @@
                 container.appendChild(div);
             });
             
-            // Actualizar también los checkboxes
             actualizarCheckboxSupervisores();
         }
         
@@ -1467,7 +1464,6 @@
                 guardarSupervisores();
                 cargarSupervisoresListaModal();
                 
-                // Eliminar también de la lista de destinatarios si estaba seleccionado
                 const supervisorEliminado = supervisores.find(s => s.id === id);
                 if (supervisorEliminado) {
                     emailsParaEnviar = emailsParaEnviar.filter(e => e !== supervisorEliminado.email);
@@ -1480,9 +1476,6 @@
             localStorage.setItem('supervisores', JSON.stringify(supervisores));
         }
         
-        // ============================================
-        // INSPECCIONES
-        // ============================================
         function guardarInspeccion() {
             const cliente = document.getElementById('cliente').value.trim();
             const partNumber = document.getElementById('partNumber').value.trim();
@@ -1503,7 +1496,6 @@
             else if (piezasBuenas === 0) resultado = 'No Pasa';
             else resultado = 'Mixto';
             
-            // ✅ FORMATO DE HORA CORREGIDO: 12 HORAS CON AM/PM
             const nuevaInspeccion = {
                 id: Date.now(),
                 fecha: new Date().toLocaleString('es-MX', { 
@@ -1651,9 +1643,6 @@ Obs: ${ins.observaciones}
             `);
         }
         
-        // ============================================
-        // ESTADÍSTICAS
-        // ============================================
         function actualizarEstadisticas() {
             const totalPiezas = inspecciones.reduce((sum, ins) => sum + ins.cantidadTotal, 0);
             const piezasBuenas = inspecciones.reduce((sum, ins) => sum + ins.piezasBuenas, 0);
@@ -1709,9 +1698,6 @@ Obs: ${ins.observaciones}
             document.getElementById('clientSummary').innerHTML = html;
         }
         
-        // ============================================
-        // TESKS REPORT
-        // ============================================
         function mostrarOpcionesReporte() {
             if (inspecciones.length === 0) {
                 alert('No hay datos para generar el reporte. Primero guarda algunas inspecciones.');
@@ -1745,7 +1731,6 @@ Obs: ${ins.observaciones}
                 <div class="report-stat-card"><span>${tasa}%</span><small>Tasa</small></div>
             `;
             
-            // Gráfico
             const ultimos7 = [...inspecciones].reverse().slice(0, 7);
             const chartContainer = document.getElementById('chartContainer');
             chartContainer.innerHTML = '';
@@ -1769,7 +1754,6 @@ Obs: ${ins.observaciones}
                 chartContainer.appendChild(barDiv);
             });
             
-            // Tabla inspecciones
             const tbody = document.getElementById('reportTableBody');
             tbody.innerHTML = '';
             inspecciones.slice(-20).reverse().forEach((ins, index) => {
@@ -1790,7 +1774,6 @@ Obs: ${ins.observaciones}
                 tbody.appendChild(tr);
             });
             
-            // Top defectos
             const defectos = {};
             inspecciones.forEach(ins => {
                 if (ins.observaciones && ins.observaciones !== 'Sin observaciones') {
@@ -1816,7 +1799,6 @@ Obs: ${ins.observaciones}
                 });
             }
             
-            // Eficiencia inspectores
             const inspRes = {};
             inspecciones.forEach(ins => {
                 if (!inspRes[ins.empleado]) inspRes[ins.empleado] = { inspecciones: 0, total: 0, buenas: 0, malas: 0 };
@@ -1833,7 +1815,6 @@ Obs: ${ins.observaciones}
                 inspectoresTbody.innerHTML += `<tr><td>${emp}</td><td>${d.inspecciones}</td><td>${d.total}</td><td>${d.buenas}</td><td>${d.malas}</td><td>${tasaEmp}%</td></tr>`;
             });
             
-            // Rendimiento operadores
             const opRes = {};
             inspecciones.forEach(ins => {
                 if (ins.operadores?.length) {
@@ -1870,9 +1851,6 @@ Obs: ${ins.observaciones}
             window.print();
         }
         
-        // ============================================
-        // EMAIL
-        // ============================================
         function seleccionarServicio(servicio) {
             servicioSeleccionado = servicio;
             document.getElementById('btnGmail').classList.remove('selected');
@@ -1943,7 +1921,6 @@ Obs: ${ins.observaciones}
             const emailEliminado = emailsParaEnviar[index];
             emailsParaEnviar.splice(index, 1);
             
-            // Desmarcar checkbox si corresponde
             const checkboxes = document.querySelectorAll('#supervisoresCheckbox input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 if (cb.value === emailEliminado) {
@@ -2013,9 +1990,6 @@ Obs: ${ins.observaciones}
             alert('✅ Se abrió Gmail/Outlook. Revisa y haz clic en ENVIAR.');
         }
         
-        // ============================================
-        // EXPORTAR EXCEL
-        // ============================================
         function exportarExcel() {
             if (inspecciones.length === 0) {
                 alert('No hay datos');
