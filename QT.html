@@ -31,10 +31,11 @@
 
         .menu-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between;  /* Mantén esto */
             align-items: center;
             padding: 15px 20px;
             background: white;
+			position: relative;  /* Añade esto */
         }
 
         .menu-logo {
@@ -42,6 +43,10 @@
             font-weight: 800;
             color: #e63946;
             letter-spacing: -0.5px;
+			position: absolute;  /* Añade esto */
+            left: 50%;           /* Añade esto */
+            transform: translateX(-50%);  /* Añade esto */
+    white-space: nowrap; /* Evita que el texto se rompa */
         }
 
         .menu-logo span {
@@ -865,7 +870,7 @@
     <div class="menu-container">
         <div class="menu-header">
             <div class="menu-logo">
-                <span>💪</span> QUALITY TRAINING
+                <span></span> QUALITY TRAINING
             </div>
             <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
         </div>
