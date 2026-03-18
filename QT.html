@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Quality Training - Donde el fitness encuentra su hogar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* ===== MENÚ HAMBURGUESA ===== */
+        .menu-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+        }
+
+        .menu-logo {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #e63946;
+            letter-spacing: -0.5px;
+        }
+
+        .menu-logo span {
+            font-size: 1.5em;
+            margin-right: 5px;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 2em;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn:active {
+            background: #f0f0f0;
+        }
+
+        .hamburger-btn.active {
+            color: #e63946;
+        }
+
+        /* Menú desplegable */
+        .menu-items {
+            display: none;
+            background: white;
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .menu-items.show {
+            display: block;
+            max-height: 500px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 25px;
+            color: #333;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:active {
+            background: #f8f8f8;
+        }
+
+        .menu-item.active {
+            color: #e63946;
+            font-weight: 600;
+            border-left: 4px solid #e63946;
+        }
+
+        .menu-item span {
+            font-size: 1.3em;
+        }
+
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            padding: 90px 0 20px 0;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ===== SECCIÓN HERO (ESTILO IRON FITNESS) ===== */
+        .hero-section {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .hero-content {
+            max-width: 90%;
+            padding: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .hero-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .hero-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(230, 57, 70, 0.3);
+        }
+
+        /* ===== SECCIÓN DE MEMBRESÍAS (ESTILO IRON FITNESS) ===== */
+        .section-title {
+            font-size: 2em;
+            font-weight: 800;
+            text-align: center;
+            margin: 40px 20px 20px;
+            color: #333;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            padding: 0 20px;
+        }
+
+        .packages-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        .package-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card.popular {
+            border: 2px solid #e63946;
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.1);
+        }
+
+        .package-card.popular::before {
+            content: '🔥 MÁS POPULAR';
+            position: absolute;
+            top: 12px;
+            right: -30px;
+            background: #e63946;
+            color: white;
+            padding: 8px 40px;
+            font-size: 0.8em;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .package-name {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .package-price {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #e63946;
+            margin-bottom: 20px;
+        }
+
+        .package-price span {
+            font-size: 0.4em;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .package-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .package-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .package-features li::before {
+            content: "✓";
+            color: #e63946;
+            font-weight: bold;
+        }
+
+        .package-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .package-btn.popular-btn {
+            background: #e63946;
+        }
+
+        .package-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ===== SECCIÓN DE TESTIMONIOS (ESTILO IRON FITNESS) ===== */
+        .testimonials-section {
+            background: #f8f8f8;
+            padding: 40px 20px;
+            margin: 40px 0;
+        }
+
+        .testimonials-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .testimonial-info p {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .testimonial-text {
+            color: #666;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .testimonial-stars {
+            color: #ffc107;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        /* ===== SECCIÓN DE CONTACTO (ESTILO IRON FITNESS) ===== */
+        .contact-section {
+            padding: 40px 20px;
+            background: white;
+        }
+
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            background: #f8f8f8;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: #e63946;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-details h4 {
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .contact-details p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .contact-form {
+            background: #f8f8f8;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .contact-form h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e63946;
+        }
+
+        .contact-submit {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* ===== SECCIÓN DE REGISTRO (estilo consistente) ===== */
+        .section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            margin: 0 20px 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .photo-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 3px dashed #e63946;
+            overflow: hidden;
+            cursor: pointer;
+            background: #f8f8f8;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 2.5em;
+        }
+
+        .photo-input {
+            display: none;
+        }
+
+        .photo-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* ===== LISTA DE CLIENTES ===== */
+        .clients-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .client-card {
+            background: #f8f8f8;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+            position: relative;
+        }
+
+        .client-photo {
+            height: 150px;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            position: relative;
+        }
+
+        .client-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .client-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #28a745;
+            border: 2px solid white;
+        }
+
+        .client-info {
+            padding: 15px;
+        }
+
+        .client-info h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .delete-client-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 44px;
+            height: 44px;
+            background: #dc3545;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.3em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border: 2px solid white;
+            box-shadow: 0 2px 10px rgba(220,53,69,0.3);
+        }
+
+        /* ===== MODALES ===== */
+        .confirm-modal,
+        .historial-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .confirm-modal.active,
+        .historial-modal.active {
+            display: block;
+        }
+
+        .confirm-content {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            margin: 100px auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .historial-header {
+            background: #e63946;
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .historial-header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .historial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .historial-back {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .historial-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 5px;
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .historial-tab {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #f8f8f8;
+            color: #666;
+            font-size: 0.9em;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .historial-tab.active {
+            background: #e63946;
+            color: white;
+        }
+
+        .historial-content {
+            padding: 20px;
+        }
+
+        .timeline-item {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #e63946;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .btn-primary {
+            background: #e63946;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+        }
+
+        /* Ocultar elementos */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- MENÚ HAMBURGUESA -->
+    <div class="menu-container">
+        <div class="menu-header">
+            <div class="menu-logo">
+                <span>💪</span> QUALITY TRAINING
+            </div>
+            <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
+        </div>
+        
+        <div class="menu-items" id="menuItems">
+            <div class="menu-item active" onclick="showSection('inicio', this)">
+                <span>🏠</span> Inicio
+            </div>
+            <div class="menu-item" onclick="showSection('registro', this)">
+                <span>📝</span> Registrar Cliente
+            </div>
+            <div class="menu-item" onclick="showSection('clientes', this)">
+                <span>📋</span> Mis Clientes
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+        <!-- SECCIÓN INICIO (ESTILO IRON FITNESS) -->
+        <div id="inicio" class="section active">
+            <!-- HERO SECTION -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1>WHERE FITNESS<br>FINDS ITS HOME</h1>
+                    <p>Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
+                    <button class="hero-btn" onclick="showSection('registro', document.querySelector('.menu-item[onclick*=\"registro\"]'))">ÚNETE AHORA</button>
+                </div>
+            </div>
+
+            <!-- MEMBERSHIP PACKAGES -->
+            <h2 class="section-title">MEMBERSHIP PACKAGES</h2>
+            <p class="section-subtitle">Elige el plan que mejor se adapte a tus metas</p>
+
+            <div class="packages-grid">
+                <div class="package-card">
+                    <div class="package-name">BÁSICO</div>
+                    <div class="package-price">$29<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Acceso en hora valle</li>
+                        <li>2 clases grupales</li>
+                        <li>Sin evaluación inicial</li>
+                        <li>Horario limitado</li>
+                    </ul>
+                    <button class="package-btn" onclick="seleccionarPlan('basico')">SELECCIONAR</button>
+                </div>
+
+                <div class="package-card popular">
+                    <div class="package-name">ESTÁNDAR</div>
+                    <div class="package-price">$49<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Acceso 24/7</li>
+                        <li>Clases grupales ilimitadas</li>
+                        <li>Evaluación inicial</li>
+                        <li>1 sesión de entrenador/mes</li>
+                        <li>App de seguimiento</li>
+                    </ul>
+                    <button class="package-btn popular-btn" onclick="seleccionarPlan('estandar')">SELECCIONAR</button>
+                </div>
+
+                <div class="package-card">
+                    <div class="package-name">PREMIUM</div>
+                    <div class="package-price">$79<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Todo lo del plan Estándar</li>
+                        <li>Entrenador personal 4x/mes</li>
+                        <li>Nutricionista incluido</li>
+                        <li>Acceso a todos los centros</li>
+                    </ul>
+                    <button class="package-btn" onclick="seleccionarPlan('premium')">SELECCIONAR</button>
+                </div>
+
+                <div class="package-card">
+                    <div class="package-name">VIP</div>
+                    <div class="package-price">$129<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Entrenador personal ilimitado</li>
+                        <li>Spa y recuperación</li>
+                        <li>Estacionamiento VIP</li>
+                        <li>Eventos exclusivos</li>
+                    </ul>
+                    <button class="package-btn" onclick="seleccionarPlan('vip')">SELECCIONAR</button>
+                </div>
+            </div>
+
+            <!-- TESTIMONIALS SECTION -->
+            <div class="testimonials-section">
+                <h2 class="section-title">REAL PEOPLE. REAL TRUST. REAL REVIEWS.</h2>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">C</div>
+                            <div class="testimonial-info">
+                                <h4>Chris</h4>
+                                <p>hace 2 meses</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-text">
+                            "Quality Training es el mejor gimnasio que he visto en años. Máquinas actualizadas, muy limpio y excelente servicio al cliente. También preparan los mejores batidos, especialmente el Mr. Peanut #1. Amplio estacionamiento. Muy recomendado."
+                        </div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">J</div>
+                            <div class="testimonial-info">
+                                <h4>Jonathan</h4>
+                                <p>hace 2 meses</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-text">
+                            "Super limpio, super cómodo, servicio al cliente 10 de 10. La mejor experiencia."
+                        </div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">J</div>
+                            <div class="testimonial-info">
+                                <h4>Julio</h4>
+                                <p>hace 7 meses</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-text">
+                            "Excelente gimnasio. El personal fue servicial y me acomodaron con un plan de una semana perfecto. Las instalaciones están limpias y organizadas, el equipo en perfectas condiciones. 100% recomendado."
+                        </div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTACT SECTION -->
+            <div class="contact-section">
+                <div class="contact-container">
+                    <h2 class="section-title">CONTACT US</h2>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <h4>Dirección</h4>
+                                <p>410 Avenida Monte Sol Suite 8, Fajardo</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-details">
+                                <h4>Teléfono</h4>
+                                <p><a href="tel:7872224242" style="color: #333; text-decoration: none;">787-222-4242</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">✉️</div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <p>info@qualitytraining.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">⏰</div>
+                            <div class="contact-details">
+                                <h4>Horario</h4>
+                                <p>Lunes a Viernes: 5am - 11pm<br>Sábados y Domingos: 7am - 9pm</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form">
+                        <h3>Envíanos un mensaje</h3>
+                        <div class="form-group">
+                            <input type="text" id="contactNombre" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="contactEmail" placeholder="Tu email">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="contactMensaje" rows="4" placeholder="Tu mensaje..."></textarea>
+                        </div>
+                        <button class="contact-submit" onclick="enviarMensaje()">ENVIAR MENSAJE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN REGISTRAR CLIENTE -->
+        <div id="registro" class="section">
+            <h2 class="form-title">📝 Registrar Nuevo Cliente</h2>
+
+            <form id="clientForm">
+                <div class="photo-section">
+                    <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoInput').click()">
+                        <div class="photo-placeholder">📸</div>
+                    </div>
+                    <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewImage(this)">
+                    <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required placeholder="ejemplo@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="telefono" placeholder="787-555-1234">
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de nacimiento</label>
+                    <input type="date" id="fechaNacimiento" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Edad</label>
+                    <input type="number" id="edad" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Membresía</label>
+                    <select id="membresia">
+                        <option value="Básica">Básica - $29/mes</option>
+                        <option value="Estándar" selected>Estándar - $49/mes</option>
+                        <option value="Premium">Premium - $79/mes</option>
+                        <option value="VIP">VIP - $129/mes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="direccion" placeholder="Calle, ciudad">
+                </div>
+
+                <h3 style="margin: 20px 0 10px; color: #e63946;">🏥 Historial Médico</h3>
+                <div class="medical-grid" style="display: grid; grid-template-columns: repeat(2,1fr); gap: 10px;">
+                    <label class="medical-item"><input type="checkbox" id="hipertension" value="Hipertensión"> Hipertensión</label>
+                    <label class="medical-item"><input type="checkbox" id="diabetes" value="Diabetes"> Diabetes</label>
+                    <label class="medical-item"><input type="checkbox" id="cardiaco" value="Problemas cardíacos"> Cardíaco</label>
+                    <label class="medical-item"><input type="checkbox" id="asma" value="Asma"> Asma</label>
+                    <label class="medical-item"><input type="checkbox" id="lesiones" value="Lesiones previas"> Lesiones</label>
+                    <label class="medical-item"><input type="checkbox" id="alergias" value="Alergias"> Alergias</label>
+                </div>
+
+                <div class="form-group">
+                    <label>Observaciones</label>
+                    <textarea id="observaciones" rows="3" placeholder="Información médica relevante..."></textarea>
+                </div>
+
+                <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+                <button type="submit" class="btn btn-primary">Registrar Cliente</button>
+            </form>
+        </div>
+
+        <!-- SECCIÓN MIS CLIENTES -->
+        <div id="clientes" class="section">
+            <h2 class="form-title">📋 Mis Clientes</h2>
+
+            <div class="form-group">
+                <input type="text" id="searchClient" placeholder="🔍 Buscar cliente..." onkeyup="buscarClientes()">
+            </div>
+
+            <div class="clients-grid" id="clientsList"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN -->
+    <div id="confirmDeleteModal" class="confirm-modal">
+        <div class="confirm-content">
+            <div style="font-size: 4em; color: #e63946; margin-bottom: 20px;">🗑️</div>
+            <h3 style="margin-bottom: 10px;">¿Eliminar cliente?</h3>
+            <p id="deleteClientMessage" style="color: #666; margin-bottom: 20px;"></p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="cerrarConfirmModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="confirmarEliminarCliente()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE HISTORIAL -->
+    <div id="historialModal" class="historial-modal">
+        <div class="historial-header" id="historialHeader"></div>
+        <div class="historial-tabs" id="historialTabs">
+            <button class="historial-tab active" onclick="showHistorialTab('pagos')">💰 Pagos</button>
+            <button class="historial-tab" onclick="showHistorialTab('visitas')">📅 Visitas</button>
+            <button class="historial-tab" onclick="showHistorialTab('progreso')">📊 Progreso</button>
+            <button class="historial-tab" onclick="showHistorialTab('medico')">🏥 Médico</button>
+            <button class="historial-tab" onclick="showHistorialTab('notas')">📝 Notas</button>
+        </div>
+        <div class="historial-content" id="historialContent"></div>
+    </div>
+
+    <script>
+        // Variables globales
+        let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+        let clienteSeleccionado = null;
+        let clienteAEliminar = null;
+
+        // ===== FUNCIONES DEL MENÚ =====
+        function toggleMenu() {
+            const menu = document.getElementById('menuItems');
+            const btn = document.getElementById('menuToggle');
+            menu.classList.toggle('show');
+            btn.classList.toggle('active');
+            btn.textContent = btn.classList.contains('active') ? '✕' : '☰';
+        }
+
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.getElementById('menuItems').classList.remove('show');
+            document.getElementById('menuToggle').classList.remove('active');
+            document.getElementById('menuToggle').textContent = '☰';
+            
+            if (sectionId === 'clientes') mostrarClientes();
+        }
+
+        function seleccionarPlan(plan) {
+            showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
+        }
+
+        // ===== FUNCIONES DE REGISTRO =====
+        function previewImage(input) {
+            const preview = document.getElementById('photoPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => preview.innerHTML = `<img src="${e.target.result}" alt="Foto">`;
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.getElementById('fechaNacimiento').addEventListener('change', function() {
+            if (this.value) {
+                const hoy = new Date();
+                const nac = new Date(this.value);
+                let edad = hoy.getFullYear() - nac.getFullYear();
+                const mes = hoy.getMonth() - nac.getMonth();
+                if (mes < 0 || (mes === 0 && hoy.getDate() < nac.getDate())) edad--;
+                document.getElementById('edad').value = edad;
+            }
+        });
+
+        document.getElementById('clientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const condiciones = [];
+            document.querySelectorAll('.medical-item input:checked').forEach(cb => condiciones.push(cb.value));
+
+            const cliente = {
+                id: Date.now(),
+                nombre: document.getElementById('nombre').value,
+                edad: document.getElementById('edad').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                membresia: document.getElementById('membresia').value,
+                direccion: document.getElementById('direccion').value,
+                foto: document.getElementById('photoPreview').querySelector('img')?.src || '',
+                condiciones: condiciones,
+                observaciones: document.getElementById('observaciones').value,
+                fechaRegistro: new Date().toLocaleDateString(),
+                activo: true,
+                historial: { pagos: [], visitas: [], progreso: [], medico: [], notas: [] }
+            };
+
+            clientes.push(cliente);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            limpiarFormulario();
+            alert('✅ Cliente registrado exitosamente');
+            showSection('clientes', document.querySelector('.menu-item[onclick*="clientes"]'));
+        });
+
+        // ===== FUNCIONES DE CLIENTES =====
+        function mostrarClientes(filtro = '') {
+            const container = document.getElementById('clientsList');
+            let filtrados = filtro ? clientes.filter(c => c.nombre.toLowerCase().includes(filtro.toLowerCase()) || c.email.toLowerCase().includes(filtro.toLowerCase())) : clientes;
+
+            if (filtrados.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 30px; color: #666;">📭 No hay clientes registrados</div>';
+                return;
+            }
+
+            container.innerHTML = filtrados.map(cliente => `
+                <div class="client-card">
+                    <button class="delete-client-btn" onclick="mostrarConfirmEliminar(event, ${cliente.id}, '${cliente.nombre}')">🗑️</button>
+                    <div class="client-photo" onclick="verHistorial(${cliente.id})">
+                        ${cliente.foto ? `<img src="${cliente.foto}" alt="${cliente.nombre}">` : '📷'}
+                        <span class="client-status ${cliente.activo ? '' : 'inactive'}"></span>
+                    </div>
+                    <div class="client-info" onclick="verHistorial(${cliente.id})">
+                        <h3>${cliente.nombre}</h3>
+                        <p>📧 ${cliente.email}</p>
+                        <p>📞 ${cliente.telefono || 'N/A'}</p>
+                        <p>💳 ${cliente.membresia || 'Básica'}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function buscarClientes() {
+            mostrarClientes(document.getElementById('searchClient').value);
+        }
+
+        // ===== FUNCIONES DE ELIMINACIÓN =====
+        function mostrarConfirmEliminar(event, id, nombre) {
+            event.stopPropagation();
+            clienteAEliminar = id;
+            document.getElementById('deleteClientMessage').textContent = `¿Eliminar a ${nombre}? Se borrará todo su historial.`;
+            document.getElementById('confirmDeleteModal').classList.add('active');
+        }
+
+        function cerrarConfirmModal() {
+            document.getElementById('confirmDeleteModal').classList.remove('active');
+            clienteAEliminar = null;
+        }
+
+        function confirmarEliminarCliente() {
+            if (clienteAEliminar) {
+                clientes = clientes.filter(c => c.id !== clienteAEliminar);
+                localStorage.setItem('clientes', JSON.stringify(clientes));
+                cerrarConfirmModal();
+                mostrarClientes();
+                alert('✅ Cliente eliminado');
+                clienteAEliminar = null;
+            }
+        }
+
+        // ===== FUNCIONES DE HISTORIAL =====
+        function verHistorial(id) {
+            clienteSeleccionado = clientes.find(c => c.id === id);
+            if (!clienteSeleccionado) return;
+
+            document.getElementById('historialHeader').innerHTML = `
+                <div class="historial-header-content">
+                    <img src="${clienteSeleccionado.foto || 'https://via.placeholder.com/60'}" class="historial-avatar">
+                    <div>
+                        <h3>${clienteSeleccionado.nombre}</h3>
+                        <small>${clienteSeleccionado.email}</small>
+                    </div>
+                    <button class="historial-back" onclick="cerrarHistorial()">✕</button>
+                </div>
+            `;
+
+            actualizarSeccionPagos();
+            actualizarSeccionVisitas();
+            actualizarSeccionProgreso();
+            actualizarSeccionMedico();
+            actualizarSeccionNotas();
+
+            document.getElementById('historialModal').classList.add('active');
+        }
+
+        function cerrarHistorial() {
+            document.getElementById('historialModal').classList.remove('active');
+            clienteSeleccionado = null;
+        }
+
+        function showHistorialTab(tab) {
+            document.querySelectorAll('.historial-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.historial-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(tab + '-section').classList.add('active');
+        }
+
+        function actualizarSeccionPagos() {
+            const pagos = clienteSeleccionado.historial.pagos || [];
+            const total = pagos.reduce((s, p) => s + (p.monto || 0), 0);
+            
+            document.getElementById('historialContent').innerHTML = `
+                <div id="pagos-section" class="historial-section active">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Total Pagado</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #e63946;">$${total}</div>
+                        </div>
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Próximo Pago</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #333;">${clienteSeleccionado.proximoPago || '-'}</div>
+                        </div>
+                    </div>
+                    <div id="pagosHistorialList">
+                        ${pagos.length ? pagos.reverse().map(p => `
+                            <div class="timeline-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>📅 ${new Date(p.fecha).toLocaleDateString()}</span>
+                                    <span style="font-weight: bold; color: #e63946;">$${p.monto}</span>
+                                </div>
+                                <div>${p.concepto || 'Membresía'}</div>
+                            </div>
+                        `).join('') : '<p style="text-align: center; color: #666;">No hay pagos</p>'}
+                    </div>
+                </div>
+                <div id="visitas-section" class="historial-section">
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;">📅 Registrar Visita</h4>
+                        <input type="date" id="visitaFecha" class="form-group" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <select id="visitaTipo" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="Regular">Regular</option>
+                            <option value="Clase grupal">Clase grupal</option>
+                            <option value="Personal">Entrenamiento personal</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="registrarVisita()">Registrar</button>
+                    </div>
+                    <div id="visitasList">
+                        ${(clienteSeleccionado.historial.visitas || []).length ? clienteSeleccionado.historial.visitas.reverse().map(v => `
+                            <div class="timeline-item">
+                                <div>📅 ${new Date(v.fecha).toLocaleDateString()}</div>
+                                <div>${v.tipo}</div>
+                            </div>
+                        `).join('') : '<p style="text-align: center; color: #666;">No hay visitas</p>'}
+                    </div>
+                </div>
+                <div id="progreso-section" class="historial-section">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Peso Inicial</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #e63946;">${clienteSeleccionado.historial.progreso?.[0]?.peso || '-'} kg</div>
+                        </div>
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Peso Actual</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #333;">${clienteSeleccionado.historial.progreso?.[clienteSeleccionado.historial.progreso.length-1]?.peso || '-'} kg</div>
+                        </div>
+                    </div>
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;">📊 Registrar Medición</h4>
+                        <input type="number" id="medicionPeso" placeholder="Peso (kg)" step="0.1" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <input type="number" id="medicionAltura" placeholder="Altura (cm)" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <input type="date" id="medicionFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <button class="btn btn-primary" onclick="registrarMedicion()">Guardar</button>
+                    </div>
+                    <div id="progresoList">
+                        ${(clienteSeleccionado.historial.progreso || []).length ? clienteSeleccionado.historial.progreso.reverse().map(p => `
+                            <div class="timeline-item">
+                                <div>📅 ${new Date(p.fecha).toLocaleDateString()}</div>
+                                <div>⚖️ ${p.peso} kg</div>
+                            </div>
+                        `).join('') : '<p style="text-align: center; color: #666;">No hay mediciones</p>'}
+                    </div>
+                </div>
+                <div id="medico-section" class="historial-section">
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;">🏥 Registro Médico</h4>
+                        <select id="medicoTipo" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="Control">Control</option>
+                            <option value="Lesión">Lesión</option>
+                            <option value="Mejoría">Mejoría</option>
+                        </select>
+                        <textarea id="medicoDescripcion" rows="3" placeholder="Descripción..." style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                        <input type="date" id="medicoFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <button class="btn btn-primary" onclick="registrarEvolucionMedica()">Registrar</button>
+                    </div>
+                    <div id="medicoList">
+                        ${(clienteSeleccionado.historial.medico || []).length ? clienteSeleccionado.historial.medico.reverse().map(m => `
+                            <div class="timeline-item">
+                                <div>📅 ${new Date(m.fecha).toLocaleDateString()}</div>
+                                <div><strong>${m.tipo}</strong></div>
+                                <div>${m.descripcion}</div>
+                            </div>
+                        `).join('') : '<p style="text-align: center; color: #666;">No hay registros</p>'}
+                    </div>
+                </div>
+                <div id="notas-section" class="historial-section">
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;">📝 Agregar Nota</h4>
+                        <input type="text" id="notaTitulo" placeholder="Título" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <textarea id="notaContenido" rows="3" placeholder="Nota..." style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                        <input type="date" id="notaFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <button class="btn btn-primary" onclick="registrarNota()">Guardar</button>
+                    </div>
+                    <div id="notasList">
+                        ${(clienteSeleccionado.historial.notas || []).length ? clienteSeleccionado.historial.notas.reverse().map(n => `
+                            <div class="timeline-item">
+                                <div>📅 ${new Date(n.fecha).toLocaleDateString()}</div>
+                                <div><strong>${n.titulo}</strong></div>
+                                <div>${n.contenido}</div>
+                            </div>
+                        `).join('') : '<p style="text-align: center; color: #666;">No hay notas</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function registrarVisita() {
+            const visita = { id: Date.now(), fecha: document.getElementById('visitaFecha').value, tipo: document.getElementById('visitaTipo').value };
+            if (!clienteSeleccionado.historial.visitas) clienteSeleccionado.historial.visitas = [];
+            clienteSeleccionado.historial.visitas.push(visita);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarSeccionPagos();
+        }
+
+        function registrarMedicion() {
+            const medicion = {
+                id: Date.now(),
+                peso: parseFloat(document.getElementById('medicionPeso').value),
+                altura: parseFloat(document.getElementById('medicionAltura').value),
+                fecha: document.getElementById('medicionFecha').value
+            };
+            if (!clienteSeleccionado.historial.progreso) clienteSeleccionado.historial.progreso = [];
+            clienteSeleccionado.historial.progreso.push(medicion);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarSeccionPagos();
+        }
+
+        function registrarEvolucionMedica() {
+            const evolucion = {
+                id: Date.now(),
+                tipo: document.getElementById('medicoTipo').value,
+                descripcion: document.getElementById('medicoDescripcion').value,
+                fecha: document.getElementById('medicoFecha').value
+            };
+            if (!clienteSeleccionado.historial.medico) clienteSeleccionado.historial.medico = [];
+            clienteSeleccionado.historial.medico.push(evolucion);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarSeccionPagos();
+        }
+
+        function registrarNota() {
+            const nota = {
+                id: Date.now(),
+                titulo: document.getElementById('notaTitulo').value,
+                contenido: document.getElementById('notaContenido').value,
+                fecha: document.getElementById('notaFecha').value
+            };
+            if (!clienteSeleccionado.historial.notas) clienteSeleccionado.historial.notas = [];
+            clienteSeleccionado.historial.notas.push(nota);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarSeccionPagos();
+        }
+
+        function actualizarSeccionVisitas() { actualizarSeccionPagos(); }
+        function actualizarSeccionProgreso() { actualizarSeccionPagos(); }
+        function actualizarSeccionMedico() { actualizarSeccionPagos(); }
+        function actualizarSeccionNotas() { actualizarSeccionPagos(); }
+
+        // ===== FUNCIONES AUXILIARES =====
+        function limpiarFormulario() {
+            document.getElementById('clientForm').reset();
+            document.getElementById('photoPreview').innerHTML = '<div class="photo-placeholder">📸</div>';
+        }
+
+        function enviarMensaje() {
+            const nombre = document.getElementById('contactNombre').value;
+            const email = document.getElementById('contactEmail').value;
+            const mensaje = document.getElementById('contactMensaje').value;
+            if (nombre && email && mensaje) {
+                alert('✅ Mensaje enviado. Nos comunicaremos contigo pronto.');
+                document.getElementById('contactNombre').value = '';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactMensaje').value = '';
+            } else {
+                alert('❌ Por favor completa todos los campos');
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarConfirmModal();
+                cerrarHistorial();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarClientes();
+        });
+    </script>
+</body>
+</html>
