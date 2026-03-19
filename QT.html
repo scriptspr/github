@@ -1,0 +1,2730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Quality Training - Registro Completo de Clientes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* ===== MENÚ HAMBURGUESA ===== */
+        .menu-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            position: relative;
+        }
+
+        .menu-logo {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #63318A;
+            letter-spacing: -0.5px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        .menu-logo span {
+            font-size: 1.5em;
+            margin-right: 5px;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 2em;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn:active {
+            background: #f0f0f0;
+        }
+
+        .hamburger-btn.active {
+            color: #63318A;
+        }
+
+        .menu-items {
+            display: none;
+            background: white;
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .menu-items.show {
+            display: block;
+            max-height: 500px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 25px;
+            color: #333;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:active {
+            background: #f8f8f8;
+        }
+
+        .menu-item.active {
+            color: #63318A;
+            font-weight: 600;
+            border-left: 4px solid #63318A;
+        }
+
+        .menu-item span {
+            font-size: 1.3em;
+        }
+
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            padding: 90px 0 20px 0;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ===== SECCIÓN HERO ===== */
+        .hero-section {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .hero-content {
+            max-width: 90%;
+            padding: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .hero-btn {
+            background: #63318A;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(99, 49, 138, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .hero-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(99, 49, 138, 0.3);
+        }
+
+        /* ===== SECCIÓN DE MEMBRESÍAS ===== */
+        .section-title {
+            font-size: 2em;
+            font-weight: 800;
+            text-align: center;
+            margin: 40px 20px 20px;
+            color: #333;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            padding: 0 20px;
+        }
+
+        .packages-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        .package-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card.popular {
+            border: 2px solid #40D32A;
+            box-shadow: 0 10px 30px rgba(64, 211, 42, 0.1);
+        }
+
+        .package-card.popular::before {
+            content: '🔥 MÁS POPULAR';
+            position: absolute;
+            top: 12px;
+            right: -30px;
+            background: #40D32A;
+            color: white;
+            padding: 8px 40px;
+            font-size: 0.8em;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .package-name {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .package-price {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #63318A;
+            margin-bottom: 20px;
+        }
+
+        .package-price span {
+            font-size: 0.4em;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .package-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .package-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .package-features li::before {
+            content: "✓";
+            color: #63318A;
+            font-weight: bold;
+        }
+
+        .package-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .package-btn.popular-btn {
+            background: #40D32A;
+        }
+
+        .package-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ===== SECCIÓN DE MÉTODOS DE PAGO ===== */
+        .payment-section {
+            background: white;
+            padding: 40px 20px;
+            margin: 40px 0;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 30px auto 0;
+        }
+
+        .payment-card {
+            background: #f8f8f8;
+            border-radius: 15px;
+            padding: 25px 15px;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .payment-card:active {
+            transform: scale(0.98);
+            background: #f0f0f0;
+        }
+
+        .payment-card.selected {
+            border: 2px solid #63318A;
+            background: #f5f0ff;
+        }
+
+        .payment-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .payment-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .payment-details {
+            background: #f8f8f8;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 2px solid #63318A;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .payment-details.hidden {
+            display: none;
+        }
+
+        .payment-details h4 {
+            color: #63318A;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .ath-number {
+            font-family: monospace;
+            font-size: 2em;
+            color: #63318A;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .credit-card-form {
+            background: linear-gradient(135deg, #333, #63318A);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+        }
+
+        .credit-card-form input {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .credit-card-form input::placeholder {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .card-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* ===== SECCIÓN DE TESTIMONIOS ===== */
+        .testimonials-section {
+            background: #f8f8f8;
+            padding: 40px 20px;
+            margin: 40px 0;
+        }
+
+        .testimonials-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.03);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .testimonial-info p {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .testimonial-text {
+            color: #666;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .testimonial-stars {
+            color: #ffc107;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        /* ===== SECCIÓN DE CONTACTO ===== */
+        .contact-section {
+            padding: 40px 20px;
+            background: white;
+        }
+
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            background: #f8f8f8;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: #63318A;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-details h4 {
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .contact-details p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .contact-form {
+            background: #f8f8f8;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .contact-form h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #63318A;
+        }
+
+        .contact-submit {
+            background: #63318A;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* ===== SECCIÓN DE REGISTRO COMPLETO ===== */
+        .section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            margin: 0 20px 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #333;
+            border-bottom: 3px solid #63318A;
+            padding-bottom: 10px;
+        }
+
+        .form-subtitle {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin: 30px 0 15px;
+            color: #63318A;
+            border-left: 5px solid #63318A;
+            padding-left: 15px;
+        }
+
+        .photo-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 3px dashed #63318A;
+            overflow: hidden;
+            cursor: pointer;
+            background: #f8f8f8;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 2.5em;
+        }
+
+        .photo-input {
+            display: none;
+        }
+
+        .photo-btn {
+            background: #63318A;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #63318A;
+        }
+
+        .info-box {
+            background: #f0f0f0;
+            border-left: 4px solid #63318A;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #63318A;
+        }
+
+        /* ===== LISTA DE CLIENTES ===== */
+        .clients-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .client-card {
+            background: #f8f8f8;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+            position: relative;
+        }
+
+        .client-photo {
+            height: 150px;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .client-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .client-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #40D32A;
+            border: 2px solid white;
+        }
+
+        .client-status.inactive {
+            background: #dc3545;
+        }
+
+        .client-info {
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .client-info h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .delete-client-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 44px;
+            height: 44px;
+            background: #dc3545;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.3em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border: 2px solid white;
+            box-shadow: 0 2px 10px rgba(220,53,69,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .delete-client-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .delete-client-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== SISTEMA DE CONTRASEÑA ===== */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-modal.active {
+            display: flex;
+        }
+
+        .password-content {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .password-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #63318A;
+        }
+
+        .password-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .password-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-size: 1.2em;
+            text-align: center;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #63318A;
+            box-shadow: 0 0 0 3px rgba(99, 49, 138, 0.1);
+        }
+
+        .password-btn {
+            width: 100%;
+            padding: 18px;
+            background: #63318A;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .password-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 49, 138, 0.3);
+        }
+
+        .password-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .password-btn-secondary {
+            width: 100%;
+            padding: 18px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .password-btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .password-error {
+            margin-top: 15px;
+            color: #63318A;
+            font-weight: 600;
+            min-height: 24px;
+        }
+
+        .password-attempts {
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Botón de cerrar sesión */
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:active {
+            transform: scale(0.98);
+        }
+
+        /* ===== MODALES ===== */
+        .confirm-modal,
+        .historial-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .confirm-modal.active,
+        .historial-modal.active {
+            display: block;
+        }
+
+        .confirm-content {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            margin: 100px auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .confirm-icon {
+            font-size: 4em;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .historial-header {
+            background: #63318A;
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .historial-header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .historial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+        }
+
+        .historial-back {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .historial-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 5px;
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .historial-tab {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #f8f8f8;
+            color: #666;
+            font-size: 0.9em;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .historial-tab.active {
+            background: #63318A;
+            color: white;
+        }
+
+        .historial-content {
+            padding: 20px;
+        }
+
+        .timeline-item {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #63318A;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .btn-primary {
+            background: #63318A;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-success {
+            background: #40D32A;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Header de clientes con botón de logout */
+        .clientes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- MENÚ HAMBURGUESA -->
+    <div class="menu-container">
+        <div class="menu-header">
+            <div class="menu-logo">
+                <span></span> QUALITY TRAINING
+            </div>
+            <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
+        </div>
+        
+        <div class="menu-items" id="menuItems">
+            <div class="menu-item active" onclick="showSection('inicio', this)">
+                <span>🏠</span> Inicio
+            </div>
+            <div class="menu-item" onclick="showSection('registro', this)">
+                <span>📝</span> Registrar Cliente
+            </div>
+            <div class="menu-item" onclick="showSection('clientes', this)">
+                <span>📋</span> Mis Clientes
+            </div>
+            <div class="menu-item" onclick="showSection('pagos', this)">
+                <span>💰</span> Procesar Pago
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+        <!-- SECCIÓN INICIO -->
+        <div id="inicio" class="section active">
+            <!-- HERO SECTION -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1>WHERE FITNESS<br>FINDS ITS HOME</h1>
+                    <p>Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
+                    <button class="hero-btn" onclick="showSection('registro', document.querySelector('.menu-item[onclick*=\"registro\"]'))">ÚNETE AHORA</button>
+                </div>
+            </div>
+
+            <!-- MEMBERSHIP PACKAGES -->
+            <h2 class="section-title">MEMBERSHIP PACKAGES</h2>
+            <p class="section-subtitle">Elige el plan que mejor se adapte a tus metas</p>
+
+            <div class="packages-grid">
+                <div class="package-card">
+                    <div class="package-name">BÁSICO</div>
+                    <div class="package-price">$29<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Acceso en hora valle</li>
+                        <li>2 clases grupales</li>
+                        <li>Sin evaluación inicial</li>
+                        <li>Horario limitado</li>
+                    </ul>
+                    <button class="package-btn" onclick="seleccionarPlan('basico')">SELECCIONAR</button>
+                </div>
+
+                <div class="package-card popular">
+                    <div class="package-name">ESTÁNDAR</div>
+                    <div class="package-price">$49<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Acceso 24/7</li>
+                        <li>Clases grupales ilimitadas</li>
+                        <li>Evaluación inicial</li>
+                        <li>1 sesión de entrenador/mes</li>
+                        <li>App de seguimiento</li>
+                    </ul>
+                    <button class="package-btn popular-btn" onclick="seleccionarPlan('estandar')">SELECCIONAR</button>
+                </div>
+
+                <div class="package-card">
+                    <div class="package-name">PREMIUM</div>
+                    <div class="package-price">$79<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Todo lo del plan Estándar</li>
+                        <li>Entrenador personal 4x/mes</li>
+                        <li>Nutricionista incluido</li>
+                        <li>Acceso a todos los centros</li>
+                    </ul>
+                    <button class="package-btn" onclick="seleccionarPlan('premium')">SELECCIONAR</button>
+                </div>
+
+                <div class="package-card">
+                    <div class="package-name">VIP</div>
+                    <div class="package-price">$129<span>/mes</span></div>
+                    <ul class="package-features">
+                        <li>Entrenador personal ilimitado</li>
+                        <li>Spa y recuperación</li>
+                        <li>Estacionamiento VIP</li>
+                        <li>Eventos exclusivos</li>
+                    </ul>
+                    <button class="package-btn" onclick="seleccionarPlan('vip')">SELECCIONAR</button>
+                </div>
+            </div>
+
+            <!-- TESTIMONIALS SECTION -->
+            <div class="testimonials-section">
+                <h2 class="section-title">REAL PEOPLE. REAL TRUST. REAL REVIEWS.</h2>
+                
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">C</div>
+                            <div class="testimonial-info">
+                                <h4>Chris</h4>
+                                <p>hace 2 meses</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-text">
+                            "Quality Training es el mejor gimnasio que he visto en años. Máquinas actualizadas, muy limpio y excelente servicio al cliente. También preparan los mejores batidos, especialmente el Mr. Peanut #1. Amplio estacionamiento. Muy recomendado."
+                        </div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">J</div>
+                            <div class="testimonial-info">
+                                <h4>Jonathan</h4>
+                                <p>hace 2 meses</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-text">
+                            "Super limpio, super cómodo, servicio al cliente 10 de 10. La mejor experiencia."
+                        </div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">J</div>
+                            <div class="testimonial-info">
+                                <h4>Julio</h4>
+                                <p>hace 7 meses</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-text">
+                            "Excelente gimnasio. El personal fue servicial y me acomodaron con un plan de una semana perfecto. Las instalaciones están limpias y organizadas, el equipo en perfectas condiciones. 100% recomendado."
+                        </div>
+                        <div class="testimonial-stars">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTACT SECTION -->
+            <div class="contact-section">
+                <div class="contact-container">
+                    <h2 class="section-title">CONTACT US</h2>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <h4>Dirección</h4>
+                                <p>Ceiba, PR</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-details">
+                                <h4>Teléfono</h4>
+                                <p><a href="tel:0000000000" style="color: #333; text-decoration: none;">000-000-0000</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">✉️</div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <p>info@qualitytraining.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">⏰</div>
+                            <div class="contact-details">
+                                <h4>Horario</h4>
+                                <p>Lunes a Viernes: 5am - 9pm<br>Sábados: 8am - 2pm</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form">
+                        <h3>Envíanos un mensaje</h3>
+                        <div class="form-group">
+                            <input type="text" id="contactNombre" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="contactEmail" placeholder="Tu email">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="contactMensaje" rows="4" placeholder="Tu mensaje..."></textarea>
+                        </div>
+                        <button class="contact-submit" onclick="enviarMensaje()">ENVIAR MENSAJE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN REGISTRAR CLIENTE (CON FORMULARIO COMPLETO) -->
+        <div id="registro" class="section">
+            <h2 class="form-title">📝 REGISTRO COMPLETO DE CLIENTE</h2>
+
+            <form id="clientForm">
+                <!-- FOTO -->
+                <div class="photo-section">
+                    <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoInput').click()">
+                        <div class="photo-placeholder">📸</div>
+                    </div>
+                    <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewImage(this)">
+                    <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
+                </div>
+
+                <!-- ===== DATOS PERSONALES ===== -->
+                <h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Fecha de Comienzo *</label>
+                        <input type="date" id="fechaComienzo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Núm. Socio *</label>
+                        <input type="text" id="numSocio" required placeholder="Ej: SOC-001">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Nombre completo *</label>
+                        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo *</label>
+                        <select id="sexo" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Fecha de nacimiento *</label>
+                        <input type="date" id="fechaNacimiento" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Edad *</label>
+                        <input type="number" id="edad" readonly>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Peso (kg)</label>
+                        <input type="text" id="peso" placeholder="Ej: 70 kg">
+                    </div>
+                    <div class="form-group">
+                        <label>Estatura (m)</label>
+                        <input type="text" id="estatura" placeholder="Ej: 1.75 m">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="direccion" placeholder="Calle, ciudad, código postal">
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Teléfono / Celular</label>
+                        <input type="tel" id="telefono" placeholder="123-456-7890">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" required placeholder="ejemplo@email.com">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Contacto de emergencia (nombre)</label>
+                        <input type="text" id="contactoEmergencia" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono de emergencia</label>
+                        <input type="tel" id="telEmergencia" placeholder="123-456-7890">
+                    </div>
+                </div>
+
+                <!-- ===== HISTORIAL MÉDICO PASADO/PRESENTE ===== -->
+                <h3 class="form-subtitle">🏥 HISTORIAL MÉDICO PASADO Y/O PRESENTE</h3>
+                
+                <div class="checkbox-group">
+                    <div class="grid-3">
+                        <label class="checkbox-item"><input type="checkbox" id="histAltaPresion" value="Alta Presión"> Alta Presión</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histAtaqueCorazon" value="Ataque al Corazón"> Ataque al Corazón</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histArtritis" value="Artritis"> Artritis</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histArterias" value="Enfermedad de las arterias"> Enfermedad de las arterias</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histPulmonar" value="Enfermedad Pulmonar"> Enfermedad Pulmonar</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histEpilepsia" value="Epilepsia"> Epilepsia</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histEspalda" value="Espalda Lastimada"> Espalda Lastimada</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histReumatica" value="Fiebre Reumática"> Fiebre Reumática</label>
+                        <label class="checkbox-item"><input type="checkbox" id="histOperaciones" value="Operaciones"> Operaciones</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Explique lo marcado (si es necesario):</label>
+                    <textarea id="explicacionHistorial" rows="2" placeholder="Detalles adicionales..."></textarea>
+                </div>
+
+                <!-- ===== HISTORIAL FAMILIAR ===== -->
+                <h3 class="form-subtitle">👪 HISTORIAL FAMILIAR</h3>
+                
+                <div class="checkbox-group">
+                    <div class="grid-3">
+                        <label class="checkbox-item"><input type="checkbox" id="famAltaPresion" value="Alta Presión"> Alta Presión</label>
+                        <label class="checkbox-item"><input type="checkbox" id="famDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
+                        <label class="checkbox-item"><input type="checkbox" id="famCorazon" value="Enfermedad del Corazón"> Enfermedad del Corazón</label>
+                        <label class="checkbox-item"><input type="checkbox" id="famOperacionCorazon" value="Operación del Corazón"> Operación del Corazón</label>
+                        <label class="checkbox-item"><input type="checkbox" id="famOtras" value="Otras enfermedades"> Otras enfermedades de cuidado</label>
+                        <label class="checkbox-item"><input type="checkbox" id="famTobillos" value="Tobillos o rodillas lastimados"> Tobillos o rodillas lastimados</label>
+                    </div>
+                </div>
+
+                <!-- ===== SÍNTOMAS PRESENTES ===== -->
+                <h3 class="form-subtitle">🤕 SÍNTOMAS PRESENTES</h3>
+                
+                <div class="checkbox-group">
+                    <div class="grid-3">
+                        <label class="checkbox-item"><input type="checkbox" id="sinArtritis" value="Artritis"> Artritis</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinDificultadRespirar" value="Dificultad al respirar"> Dificultad al respirar</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinDificultadDormir" value="Dificultad al respirar mientras duerme"> Dificultad al respirar mientras duerme</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinDolorCadera" value="Dolor en la cadera"> Dolor en la cadera</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinDolorPecho" value="Dolor de pecho"> Dolor de pecho</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinDolorRodillas" value="Dolor de rodillas o tobillo"> Dolor de rodillas o tobillo</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinFatiga" value="Fatiga inusual"> Fatiga inusual</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinFlema" value="Flema con sangre"> Flema con sangre</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinMareos" value="Mareos o Desmayos"> Mareos o Desmayos</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinAlmohada" value="Necesita más almohadas"> Necesita más almohadas</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinPalpitaciones" value="Palpitaciones"> Palpitaciones</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinPulsoAcelerado" value="Pulso acelerado"> Pulso acelerado</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinSoplo" value="Soplo en el Corazón"> Soplo en el Corazón</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinTos" value="Tos o Fatiga"> Tos o Fatiga</label>
+                        <label class="checkbox-item"><input type="checkbox" id="sinTobillosInflamados" value="Tobillos Inflamados"> Tobillos Inflamados</label>
+                    </div>
+                </div>
+
+                <!-- ===== DESCRIPCIÓN DEL TRABAJO ===== -->
+                <h3 class="form-subtitle">💼 DESCRIPCIÓN DEL TRABAJO</h3>
+                
+                <div class="form-group">
+                    <label>Compañía o Empresa</label>
+                    <input type="text" id="compania" placeholder="Nombre de la empresa">
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Tipo de trabajo</label>
+                        <select id="tipoTrabajo">
+                            <option value="">Seleccionar...</option>
+                            <option value="Sedentario">Sedentario</option>
+                            <option value="Activo">Activo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nivel de actividad física</label>
+                        <select id="nivelActividad">
+                            <option value="">Seleccionar...</option>
+                            <option value="Sedentario">Sedentario</option>
+                            <option value="Fines de semana">Se ejercita fines de semana</option>
+                            <option value="Activo 1-2">Físicamente activo (1-2 veces/semana)</option>
+                            <option value="Activo 3+">Físicamente activo (3+ veces/semana)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>¿Cuánto camina diariamente? (minutos)</label>
+                        <input type="number" id="minutosCamina" placeholder="Minutos">
+                    </div>
+                    <div class="form-group">
+                        <label>Millas</label>
+                        <input type="number" id="millasCamina" placeholder="Millas" step="0.1">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>¿En programa de ejercicio actualmente?</label>
+                        <select id="programaEjercicio">
+                            <option value="">Seleccionar...</option>
+                            <option value="Si">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>¿Le gustaría comenzar?</label>
+                        <select id="gustariaComenzar">
+                            <option value="">Seleccionar...</option>
+                            <option value="Si">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>¿Se toma el pulso al hacer ejercicio?</label>
+                        <select id="tomaPulso">
+                            <option value="">Seleccionar...</option>
+                            <option value="Si">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Pulso por minuto</label>
+                        <input type="number" id="pulsoMinuto" placeholder="Ej: 70">
+                    </div>
+                </div>
+
+                <!-- ===== SÍNTOMAS AL EJERCITARSE ===== -->
+                <h3 class="form-subtitle">🏃 SÍNTOMAS AL EJERCITARSE</h3>
+                
+                <div class="checkbox-group">
+                    <div class="grid-3">
+                        <label class="checkbox-item"><input type="checkbox" id="ejerDolorPecho" value="Dolor de Pecho"> Dolor de Pecho</label>
+                        <label class="checkbox-item"><input type="checkbox" id="ejerDolorPiernas" value="Dolor en las piernas"> Dolor en las piernas</label>
+                        <label class="checkbox-item"><input type="checkbox" id="ejerFaltaRespiración" value="Falta de respiración"> Falta de respiración</label>
+                        <label class="checkbox-item"><input type="checkbox" id="ejerMareo" value="Mareo"> Mareo</label>
+                        <label class="checkbox-item"><input type="checkbox" id="ejerPresion" value="Presión en el Corazón"> Presión en el Corazón</label>
+                        <label class="checkbox-item"><input type="checkbox" id="ejerCansancio" value="Sensación de cansancio"> Sensación de cansancio</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tiempo de recuperación de la respiración</label>
+                    <select id="tiempoRecuperacion">
+                        <option value="">Seleccionar...</option>
+                        <option value="1-2 min">1-2 minutos</option>
+                        <option value="Pocos min">Unos pocos minutos</option>
+                        <option value="5+ min">Más de 5 minutos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>¿Tiene alguna lesión en huesos o músculos?</label>
+                    <select id="tieneLesion">
+                        <option value="">Seleccionar...</option>
+                        <option value="Si">Sí</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- ===== HÁBITOS ===== -->
+                <h3 class="form-subtitle">🚬 HÁBITOS</h3>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>¿Fuma?</label>
+                        <select id="fuma" onchange="toggleFumador()">
+                            <option value="">Seleccionar...</option>
+                            <option value="Si">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="cantidadFumaContainer" style="display: none;">
+                        <label>Cantidad diaria</label>
+                        <input type="text" id="cantidadFuma" placeholder="Ej: 10 cigarrillos">
+                    </div>
+                </div>
+
+                <div id="fumadorDetalles" style="display: none;">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Edad que comenzó a fumar</label>
+                            <input type="number" id="edadComenzoFumar">
+                        </div>
+                        <div class="form-group">
+                            <label>Años fumando</label>
+                            <input type="number" id="anosFumando">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>¿Dejó de fumar?</label>
+                            <select id="dejoFumar" onchange="toggleDejoFumar()">
+                                <option value="">Seleccionar...</option>
+                                <option value="Si">Sí</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="cuandoDejoContainer" style="display: none;">
+                            <label>Cuándo dejó de fumar</label>
+                            <input type="text" id="cuandoDejoFumar" placeholder="Ej: Hace 2 años">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="porqueDejoContainer" style="display: none;">
+                        <label>¿Por qué dejó de fumar?</label>
+                        <textarea id="porqueDejoFumar" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Peso a los 21 años (libras)</label>
+                        <input type="number" id="peso21" placeholder="Libras">
+                    </div>
+                    <div class="form-group">
+                        <label>¿Está actualmente a dieta?</label>
+                        <select id="dieta" onchange="toggleDieta()">
+                            <option value="">Seleccionar...</option>
+                            <option value="Si">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="tipoDietaContainer" style="display: none;">
+                    <label>Qué clase de dieta</label>
+                    <input type="text" id="tipoDieta" placeholder="Ej: Baja en carbohidratos">
+                </div>
+
+                <!-- ===== MEDICAMENTOS ===== -->
+                <h3 class="form-subtitle">💊 MEDICAMENTOS</h3>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>¿Usa nitroglicerina o equivalente?</label>
+                        <select id="usaNitroglicerina" onchange="toggleNitroglicerina()">
+                            <option value="">Seleccionar...</option>
+                            <option value="Si">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="cantidadNitroglicerinaContainer" style="display: none;">
+                        <label>Cuántas tabletas</label>
+                        <input type="text" id="cantidadNitroglicerina" placeholder="Ej: 2">
+                    </div>
+                </div>
+
+                <div class="grid-2" id="frecuenciaNitroglicerinaContainer" style="display: none;">
+                    <div class="form-group">
+                        <label>Por día</label>
+                        <input type="text" id="nitroPorDia">
+                    </div>
+                    <div class="form-group">
+                        <label>Por semana</label>
+                        <input type="text" id="nitroPorSemana">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Condición actual de salud</label>
+                    <textarea id="condicionSalud" rows="2" placeholder="Describa su condición actual..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Medicamentos que usa actualmente</label>
+                    <textarea id="medicamentos" rows="4" placeholder="Escriba los medicamentos que está usando actualmente..."></textarea>
+                </div>
+
+                <!-- ===== RELEVOS Y CONSENTIMIENTOS ===== -->
+                <h3 class="form-subtitle">📄 RELEVOS Y CONSENTIMIENTOS</h3>
+                
+                <div class="info-box">
+                    <strong>RELEVO Y CONSENTIMIENTO PARA EVALUACION Y PLAN DE ACONDICIONAMIENTO FISICO</strong>
+                    <p style="margin-top: 10px;">Doy mi consentimiento voluntario para participar de una evaluación física con el propósito de determinar mi condición física actual y un plan de acondicionamiento individualizado. Todas son realizadas por un capacitador Físico, Entrenador Personal Certificado. Cualquier prueba puede ser detenida en cualquier momento por signos de fatiga o agotamiento.</p>
+                    <p style="margin-top: 10px;">Las pruebas para realizarse requieren una indumentaria para hacer ejercicio que no restrinja el movimiento corporal, ni sea excesivamente calurosa. También requiere calzado deportivo adecuado. Todos los parámetros para seguir durante la evaluación serán explicados por el Capacitador Físico, Entrenador Personal antes de comenzar. Hay pruebas que se pueden modificar o eliminar según las particularidades de cada caso.</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>Breve descripción de las pruebas a realizarse</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Por ciento % de grasa, medidas de pliegues en la piel en área del cuerpo, hombre - parte central del lado exterior del pectoral, abdomen el punto medio del muslo. Mujer- parte posterior del brazo, punto lateral superior de la cadera y el punto medio del muslo.</li>
+                        <li>Peso corporal, presión sanguínea y pulso en reposo. Medidas anatómicas.</li>
+                        <li>Prueba de flexibilidad, sentada, inclinándose y estirándose hace el frente.</li>
+                        <li>Prueba de resistencia abdominal tipo "crunch" en un periodo de un minuto.</li>
+                        <li>Prueba de resistencia muscular tipo lagartija "push-up" modificada para hombres y mujeres.</li>
+                        <li>Prueba de tolerancia cardiovascular subiendo y bajando un escalón por 3 min. Se tomará el pulso de recuperación en el minuto subsiguiente al concluir la prueba.</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <p>Entiendo que toda evaluación física y rutina de acondicionamiento físico presentan unos riesgos a mi salud. Acepto someterme a las pruebas y plan de acondicionamiento, para lo cual tengo autorización y consentimiento de un médico autorizado a practicar la medicina en Puerto Rico (en caso de tener factores de riesgo moderado o alto).</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Yo (nombre completo)</label>
+                        <input type="text" id="consentimientoNombre" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="consentimientoFecha">
+                    </div>
+                </div>
+
+                <!-- ===== POLÍTICAS DEL GIMNASIO ===== -->
+                <h3 class="form-subtitle">🏋️ POLÍTICAS DEL GIMNASIO</h3>
+                
+                <div class="info-box">
+                    <ul style="margin-left: 20px;">
+                        <li>High Quality Training LLC, le hace entrega de una llave para el registro diario de sus visitas, si usted pierde o se le daña la llave tendrá que sustituirla por un costo de $10.00 dólares. Es requisito el uso de esta llave, si se le queda High Quality Training le dará la entrada hasta un máximo de 3 veces, después de esto se le vende una llave o se le deniega la entrada.</li>
+                        <li>Además, nuestra matrícula tiene un costo de $30.00 dólares anuales. Por lo que el sistema le cobrará este cargo anualmente.</li>
+                        <li>Si usted No quiere evaluación ni rutina favor de firmar con sus iniciales.</li>
+                        <li>Además de nuestros entrenadores de piso que lo estarán ayudando, contamos con servicios de Personal Training que se trata de un entrenamiento personalizado, esto conlleva un costo adicional. Para más información pregunte en Servicio al Cliente.</li>
+                    </ul>
+                </div>
+
+                <div class="info-box" style="background: #ffe6e6; border-left-color: #dc3545;">
+                    <strong style="color: #dc3545;">¡¡¡¡SE REQUIERE EL USO DE 2 TOALLAS!!!!</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px; color: #dc3545; font-weight: bold;">
+                        <li>TOALLA #1 ES PARA PONER EN LAS MAQUINAS.</li>
+                        <li>TOALLA #2 ES PARA DESINFECTAR LAS MAQUINAS.</li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label>Doy fe que se me dio a leer y se me entregaron los reglamentos del gimnasio</label>
+                    <select id="aceptaReglamentos" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="Si">Sí, acepto</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Firma</label>
+                        <input type="text" id="firmaReglamentos" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="fechaReglamentos">
+                    </div>
+                </div>
+
+                <!-- ===== AUTORIZACIÓN DE IMAGEN ===== -->
+                <h3 class="form-subtitle">📸 AUTORIZACIÓN DE IMAGEN</h3>
+                
+                <div class="info-box">
+                    <p>Yo, ___________________________, por la presente concedo al High Quality Training LLC, sus directores, oficiales, empleados, agentes y designados (en adelante colectivamente referidos como, el "HQT"), el permiso irrevocable de capturar imágenes de mi persona a través de fotografías, videos, grabaciones o cualquier otro medio electrónico o impreso (en adelante colectivamente, "Imágenes") en relación a promociones del gimnasio conozco que el HTQ será el único dueño y custodio de las Imágenes y le concedo permiso para reproducir, mostrar, distribuir, usar, modificar e imprimir dichas Imágenes de cualquier manera relacionada al negocio del HTQ incluyendo, pero sin limitarse a: publicaciones, afiches, página web, redes sociales u otros medios utilizados únicamente para la promoción de los productos y servicios ofrecidos por el HTQ.</p>
+                    <p style="margin-top: 10px;">Además, relevo al HTQ de toda responsabilidad derivada del uso y reproducción de las Imágenes a través de cualquier medio y renuncio toda causa de acción relacionada al uso de las Imágenes incluyendo, pero sin limitarse a reclamaciones por invasión a la intimidad.</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Nombre en letra de molde</label>
+                        <input type="text" id="autorizacionNombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Firma</label>
+                        <input type="text" id="autorizacionFirma">
+                    </div>
+                </div>
+
+                <!-- ===== CLASES GRUPALES ===== -->
+                <h3 class="form-subtitle">👥 CLASES GRUPALES</h3>
+                
+                <div class="info-box">
+                    <p>Estoy consciente que, de no existir quorum de 4 o más, la clase grupal se suspenderá y podrá reponerla con el uso del Gimnasio. Por otro lado, si la maestra(o), faltara las clases se le sustituye con el uso de las facilidades.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Iniciales</label>
+                    <input type="text" id="inicialesClases" maxlength="3" placeholder="Ej: JPG">
+                </div>
+
+                <!-- ===== RELEVO Y LIBERACION DE RESPONSABILIDAD ===== -->
+                <h3 class="form-subtitle">⚖️ RELEVO Y LIBERACION DE RESPONSABILIDAD</h3>
+                
+                <div class="info-box">
+                    <p><strong>High Quality Training LLC</strong></p>
+                    <p style="margin-top: 10px;">Se entiende y acuerda que EL SOCIO tiene el permiso de su médico para realizar ejercicio físico y que el GYM no ofrece ninguna garantía o representación con respecto a la conveniencia/no conveniencia de EL SOCIO realizar dicho ejercicio. Por la presente, EL SOCIO libera para siempre al GYM de todas las acciones y causas de acciones, demandas, reclamos y demandas que surjan de las lesiones sufridas por las promesas del Vendedor.</p>
+                    <p style="margin-top: 10px;"><strong>Aceptación expresa de riesgo:</strong> El abajo firmante es consciente de que existen riesgos importantes involucrados en todos los aspectos del entrenamiento físico. Estos riesgos incluyen, entre otros: caídas que pueden provocar lesiones graves o la muerte; lesión o muerte debido a negligencia por su parte, su compañero de entrenamiento u otras personas a su alrededor; lesiones o muerte debido al uso inadecuado o falla del equipo; Esguinces y torceduras. Soy consciente de que cualquiera de los riesgos mencionados anteriormente puede provocar lesiones graves o la muerte para mí o para mi(s) pareja(s). Asumo voluntariamente la responsabilidad total por los riesgos a los que me estoy exponiendo y acepto la responsabilidad total por cualquier lesión o muerte que pueda resultar de la participación en cualquier actividad o clase mientras estoy en o bajo la dirección de HIGH QUALITY TRAINING LLC (GYM). Reconozco que no tengo impedimentos físicos, lesiones o enfermedades que puedan ponerme en peligro a mí o a otros.</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Firma</label>
+                        <input type="text" id="firmaLiberacion">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="fechaLiberacion">
+                    </div>
+                </div>
+
+                <!-- MEMBRESÍA -->
+                <h3 class="form-subtitle">💳 MEMBRESÍA</h3>
+                
+                <div class="form-group">
+                    <label>Tipo de membresía</label>
+                    <select id="membresia" required>
+                        <option value="Básica">Básica - $29/mes</option>
+                        <option value="Estándar" selected>Estándar - $49/mes</option>
+                        <option value="Premium">Premium - $79/mes</option>
+                        <option value="VIP">VIP - $129/mes</option>
+                    </select>
+                </div>
+
+                <!-- BOTONES -->
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()" style="flex: 1;">LIMPIAR</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">REGISTRAR CLIENTE</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- SECCIÓN MIS CLIENTES -->
+        <div id="clientes" class="section">
+            <div class="clientes-header">
+                <h2 class="form-title">📋 Mis Clientes</h2>
+                <button class="btn-logout" onclick="cerrarSesionClientes()">🔒 Cerrar Sesión</button>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="searchClient" placeholder="🔍 Buscar cliente..." onkeyup="buscarClientes()">
+            </div>
+
+            <div class="clients-grid" id="clientsList"></div>
+        </div>
+
+        <!-- SECCIÓN PROCESAR PAGO -->
+        <div id="pagos" class="section">
+            <h2 class="form-title">💰 Procesar Pago</h2>
+
+            <div class="form-group">
+                <label>Seleccionar Cliente</label>
+                <select id="pagoCliente" class="form-group">
+                    <option value="">Seleccionar cliente...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Monto a pagar ($)</label>
+                <input type="number" id="pagoMonto" value="49" step="0.01" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>Concepto</label>
+                <input type="text" id="pagoConcepto" value="Membresía mensual">
+            </div>
+
+            <h3 style="margin: 20px 0; color: #63318A;">Método de Pago</h3>
+            
+            <div class="payment-methods-grid">
+                <div class="payment-card" onclick="seleccionarMetodoPago('ath')">
+                    <div class="payment-icon">📱</div>
+                    <div class="payment-name">ATH Móvil</div>
+                </div>
+                <div class="payment-card" onclick="seleccionarMetodoPago('tarjeta')">
+                    <div class="payment-icon">💳</div>
+                    <div class="payment-name">Tarjeta</div>
+                </div>
+                <div class="payment-card" onclick="seleccionarMetodoPago('paypal')">
+                    <div class="payment-icon">🅿️</div>
+                    <div class="payment-name">PayPal</div>
+                </div>
+                <div class="payment-card" onclick="seleccionarMetodoPago('efectivo')">
+                    <div class="payment-icon">💵</div>
+                    <div class="payment-name">Efectivo</div>
+                </div>
+            </div>
+
+            <div id="ath-details" class="payment-details hidden">
+                <h4>📱 Pago con ATH Móvil</h4>
+                <div class="ath-number">787-555-1234</div>
+                <p style="text-align: center; margin: 10px 0;"><strong>Comercio:</strong> Quality Training</p>
+                <div class="form-group">
+                    <label>Número de confirmación</label>
+                    <input type="text" id="athReferencia" placeholder="Ej: ATH123456">
+                </div>
+            </div>
+
+            <div id="tarjeta-details" class="payment-details hidden">
+                <h4>💳 Pago con Tarjeta</h4>
+                <div class="credit-card-form">
+                    <input type="text" placeholder="Número de tarjeta" id="cardNumber">
+                    <div class="card-row">
+                        <input type="text" placeholder="MM/AA" id="cardExpiry">
+                        <input type="text" placeholder="CVV" id="cardCVV">
+                    </div>
+                    <input type="text" placeholder="Nombre del titular" id="cardName">
+                </div>
+            </div>
+
+            <div id="paypal-details" class="payment-details hidden">
+                <h4>🅿️ Pago con PayPal</h4>
+                <div style="text-align: center; padding: 20px;">
+                    <p>Serás redirigido a PayPal</p>
+                    <p><strong>Email:</strong> pagos@qualitytraining.com</p>
+                </div>
+            </div>
+
+            <div id="efectivo-details" class="payment-details hidden">
+                <h4>💵 Pago en Efectivo</h4>
+                <div class="form-group">
+                    <label>Monto recibido ($)</label>
+                    <input type="number" id="efectivoRecibido" onchange="calcularCambio()">
+                </div>
+                <div class="form-group">
+                    <label>Cambio ($)</label>
+                    <input type="number" id="efectivoCambio" readonly>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <div class="form-group">
+                    <label>Fecha del pago</label>
+                    <input type="date" id="pagoFecha">
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="pagoEstado">
+                        <option value="completado">Completado</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="fallido">Fallido</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="registrarPago()" style="margin-top: 20px;">PROCESAR PAGO</button>
+
+            <div style="margin-top: 30px;">
+                <h3 style="color: #333;">📋 Últimos Pagos</h3>
+                <div id="pagosRecientes" class="timeline-list" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONTRASEÑA PARA MIS CLIENTES -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-content">
+            <div class="password-icon">🔒</div>
+            <h2 class="password-title">Acceso Restringido</h2>
+            <p class="password-subtitle">Ingresa la contraseña para ver la lista de clientes</p>
+            
+            <input type="password" id="passwordInput" class="password-input" placeholder="Contraseña" onkeypress="if(event.key==='Enter') verificarPasswordClientes()" maxlength="20" autofocus>
+            
+            <button class="password-btn" onclick="verificarPasswordClientes()" id="passwordBtn">
+                INGRESAR
+            </button>
+            
+            <button class="password-btn-secondary" onclick="cerrarPasswordClientes()">
+                ✕ CERRAR Y VOLVER AL INICIO
+            </button>
+            
+            <div class="password-error" id="passwordError"></div>
+            <div class="password-attempts" id="passwordAttempts"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN -->
+    <div id="confirmDeleteModal" class="confirm-modal">
+        <div class="confirm-content">
+            <div class="confirm-icon">🗑️</div>
+            <h3 style="margin-bottom: 10px;">¿Eliminar cliente?</h3>
+            <p id="deleteClientMessage" style="color: #666; margin-bottom: 20px;"></p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="cerrarConfirmModal()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmarEliminarCliente()">ELIMINAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE HISTORIAL (simplificado) -->
+    <div id="historialModal" class="historial-modal">
+        <div class="historial-header" id="historialHeader"></div>
+        <div class="historial-tabs" id="historialTabs">
+            <button class="historial-tab active" onclick="showHistorialTab('pagos')">💰 Pagos</button>
+            <button class="historial-tab" onclick="showHistorialTab('visitas')">📅 Visitas</button>
+            <button class="historial-tab" onclick="showHistorialTab('progreso')">📊 Progreso</button>
+            <button class="historial-tab" onclick="showHistorialTab('medico')">🏥 Médico</button>
+            <button class="historial-tab" onclick="showHistorialTab('notas')">📝 Notas</button>
+        </div>
+        <div class="historial-content" id="historialContent"></div>
+    </div>
+
+    <script>
+        // Variables globales
+        let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+        let clienteSeleccionado = null;
+        let clienteAEliminar = null;
+        let metodoPagoSeleccionado = null;
+
+        // ===== SISTEMA DE CONTRASEÑA PARA MIS CLIENTES =====
+        let sesionClientesActiva = false;
+        let intentosFallidos = 0;
+        const CONTRASENA_CLIENTES = "gym2024"; // 🔑 CAMBIA ESTA CONTRASEÑA
+
+        function mostrarPasswordClientes() {
+            document.getElementById('passwordModal').classList.add('active');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function cerrarPasswordClientes() {
+            document.getElementById('passwordModal').classList.remove('active');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').innerHTML = '';
+            document.getElementById('passwordAttempts').innerHTML = '';
+            // Volver al inicio
+            showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
+        }
+
+        function verificarPasswordClientes() {
+            const password = document.getElementById('passwordInput').value;
+            const error = document.getElementById('passwordError');
+            const attempts = document.getElementById('passwordAttempts');
+            const btn = document.getElementById('passwordBtn');
+            
+            if (!password) {
+                error.innerHTML = '❌ Ingresa una contraseña';
+                return;
+            }
+            
+            if (password === CONTRASENA_CLIENTES) {
+                // Contraseña correcta
+                sesionClientesActiva = true;
+                intentosFallidos = 0;
+                cerrarPasswordClientes();
+                // Ahora sí mostrar la sección de clientes
+                document.getElementById('clientes').classList.add('active');
+                document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+                document.querySelector('.menu-item[onclick*="clientes"]').classList.add('active');
+                mostrarClientes();
+            } else {
+                // Contraseña incorrecta
+                intentosFallidos++;
+                
+                if (intentosFallidos >= 3) {
+                    btn.disabled = true;
+                    document.getElementById('passwordInput').disabled = true;
+                    error.innerHTML = '🔒 Demasiados intentos. Espera 30 segundos.';
+                    
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        document.getElementById('passwordInput').disabled = false;
+                        document.getElementById('passwordInput').value = '';
+                        intentosFallidos = 0;
+                        error.innerHTML = '';
+                        attempts.innerHTML = '';
+                    }, 30000);
+                } else {
+                    error.innerHTML = `❌ Contraseña incorrecta. Intento ${intentosFallidos} de 3`;
+                    document.getElementById('passwordInput').value = '';
+                    document.getElementById('passwordInput').focus();
+                    attempts.innerHTML = `Intentos restantes: ${3 - intentosFallidos}`;
+                }
+            }
+        }
+
+        function cerrarSesionClientes() {
+            sesionClientesActiva = false;
+            // Volver a inicio
+            showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
+        }
+
+        // ===== FUNCIONES DEL MENÚ =====
+        function toggleMenu() {
+            const menu = document.getElementById('menuItems');
+            const btn = document.getElementById('menuToggle');
+            menu.classList.toggle('show');
+            btn.classList.toggle('active');
+            btn.textContent = btn.classList.contains('active') ? '✕' : '☰';
+        }
+
+        function showSection(sectionId, element) {
+            // Si es la sección de clientes y no hay sesión activa, mostrar password
+            if (sectionId === 'clientes' && !sesionClientesActiva) {
+                mostrarPasswordClientes();
+                return;
+            }
+            
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.getElementById('menuItems').classList.remove('show');
+            document.getElementById('menuToggle').classList.remove('active');
+            document.getElementById('menuToggle').textContent = '☰';
+            
+            if (sectionId === 'clientes' && sesionClientesActiva) {
+                mostrarClientes();
+            }
+            if (sectionId === 'pagos') actualizarSelectPagos();
+        }
+
+        function seleccionarPlan(plan) {
+            showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
+            const precios = { basico: 29, estandar: 49, premium: 79, vip: 129 };
+            document.getElementById('membresia').value = 
+                plan === 'basico' ? 'Básica' :
+                plan === 'estandar' ? 'Estándar' :
+                plan === 'premium' ? 'Premium' : 'VIP';
+        }
+
+        // ===== FUNCIONES DE REGISTRO =====
+        function previewImage(input) {
+            const preview = document.getElementById('photoPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => preview.innerHTML = `<img src="${e.target.result}" alt="Foto">`;
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Calcular edad automáticamente
+        document.getElementById('fechaNacimiento').addEventListener('change', function() {
+            if (this.value) {
+                const hoy = new Date();
+                const nac = new Date(this.value);
+                let edad = hoy.getFullYear() - nac.getFullYear();
+                const mes = hoy.getMonth() - nac.getMonth();
+                if (mes < 0 || (mes === 0 && hoy.getDate() < nac.getDate())) edad--;
+                document.getElementById('edad').value = edad;
+            }
+        });
+
+        // Funciones para mostrar/ocultar campos condicionales
+        function toggleFumador() {
+            const fuma = document.getElementById('fuma').value;
+            const container = document.getElementById('cantidadFumaContainer');
+            const detalles = document.getElementById('fumadorDetalles');
+            
+            if (fuma === 'Si') {
+                container.style.display = 'block';
+                detalles.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+                detalles.style.display = 'none';
+            }
+        }
+
+        function toggleDejoFumar() {
+            const dejo = document.getElementById('dejoFumar').value;
+            document.getElementById('cuandoDejoContainer').style.display = dejo === 'Si' ? 'block' : 'none';
+            document.getElementById('porqueDejoContainer').style.display = dejo === 'Si' ? 'block' : 'none';
+        }
+
+        function toggleDieta() {
+            const dieta = document.getElementById('dieta').value;
+            document.getElementById('tipoDietaContainer').style.display = dieta === 'Si' ? 'block' : 'none';
+        }
+
+        function toggleNitroglicerina() {
+            const usa = document.getElementById('usaNitroglicerina').value;
+            document.getElementById('cantidadNitroglicerinaContainer').style.display = usa === 'Si' ? 'block' : 'none';
+            document.getElementById('frecuenciaNitroglicerinaContainer').style.display = usa === 'Si' ? 'block' : 'none';
+        }
+
+        // Guardar cliente con todos los datos
+        document.getElementById('clientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Recoger condiciones médicas simples
+            const condiciones = [];
+            document.querySelectorAll('.medical-item input:checked').forEach(cb => condiciones.push(cb.value));
+
+            // Crear objeto con todos los datos del formulario
+            const cliente = {
+                id: Date.now(),
+                // Datos personales básicos
+                numSocio: document.getElementById('numSocio').value || `SOC-${Date.now()}`,
+                fechaComienzo: document.getElementById('fechaComienzo').value,
+                nombre: document.getElementById('nombre').value,
+                sexo: document.getElementById('sexo').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                edad: document.getElementById('edad').value,
+                peso: document.getElementById('peso').value,
+                estatura: document.getElementById('estatura').value,
+                direccion: document.getElementById('direccion').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+                contactoEmergencia: document.getElementById('contactoEmergencia').value,
+                telEmergencia: document.getElementById('telEmergencia').value,
+                
+                // Membresía
+                membresia: document.getElementById('membresia').value,
+                
+                // Foto
+                foto: document.getElementById('photoPreview').querySelector('img')?.src || '',
+                
+                // Historial médico simple (para compatibilidad)
+                condiciones: condiciones,
+                observaciones: document.getElementById('explicacionHistorial').value,
+                
+                fechaRegistro: new Date().toLocaleDateString(),
+                activo: true,
+                
+                // Guardar TODO el formulario completo
+                formularioCompleto: {
+                    // Historial médico detallado
+                    historialPasado: {
+                        altaPresion: document.getElementById('histAltaPresion')?.checked || false,
+                        ataqueCorazon: document.getElementById('histAtaqueCorazon')?.checked || false,
+                        artritis: document.getElementById('histArtritis')?.checked || false,
+                        diabetes: document.getElementById('histDiabetes')?.checked || false,
+                        arterias: document.getElementById('histArterias')?.checked || false,
+                        pulmonar: document.getElementById('histPulmonar')?.checked || false,
+                        epilepsia: document.getElementById('histEpilepsia')?.checked || false,
+                        espalda: document.getElementById('histEspalda')?.checked || false,
+                        reumatica: document.getElementById('histReumatica')?.checked || false,
+                        operaciones: document.getElementById('histOperaciones')?.checked || false,
+                        explicacion: document.getElementById('explicacionHistorial').value
+                    },
+                    
+                    historialFamiliar: {
+                        altaPresion: document.getElementById('famAltaPresion')?.checked || false,
+                        diabetes: document.getElementById('famDiabetes')?.checked || false,
+                        corazon: document.getElementById('famCorazon')?.checked || false,
+                        operacionCorazon: document.getElementById('famOperacionCorazon')?.checked || false,
+                        otras: document.getElementById('famOtras')?.checked || false,
+                        tobillos: document.getElementById('famTobillos')?.checked || false
+                    },
+                    
+                    sintomas: {
+                        artritis: document.getElementById('sinArtritis')?.checked || false,
+                        dificultadRespirar: document.getElementById('sinDificultadRespirar')?.checked || false,
+                        dificultadDormir: document.getElementById('sinDificultadDormir')?.checked || false,
+                        dolorCadera: document.getElementById('sinDolorCadera')?.checked || false,
+                        dolorPecho: document.getElementById('sinDolorPecho')?.checked || false,
+                        dolorRodillas: document.getElementById('sinDolorRodillas')?.checked || false,
+                        fatiga: document.getElementById('sinFatiga')?.checked || false,
+                        flema: document.getElementById('sinFlema')?.checked || false,
+                        mareos: document.getElementById('sinMareos')?.checked || false,
+                        almohada: document.getElementById('sinAlmohada')?.checked || false,
+                        palpitaciones: document.getElementById('sinPalpitaciones')?.checked || false,
+                        pulsoAcelerado: document.getElementById('sinPulsoAcelerado')?.checked || false,
+                        soplo: document.getElementById('sinSoplo')?.checked || false,
+                        tos: document.getElementById('sinTos')?.checked || false,
+                        tobillosInflamados: document.getElementById('sinTobillosInflamados')?.checked || false
+                    },
+                    
+                    trabajo: {
+                        compania: document.getElementById('compania').value,
+                        tipoTrabajo: document.getElementById('tipoTrabajo').value,
+                        nivelActividad: document.getElementById('nivelActividad').value,
+                        minutosCamina: document.getElementById('minutosCamina').value,
+                        millasCamina: document.getElementById('millasCamina').value,
+                        programaEjercicio: document.getElementById('programaEjercicio').value,
+                        gustariaComenzar: document.getElementById('gustariaComenzar').value,
+                        tomaPulso: document.getElementById('tomaPulso').value,
+                        pulsoMinuto: document.getElementById('pulsoMinuto').value
+                    },
+                    
+                    sintomasEjercicio: {
+                        dolorPecho: document.getElementById('ejerDolorPecho')?.checked || false,
+                        dolorPiernas: document.getElementById('ejerDolorPiernas')?.checked || false,
+                        faltaRespiración: document.getElementById('ejerFaltaRespiración')?.checked || false,
+                        mareo: document.getElementById('ejerMareo')?.checked || false,
+                        presion: document.getElementById('ejerPresion')?.checked || false,
+                        cansancio: document.getElementById('ejerCansancio')?.checked || false,
+                        tiempoRecuperacion: document.getElementById('tiempoRecuperacion').value,
+                        tieneLesion: document.getElementById('tieneLesion').value
+                    },
+                    
+                    habitos: {
+                        fuma: document.getElementById('fuma').value,
+                        cantidadFuma: document.getElementById('cantidadFuma').value,
+                        edadComenzoFumar: document.getElementById('edadComenzoFumar').value,
+                        anosFumando: document.getElementById('anosFumando').value,
+                        dejoFumar: document.getElementById('dejoFumar').value,
+                        cuandoDejo: document.getElementById('cuandoDejoFumar').value,
+                        porqueDejo: document.getElementById('porqueDejoFumar').value,
+                        peso21: document.getElementById('peso21').value,
+                        dieta: document.getElementById('dieta').value,
+                        tipoDieta: document.getElementById('tipoDieta').value
+                    },
+                    
+                    medicamentos: {
+                        usaNitroglicerina: document.getElementById('usaNitroglicerina').value,
+                        cantidadNitroglicerina: document.getElementById('cantidadNitroglicerina').value,
+                        nitroPorDia: document.getElementById('nitroPorDia').value,
+                        nitroPorSemana: document.getElementById('nitroPorSemana').value,
+                        condicionSalud: document.getElementById('condicionSalud').value,
+                        listaMedicamentos: document.getElementById('medicamentos').value
+                    },
+                    
+                    consentimientos: {
+                        nombreConsentimiento: document.getElementById('consentimientoNombre').value,
+                        fechaConsentimiento: document.getElementById('consentimientoFecha').value,
+                        aceptaReglamentos: document.getElementById('aceptaReglamentos').value,
+                        firmaReglamentos: document.getElementById('firmaReglamentos').value,
+                        fechaReglamentos: document.getElementById('fechaReglamentos').value,
+                        autorizacionNombre: document.getElementById('autorizacionNombre').value,
+                        autorizacionFirma: document.getElementById('autorizacionFirma').value,
+                        inicialesClases: document.getElementById('inicialesClases').value,
+                        firmaLiberacion: document.getElementById('firmaLiberacion').value,
+                        fechaLiberacion: document.getElementById('fechaLiberacion').value
+                    }
+                },
+                
+                historial: { pagos: [], visitas: [], progreso: [], medico: [], notas: [] }
+            };
+
+            clientes.push(cliente);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            limpiarFormulario();
+            
+            // Seleccionar el cliente en el selector de pagos y mostrar la sección
+            const selectPago = document.getElementById('pagoCliente');
+            setTimeout(() => {
+                actualizarSelectPagos();
+                selectPago.value = cliente.id;
+            }, 100);
+            
+            // Actualizar monto según membresía
+            const montos = {
+                'Básica': 29,
+                'Estándar': 49,
+                'Premium': 79,
+                'VIP': 129
+            };
+            document.getElementById('pagoMonto').value = montos[cliente.membresia] || 49;
+            document.getElementById('pagoConcepto').value = `Membresía ${cliente.membresia}`;
+            
+            // Mostrar sección de pagos
+            showSection('pagos', document.querySelector('.menu-item[onclick*="pagos"]'));
+            
+            // Mensaje de confirmación
+            alert(`✅ Cliente registrado exitosamente. Ahora procesa el pago de $${montos[cliente.membresia] || 49} para ${cliente.nombre}`);
+        });
+
+        // ===== FUNCIONES DE CLIENTES =====
+        function mostrarClientes(filtro = '') {
+            const container = document.getElementById('clientsList');
+            let filtrados = filtro ? clientes.filter(c => c.nombre.toLowerCase().includes(filtro.toLowerCase()) || c.email.toLowerCase().includes(filtro.toLowerCase())) : clientes;
+
+            if (filtrados.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 30px; color: #666;">📭 No hay clientes registrados</div>';
+                return;
+            }
+
+            container.innerHTML = filtrados.map(cliente => {
+                // Asegurarse de que el ID sea un string para evitar problemas
+                const clienteId = String(cliente.id);
+                return `
+                <div class="client-card" data-cliente-id="${clienteId}">
+                    <button class="delete-client-btn" onclick="mostrarConfirmEliminar('${clienteId}', '${cliente.nombre.replace(/'/g, "\\'")}')">🗑️</button>
+                    <div class="client-photo" onclick="verHistorial('${clienteId}')">
+                        ${cliente.foto ? `<img src="${cliente.foto}" alt="${cliente.nombre}">` : '📷'}
+                        <span class="client-status ${cliente.activo ? '' : 'inactive'}"></span>
+                    </div>
+                    <div class="client-info" onclick="verHistorial('${clienteId}')">
+                        <h3>${cliente.nombre}</h3>
+                        <p>📧 ${cliente.email}</p>
+                        <p>📞 ${cliente.telefono || 'N/A'}</p>
+                        <p>💳 ${cliente.membresia || 'Básica'}</p>
+                        <p>📋 #${cliente.numSocio || 'N/A'}</p>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function buscarClientes() {
+            mostrarClientes(document.getElementById('searchClient').value);
+        }
+
+        // ===== FUNCIONES DE ELIMINACIÓN - VERSIÓN SIMPLIFICADA =====
+        function mostrarConfirmEliminar(id, nombre) {
+            console.log("ID a eliminar:", id); // Para depuración
+            clienteAEliminar = id;
+            document.getElementById('deleteClientMessage').innerHTML = `¿Estás seguro que deseas eliminar a <strong>${nombre}</strong>? Esta acción eliminará permanentemente al cliente y todo su historial.`;
+            document.getElementById('confirmDeleteModal').classList.add('active');
+        }
+
+        function cerrarConfirmModal() {
+            document.getElementById('confirmDeleteModal').classList.remove('active');
+            clienteAEliminar = null;
+        }
+
+        function confirmarEliminarCliente() {
+            if (clienteAEliminar) {
+                console.log("Eliminando ID:", clienteAEliminar);
+                
+                // Filtrar el cliente eliminado
+                clientes = clientes.filter(c => String(c.id) !== String(clienteAEliminar));
+                
+                // Guardar en localStorage
+                localStorage.setItem('clientes', JSON.stringify(clientes));
+                
+                // Cerrar modal
+                cerrarConfirmModal();
+                
+                // Actualizar la lista
+                mostrarClientes();
+                
+                // Mostrar mensaje de éxito
+                alert('✅ Cliente eliminado permanentemente');
+                
+                // Limpiar variable
+                clienteAEliminar = null;
+            }
+        }
+
+        // ===== FUNCIONES DE PAGOS =====
+        function actualizarSelectPagos() {
+            const select = document.getElementById('pagoCliente');
+            select.innerHTML = '<option value="">Seleccionar cliente...</option>' + 
+                clientes.filter(c => c.activo).map(c => `<option value="${c.id}">${c.nombre} - ${c.membresia || 'Básica'} (#${c.numSocio || ''})</option>`).join('');
+            
+            document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
+        }
+
+        function seleccionarMetodoPago(metodo) {
+            metodoPagoSeleccionado = metodo;
+            document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.payment-card').classList.add('selected');
+            document.querySelectorAll('.payment-details').forEach(d => d.classList.add('hidden'));
+            document.getElementById(metodo + '-details').classList.remove('hidden');
+        }
+
+        function calcularCambio() {
+            const monto = parseFloat(document.getElementById('pagoMonto').value) || 0;
+            const recibido = parseFloat(document.getElementById('efectivoRecibido').value) || 0;
+            document.getElementById('efectivoCambio').value = (recibido - monto).toFixed(2);
+        }
+
+        function registrarPago() {
+            const clienteId = document.getElementById('pagoCliente').value;
+            if (!clienteId) { alert('❌ Selecciona un cliente'); return; }
+            if (!metodoPagoSeleccionado) { alert('❌ Selecciona un método de pago'); return; }
+
+            const cliente = clientes.find(c => String(c.id) === String(clienteId));
+            const pago = {
+                id: Date.now(),
+                fecha: document.getElementById('pagoFecha').value,
+                monto: parseFloat(document.getElementById('pagoMonto').value),
+                concepto: document.getElementById('pagoConcepto').value,
+                metodo: metodoPagoSeleccionado,
+                estado: document.getElementById('pagoEstado').value,
+                factura: `FAC-${new Date().getFullYear()}-${String(clientes.length).padStart(4,'0')}`
+            };
+
+            if (!cliente.historial) cliente.historial = { pagos: [] };
+            if (!cliente.historial.pagos) cliente.historial.pagos = [];
+            cliente.historial.pagos.push(pago);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+
+            alert('✅ Pago registrado exitosamente');
+            actualizarPagosRecientes();
+            
+            // Limpiar selección después del pago
+            metodoPagoSeleccionado = null;
+            document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.payment-details').forEach(d => d.classList.add('hidden'));
+        }
+
+        function actualizarPagosRecientes() {
+            const pagos = clientes.flatMap(c => (c.historial?.pagos || []).map(p => ({ ...p, cliente: c.nombre })))
+                .sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).slice(0,5);
+            
+            document.getElementById('pagosRecientes').innerHTML = pagos.length ? 
+                pagos.map(p => `
+                    <div class="timeline-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>📅 ${new Date(p.fecha).toLocaleDateString()}</span>
+                            <span style="color: #63318A; font-weight: bold;">$${p.monto}</span>
+                        </div>
+                        <div>${p.cliente} - ${p.concepto}</div>
+                    </div>
+                `).join('') : '<p style="text-align: center; color: #666;">No hay pagos recientes</p>';
+        }
+
+        // ===== FUNCIONES DE HISTORIAL (simplificadas) =====
+        function verHistorial(id) {
+            clienteSeleccionado = clientes.find(c => String(c.id) === String(id));
+            if (!clienteSeleccionado) return;
+
+            document.getElementById('historialHeader').innerHTML = `
+                <div class="historial-header-content">
+                    <img src="${clienteSeleccionado.foto || 'https://via.placeholder.com/60'}" class="historial-avatar">
+                    <div>
+                        <h3>${clienteSeleccionado.nombre}</h3>
+                        <small>${clienteSeleccionado.email} | #${clienteSeleccionado.numSocio || ''}</small>
+                    </div>
+                    <button class="historial-back" onclick="cerrarHistorial()">✕</button>
+                </div>
+            `;
+
+            actualizarHistorialCompleto();
+            document.getElementById('historialModal').classList.add('active');
+        }
+
+        function cerrarHistorial() {
+            document.getElementById('historialModal').classList.remove('active');
+            clienteSeleccionado = null;
+        }
+
+        function showHistorialTab(tab) {
+            document.querySelectorAll('.historial-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            actualizarHistorialCompleto(tab);
+        }
+
+        function actualizarHistorialCompleto(seccionActiva = 'pagos') {
+            if (!clienteSeleccionado) return;
+
+            const pagos = clienteSeleccionado.historial.pagos || [];
+            const visitas = clienteSeleccionado.historial.visitas || [];
+            const progreso = clienteSeleccionado.historial.progreso || [];
+            const medico = clienteSeleccionado.historial.medico || [];
+            const notas = clienteSeleccionado.historial.notas || [];
+
+            const totalPagado = pagos.reduce((s, p) => s + (p.monto || 0), 0);
+
+            document.getElementById('historialContent').innerHTML = `
+                <div id="pagos-section" class="historial-section ${seccionActiva === 'pagos' ? 'active' : ''}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Total Pagado</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #63318A;">$${totalPagado}</div>
+                        </div>
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Último Pago</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #333;">${pagos.length ? new Date(pagos[pagos.length-1].fecha).toLocaleDateString() : '-'}</div>
+                        </div>
+                    </div>
+                    ${pagos.length ? pagos.reverse().map(p => `
+                        <div class="timeline-item">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>📅 ${new Date(p.fecha).toLocaleDateString()}</span>
+                                <span style="font-weight: bold; color: #63318A;">$${p.monto}</span>
+                            </div>
+                            <div>${p.concepto || 'Membresía'} - ${p.metodo}</div>
+                        </div>
+                    `).join('') : '<p style="text-align: center; color: #666;">No hay pagos</p>'}
+                </div>
+
+                <div id="visitas-section" class="historial-section ${seccionActiva === 'visitas' ? 'active' : ''}">
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px; color: #63318A;">📅 Registrar Visita</h4>
+                        <input type="date" id="visitaFecha" class="form-group" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
+                        <select id="visitaTipo" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="Regular">Regular</option>
+                            <option value="Clase grupal">Clase grupal</option>
+                            <option value="Personal">Entrenamiento personal</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="registrarVisita()">Registrar Visita</button>
+                    </div>
+                    ${visitas.length ? visitas.reverse().map(v => `
+                        <div class="timeline-item">
+                            <div>📅 ${new Date(v.fecha).toLocaleDateString()}</div>
+                            <div>${v.tipo}</div>
+                        </div>
+                    `).join('') : '<p style="text-align: center; color: #666;">No hay visitas</p>'}
+                </div>
+
+                <div id="progreso-section" class="historial-section ${seccionActiva === 'progreso' ? 'active' : ''}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Peso Inicial</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #63318A;">${progreso[0]?.peso || '-'} kg</div>
+                        </div>
+                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
+                            <div>Peso Actual</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #333;">${progreso[progreso.length-1]?.peso || '-'} kg</div>
+                        </div>
+                    </div>
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px; color: #63318A;">📊 Registrar Medición</h4>
+                        <input type="number" id="medicionPeso" placeholder="Peso (kg)" step="0.1" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <input type="number" id="medicionAltura" placeholder="Altura (cm)" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <input type="date" id="medicionFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
+                        <button class="btn btn-primary" onclick="registrarMedicion()">Guardar Medición</button>
+                    </div>
+                    ${progreso.length ? progreso.reverse().map(p => `
+                        <div class="timeline-item">
+                            <div>📅 ${new Date(p.fecha).toLocaleDateString()}</div>
+                            <div>⚖️ ${p.peso} kg</div>
+                        </div>
+                    `).join('') : '<p style="text-align: center; color: #666;">No hay mediciones</p>'}
+                </div>
+
+                <div id="medico-section" class="historial-section ${seccionActiva === 'medico' ? 'active' : ''}">
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px; color: #63318A;">🏥 Registrar Evolución Médica</h4>
+                        <select id="medicoTipo" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="Control">Control</option>
+                            <option value="Lesión">Lesión</option>
+                            <option value="Mejoría">Mejoría</option>
+                        </select>
+                        <textarea id="medicoDescripcion" rows="3" placeholder="Descripción..." style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                        <input type="date" id="medicoFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
+                        <button class="btn btn-primary" onclick="registrarEvolucionMedica()">Registrar Evolución</button>
+                    </div>
+                    ${medico.length ? medico.reverse().map(m => `
+                        <div class="timeline-item">
+                            <div>📅 ${new Date(m.fecha).toLocaleDateString()}</div>
+                            <div><strong>${m.tipo}</strong></div>
+                            <div>${m.descripcion}</div>
+                        </div>
+                    `).join('') : '<p style="text-align: center; color: #666;">No hay registros médicos</p>'}
+                </div>
+
+                <div id="notas-section" class="historial-section ${seccionActiva === 'notas' ? 'active' : ''}">
+                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px; color: #63318A;">📝 Agregar Nota</h4>
+                        <input type="text" id="notaTitulo" placeholder="Título" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <textarea id="notaContenido" rows="3" placeholder="Nota..." style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                        <input type="date" id="notaFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
+                        <button class="btn btn-primary" onclick="registrarNota()">Guardar Nota</button>
+                    </div>
+                    ${notas.length ? notas.reverse().map(n => `
+                        <div class="timeline-item">
+                            <div>📅 ${new Date(n.fecha).toLocaleDateString()}</div>
+                            <div><strong>${n.titulo}</strong></div>
+                            <div>${n.contenido}</div>
+                        </div>
+                    `).join('') : '<p style="text-align: center; color: #666;">No hay notas</p>'}
+                </div>
+            `;
+        }
+
+        // ===== FUNCIONES DEL HISTORIAL =====
+        function registrarVisita() {
+            const visita = {
+                id: Date.now(),
+                fecha: document.getElementById('visitaFecha').value,
+                tipo: document.getElementById('visitaTipo').value
+            };
+            if (!clienteSeleccionado.historial.visitas) clienteSeleccionado.historial.visitas = [];
+            clienteSeleccionado.historial.visitas.push(visita);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarHistorialCompleto('visitas');
+        }
+
+        function registrarMedicion() {
+            const medicion = {
+                id: Date.now(),
+                peso: parseFloat(document.getElementById('medicionPeso').value),
+                altura: parseFloat(document.getElementById('medicionAltura').value) || null,
+                fecha: document.getElementById('medicionFecha').value
+            };
+            if (!clienteSeleccionado.historial.progreso) clienteSeleccionado.historial.progreso = [];
+            clienteSeleccionado.historial.progreso.push(medicion);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarHistorialCompleto('progreso');
+        }
+
+        function registrarEvolucionMedica() {
+            const evolucion = {
+                id: Date.now(),
+                tipo: document.getElementById('medicoTipo').value,
+                descripcion: document.getElementById('medicoDescripcion').value,
+                fecha: document.getElementById('medicoFecha').value
+            };
+            if (!clienteSeleccionado.historial.medico) clienteSeleccionado.historial.medico = [];
+            clienteSeleccionado.historial.medico.push(evolucion);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarHistorialCompleto('medico');
+        }
+
+        function registrarNota() {
+            const nota = {
+                id: Date.now(),
+                titulo: document.getElementById('notaTitulo').value || 'Sin título',
+                contenido: document.getElementById('notaContenido').value,
+                fecha: document.getElementById('notaFecha').value
+            };
+            if (!clienteSeleccionado.historial.notas) clienteSeleccionado.historial.notas = [];
+            clienteSeleccionado.historial.notas.push(nota);
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            actualizarHistorialCompleto('notas');
+        }
+
+        // ===== FUNCIONES AUXILIARES =====
+        function limpiarFormulario() {
+            document.getElementById('clientForm').reset();
+            document.getElementById('photoPreview').innerHTML = '<div class="photo-placeholder">📸</div>';
+            document.getElementById('edad').value = '';
+            
+            // Ocultar secciones condicionales
+            document.getElementById('cantidadFumaContainer').style.display = 'none';
+            document.getElementById('fumadorDetalles').style.display = 'none';
+            document.getElementById('tipoDietaContainer').style.display = 'none';
+            document.getElementById('cantidadNitroglicerinaContainer').style.display = 'none';
+            document.getElementById('frecuenciaNitroglicerinaContainer').style.display = 'none';
+            
+            // Generar número de socio automático
+            document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
+        }
+
+        function enviarMensaje() {
+            const nombre = document.getElementById('contactNombre').value;
+            const email = document.getElementById('contactEmail').value;
+            const mensaje = document.getElementById('contactMensaje').value;
+            if (nombre && email && mensaje) {
+                alert('✅ Mensaje enviado. Nos comunicaremos contigo pronto.');
+                document.getElementById('contactNombre').value = '';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactMensaje').value = '';
+            } else {
+                alert('❌ Por favor completa todos los campos');
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarConfirmModal();
+                cerrarHistorial();
+                cerrarPasswordClientes();
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarClientes();
+            actualizarPagosRecientes();
+            document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
+            
+            // Generar número de socio automático
+            document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
+        });
+    </script>
+</body>
+</html>
