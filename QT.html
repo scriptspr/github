@@ -1193,6 +1193,10 @@
             <div class="menu-item" onclick="showSection('registro', this)">
                 <span>📝</span> Inscribirme
             </div>
+			<!-- 👇 PEGA ESTO AQUÍ 👇 -->
+            <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view?utm_content=DAGzoaORiFg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h68c62c8712&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnYWWnGR3U4cmEQwznp_dw4c72ziW2r5jDFEP2e6Ylb3fUXjdZeLi8Br9F7Vs_aem_ybRM9yftbP3kZYemE05nPg', '_blank')">
+            <span>💅</span> Estética
+            </div>
             <div class="menu-item" onclick="showSection('clientes', this)">
                 <span>📋</span> Mis Clientes
             </div>
@@ -1320,136 +1324,163 @@
 <div id="planes" class="section">
     <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
     
-    <div class="packages-grid">
-        <div class="package-card" onclick="seleccionarPlan('basico')">
-            <div class="package-name">BÁSICO</div>
-            <div class="package-price">$29<span>/mes</span></div>
-            <ul class="package-features">
-                <li>Acceso en hora valle</li>
-                <li>2 clases grupales</li>
-                <li>Sin evaluación inicial</li>
-                <li>Horario limitado</li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('basico')">SELECCIONAR</button>
-        </div>
-
-        <div class="package-card popular" onclick="seleccionarPlan('estandar')">
-            <div class="package-name">ESTÁNDAR</div>
-            <div class="package-price">$49<span>/mes</span></div>
-            <ul class="package-features">
-                <li>Acceso 24/7</li>
-                <li>Clases grupales ilimitadas</li>
-                <li>Evaluación inicial</li>
-                <li>1 sesión de entrenador/mes</li>
-                <li>App de seguimiento</li>
-            </ul>
-            <button class="package-btn popular-btn" onclick="seleccionarPlan('estandar')">SELECCIONAR</button>
-        </div>
-
-        <div class="package-card" onclick="seleccionarPlan('premium')">
-            <div class="package-name">PREMIUM</div>
-            <div class="package-price">$79<span>/mes</span></div>
-            <ul class="package-features">
-                <li>Todo lo del plan Estándar</li>
-                <li>Entrenador personal 4x/mes</li>
-                <li>Nutricionista incluido</li>
-                <li>Acceso a todos los centros</li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('premium')">SELECCIONAR</button>
-        </div>
-
-        <div class="package-card" onclick="seleccionarPlan('vip')">
-            <div class="package-name">VIP</div>
-            <div class="package-price">$129<span>/mes</span></div>
-            <ul class="package-features">
-                <li>Entrenador personal ilimitado</li>
-                <li>Spa y recuperación</li>
-                <li>Estacionamiento VIP</li>
-                <li>Eventos exclusivos</li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('vip')">SELECCIONAR</button>
-        </div>
-    </div>
-
-    <!-- OFERTAS ESPECIALES EN ESTILO TARJETA BLANCA -->
-    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
-        🔥 OFERTAS ESPECIALES
+    <!-- PLANES INDIVIDUALES -->
+    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px;">
+        📅 MEMBRESÍAS INDIVIDUALES
     </h3>
     
-    <!-- CONTENEDOR VERTICAL -->
-    <div style="display: flex; flex-direction: column; gap: 20px; margin: 30px 0; padding: 0 10px;">
-        
-        <!-- OFERTA 1 - ANUAL (borde violeta) -->
-        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #63318A; position: relative;">
-            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span>✨</span> MEMBRESÍA ANUAL
-            </h4>
-            <div style="background: #63318A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
-                Ahorras $98
-            </div>
-            <div style="font-size: 2.5em; font-weight: 800; color: #63318A; margin: 15px 0;">$490</div>
-            <p style="margin: 10px 0; color: #666;">Paga 10 meses y recibe 2 GRATIS</p>
-            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Precio regular: $588</p>
-            <button class="package-btn" onclick="seleccionarOferta('anual')" 
-                    style="background: #63318A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
-                VER OFERTA
-            </button>
+    <div class="packages-grid" style="margin-bottom: 30px;">
+        <div class="package-card" onclick="seleccionarPlan('1mes')">
+            <div class="package-name">1 MES</div>
+            <div class="package-price">$45.00</div>
+            <ul class="package-features">
+                <li>Acceso por 30 días</li>
+                <li>Incluye evaluación física inicial</li>
+                <li>Rutina de entrenamiento (2 semanas)</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('1mes')">SELECCIONAR</button>
         </div>
-        
-        <!-- OFERTA 2 - PAREJA (borde verde) -->
-        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #40D32A; position: relative;">
-            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span>👥</span> MEMBRESÍA PAREJA
-            </h4>
-            <div style="background: #40D32A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
-                Ahorras $19/mes
-            </div>
-            <div style="font-size: 2.5em; font-weight: 800; color: #40D32A; margin: 15px 0;">$79<span style="font-size: 0.4em;">/mes</span></div>
-            <p style="margin: 10px 0; color: #666;">2 personas por $79/mes</p>
-            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Incluye todos los beneficios</p>
-            <button class="package-btn" onclick="seleccionarOferta('pareja')" 
-                    style="background: #40D32A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
-                VER OFERTA
-            </button>
+
+        <div class="package-card" onclick="seleccionarPlan('3meses')">
+            <div class="package-name">3 MESES</div>
+            <div class="package-price">$114.00</div>
+            <ul class="package-features">
+                <li>Acceso por 90 días</li>
+                <li>Ahorras $21</li>
+                <li>Incluye evaluación física inicial</li>
+                <li>Rutina de entrenamiento (2 semanas)</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('3meses')">SELECCIONAR</button>
         </div>
-        
-        <!-- OFERTA 3 - ESTUDIANTIL (borde violeta) -->
-        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #63318A; position: relative;">
-            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span>🎓</span> DESCUENTO ESTUDIANTIL
-            </h4>
-            <div style="background: #63318A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
-                15% OFF
-            </div>
-            <div style="font-size: 2.5em; font-weight: 800; color: #63318A; margin: 15px 0;">$41.65<span style="font-size: 0.4em;">/mes</span></div>
-            <p style="margin: 10px 0; color: #666;">Plan Estándar con credencial</p>
-            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Válido para estudiantes</p>
-            <button class="package-btn" onclick="seleccionarOferta('estudiante')" 
-                    style="background: #63318A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
-                VER OFERTA
-            </button>
+
+        <div class="package-card" onclick="seleccionarPlan('6meses')">
+            <div class="package-name">6 MESES</div>
+            <div class="package-price">$210.00</div>
+            <ul class="package-features">
+                <li>Acceso por 180 días</li>
+                <li>Ahorras $60</li>
+                <li>Incluye evaluación física inicial</li>
+                <li>Rutina de entrenamiento (2 semanas)</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('6meses')">SELECCIONAR</button>
         </div>
-        
-        <!-- OFERTA 4 - PRIMERA VEZ (borde verde) -->
-        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #40D32A; position: relative;">
-            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <span>⏰</span> PRIMERA VEZ
-            </h4>
-            <div style="background: #40D32A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
-                -41%
-            </div>
-            <div style="font-size: 2.5em; font-weight: 800; color: #40D32A; margin: 15px 0;">$29<span style="font-size: 0.4em;">/mes</span></div>
-            <p style="margin: 10px 0; color: #666;">Primer mes a $29</p>
-            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Prueba cualquier plan</p>
-            <button class="package-btn" onclick="seleccionarOferta('primeravez')" 
-                    style="background: #40D32A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
-                VER OFERTA
-            </button>
+
+        <div class="package-card popular" onclick="seleccionarPlan('1año')">
+            <div class="package-name">1 AÑO</div>
+            <div class="package-price">$360.00</div>
+            <ul class="package-features">
+                <li>Acceso por 365 días</li>
+                <li>Ahorras $180</li>
+                <li>Incluye evaluación física inicial</li>
+                <li>Rutina de entrenamiento (2 semanas)</li>
+            </ul>
+            <button class="package-btn popular-btn" onclick="seleccionarPlan('1año')">SELECCIONAR</button>
         </div>
     </div>
+
+    <!-- MEMBRESÍA ESPECIAL -->
+    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
+        ⭐ MEMBRESÍA ESPECIAL - $35.00/mes
+    </h3>
     
+    <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #40D32A; text-align: center;">
+        <p style="font-size: 1.2em; color: #333; margin-bottom: 20px;"><strong>¡Homenaje a nuestros héroes!</strong></p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👮 Policías</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚒 Bomberos</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚑 Paramédicos</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">⚕️ Manejo de Emergencias</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🎖️ Militares</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🪖 Veteranos</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👩‍⚕️ Enfermeras</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👨‍⚕️ Doctores</span>
+            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👴 Seniors 65+ años</span>
+        </div>
+        <button class="package-btn" onclick="seleccionarPlan('especial')" style="background: #40D32A; max-width: 300px; margin: 0 auto;">SELECCIONAR MEMBRESÍA ESPECIAL</button>
+    </div>
+
+    <!-- MEMBRESÍA ESTUDIANTIL -->
+    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
+        🎓 MEMBRESÍA ESTUDIANTIL - $23.00/mes
+    </h3>
+    
+    <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #63318A; text-align: center;">
+        <p style="font-size: 1.2em; color: #333; margin-bottom: 15px;">Estudiantes de 18 años o más deben traer <strong>matrícula del semestre en curso</strong></p>
+        <p style="color: #666;">Válido con identificación estudiantil vigente</p>
+        <button class="package-btn" onclick="seleccionarPlan('estudiante')" style="background: #63318A; max-width: 300px; margin: 20px auto 0;">SELECCIONAR MEMBRESÍA ESTUDIANTIL</button>
+    </div>
+
+    <!-- MEMBRESÍAS GRUPALES -->
+    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
+        👥 MEMBRESÍAS GRUPALES
+    </h3>
+    
+    <div class="packages-grid" style="margin-bottom: 30px;">
+        <div class="package-card" onclick="seleccionarPlan('2personas')">
+            <div class="package-name">2 PERSONAS</div>
+            <div class="package-price">$40<span>/c/u mes</span></div>
+            <ul class="package-features">
+                <li>Total: $80/mes</li>
+                <li>Incluye evaluación física inicial</li>
+                <li>Rutina de entrenamiento (2 semanas)</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('2personas')">SELECCIONAR</button>
+        </div>
+
+        <div class="package-card popular" onclick="seleccionarPlan('3personas')">
+            <div class="package-name">3+ PERSONAS</div>
+            <div class="package-price">$35<span>/c/u mes</span></div>
+            <ul class="package-features">
+                <li>Mejor precio por persona</li>
+                <li>Incluye evaluación física inicial</li>
+                <li>Rutina de entrenamiento (2 semanas)</li>
+            </ul>
+            <button class="package-btn popular-btn" onclick="seleccionarPlan('3personas')">SELECCIONAR</button>
+        </div>
+    </div>
+
+    <!-- PASES DIARIOS Y SEMANALES -->
+    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
+        🎟️ PASES ESPECIALES
+    </h3>
+    
+    <div class="packages-grid" style="margin-bottom: 30px;">
+        <div class="package-card" onclick="seleccionarPlan('daypass')">
+            <div class="package-name">DAY PASS</div>
+            <div class="package-price">$8.97</div>
+            <ul class="package-features">
+                <li>Acceso por 1 día</li>
+                <li>Ideal para probar</li>
+                <li>Sin compromiso</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('daypass')">SELECCIONAR</button>
+        </div>
+
+        <div class="package-card" onclick="seleccionarPlan('weekpass')">
+            <div class="package-name">WEEK PASS</div>
+            <div class="package-price">$23.00</div>
+            <ul class="package-features">
+                <li>Acceso por 1 semana</li>
+                <li>7 días de entrenamiento</li>
+                <li>Flexibilidad total</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('weekpass')">SELECCIONAR</button>
+        </div>
+    </div>
+
+    <!-- INFORMACIÓN IMPORTANTE -->
+    <div style="background: #f8f8f8; border-radius: 20px; padding: 25px; margin-top: 30px; border-left: 5px solid #63318A;">
+        <h4 style="color: #63318A; margin-bottom: 15px; font-size: 1.3em;">📌 INFORMACIÓN IMPORTANTE</h4>
+        <ul style="color: #666; line-height: 1.8; margin-left: 20px;">
+            <li>💰 Los precios <strong>NO incluyen IVU</strong></li>
+            <li>📅 Al inscribirse se paga <strong>CUOTA ANUAL DE MANTENIMIENTO: $30.00</strong> (una vez al año)</li>
+            <li>✅ Todas nuestras membresías son <strong>SIN CONTRATO y SIN DÉBITO AUTOMÁTICO (Auto Pay)</strong></li>
+            <li>🏋️ Nuestras membresías incluyen: <strong>Evaluación Física Inicial</strong> y <strong>rutina de entrenamiento</strong> con uno de nuestros entrenadores por un periodo de <strong>2 semanas</strong></li>
+        </ul>
+    </div>
+
     <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8em;">
-        * Las ofertas pueden combinarse. Aplican restricciones.
+        * Las promociones no son acumulables. Aplican restricciones.
     </p>
 </div>
 
@@ -1568,398 +1599,6 @@
                     <textarea id="explicacionHistorial" rows="2" placeholder="Detalles adicionales..."></textarea>
                 </div>
 
-                <!-- ===== HISTORIAL FAMILIAR ===== -->
-                <h3 class="form-subtitle">👪 HISTORIAL FAMILIAR</h3>
-                
-                <div class="checkbox-group">
-                    <div class="grid-3">
-                        <label class="checkbox-item"><input type="checkbox" id="famAltaPresion" value="Alta Presión"> Alta Presión</label>
-                        <label class="checkbox-item"><input type="checkbox" id="famDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
-                        <label class="checkbox-item"><input type="checkbox" id="famCorazon" value="Enfermedad del Corazón"> Enfermedad del Corazón</label>
-                        <label class="checkbox-item"><input type="checkbox" id="famOperacionCorazon" value="Operación del Corazón"> Operación del Corazón</label>
-                        <label class="checkbox-item"><input type="checkbox" id="famOtras" value="Otras enfermedades"> Otras enfermedades de cuidado</label>
-                        <label class="checkbox-item"><input type="checkbox" id="famTobillos" value="Tobillos o rodillas lastimados"> Tobillos o rodillas lastimados</label>
-                    </div>
-                </div>
-
-                <!-- ===== SÍNTOMAS PRESENTES ===== -->
-                <h3 class="form-subtitle">🤕 SÍNTOMAS PRESENTES</h3>
-                
-                <div class="checkbox-group">
-                    <div class="grid-3">
-                        <label class="checkbox-item"><input type="checkbox" id="sinArtritis" value="Artritis"> Artritis</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinDificultadRespirar" value="Dificultad al respirar"> Dificultad al respirar</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinDificultadDormir" value="Dificultad al respirar mientras duerme"> Dificultad al respirar mientras duerme</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinDolorCadera" value="Dolor en la cadera"> Dolor en la cadera</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinDolorPecho" value="Dolor de pecho"> Dolor de pecho</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinDolorRodillas" value="Dolor de rodillas o tobillo"> Dolor de rodillas o tobillo</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinFatiga" value="Fatiga inusual"> Fatiga inusual</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinFlema" value="Flema con sangre"> Flema con sangre</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinMareos" value="Mareos o Desmayos"> Mareos o Desmayos</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinAlmohada" value="Necesita más almohadas"> Necesita más almohadas</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinPalpitaciones" value="Palpitaciones"> Palpitaciones</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinPulsoAcelerado" value="Pulso acelerado"> Pulso acelerado</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinSoplo" value="Soplo en el Corazón"> Soplo en el Corazón</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinTos" value="Tos o Fatiga"> Tos o Fatiga</label>
-                        <label class="checkbox-item"><input type="checkbox" id="sinTobillosInflamados" value="Tobillos Inflamados"> Tobillos Inflamados</label>
-                    </div>
-                </div>
-
-                <!-- ===== DESCRIPCIÓN DEL TRABAJO ===== -->
-                <h3 class="form-subtitle">💼 DESCRIPCIÓN DEL TRABAJO</h3>
-                
-                <div class="form-group">
-                    <label>Compañía o Empresa</label>
-                    <input type="text" id="compania" placeholder="Nombre de la empresa">
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Tipo de trabajo</label>
-                        <select id="tipoTrabajo">
-                            <option value="">Seleccionar...</option>
-                            <option value="Sedentario">Sedentario</option>
-                            <option value="Activo">Activo</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Nivel de actividad física</label>
-                        <select id="nivelActividad">
-                            <option value="">Seleccionar...</option>
-                            <option value="Sedentario">Sedentario</option>
-                            <option value="Fines de semana">Se ejercita fines de semana</option>
-                            <option value="Activo 1-2">Físicamente activo (1-2 veces/semana)</option>
-                            <option value="Activo 3+">Físicamente activo (3+ veces/semana)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>¿Cuánto camina diariamente? (minutos)</label>
-                        <input type="number" id="minutosCamina" placeholder="Minutos">
-                    </div>
-                    <div class="form-group">
-                        <label>Millas</label>
-                        <input type="number" id="millasCamina" placeholder="Millas" step="0.1">
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>¿En programa de ejercicio actualmente?</label>
-                        <select id="programaEjercicio">
-                            <option value="">Seleccionar...</option>
-                            <option value="Si">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>¿Le gustaría comenzar?</label>
-                        <select id="gustariaComenzar">
-                            <option value="">Seleccionar...</option>
-                            <option value="Si">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>¿Se toma el pulso al hacer ejercicio?</label>
-                        <select id="tomaPulso">
-                            <option value="">Seleccionar...</option>
-                            <option value="Si">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Pulso por minuto</label>
-                        <input type="number" id="pulsoMinuto" placeholder="Ej: 70">
-                    </div>
-                </div>
-
-                <!-- ===== SÍNTOMAS AL EJERCITARSE ===== -->
-                <h3 class="form-subtitle">🏃 SÍNTOMAS AL EJERCITARSE</h3>
-                
-                <div class="checkbox-group">
-                    <div class="grid-3">
-                        <label class="checkbox-item"><input type="checkbox" id="ejerDolorPecho" value="Dolor de Pecho"> Dolor de Pecho</label>
-                        <label class="checkbox-item"><input type="checkbox" id="ejerDolorPiernas" value="Dolor en las piernas"> Dolor en las piernas</label>
-                        <label class="checkbox-item"><input type="checkbox" id="ejerFaltaRespiración" value="Falta de respiración"> Falta de respiración</label>
-                        <label class="checkbox-item"><input type="checkbox" id="ejerMareo" value="Mareo"> Mareo</label>
-                        <label class="checkbox-item"><input type="checkbox" id="ejerPresion" value="Presión en el Corazón"> Presión en el Corazón</label>
-                        <label class="checkbox-item"><input type="checkbox" id="ejerCansancio" value="Sensación de cansancio"> Sensación de cansancio</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Tiempo de recuperación de la respiración</label>
-                    <select id="tiempoRecuperacion">
-                        <option value="">Seleccionar...</option>
-                        <option value="1-2 min">1-2 minutos</option>
-                        <option value="Pocos min">Unos pocos minutos</option>
-                        <option value="5+ min">Más de 5 minutos</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>¿Tiene alguna lesión en huesos o músculos?</label>
-                    <select id="tieneLesion">
-                        <option value="">Seleccionar...</option>
-                        <option value="Si">Sí</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
-
-                <!-- ===== HÁBITOS ===== -->
-                <h3 class="form-subtitle">🚬 HÁBITOS</h3>
-                
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>¿Fuma?</label>
-                        <select id="fuma" onchange="toggleFumador()">
-                            <option value="">Seleccionar...</option>
-                            <option value="Si">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="cantidadFumaContainer" style="display: none;">
-                        <label>Cantidad diaria</label>
-                        <input type="text" id="cantidadFuma" placeholder="Ej: 10 cigarrillos">
-                    </div>
-                </div>
-
-                <div id="fumadorDetalles" style="display: none;">
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>Edad que comenzó a fumar</label>
-                            <input type="number" id="edadComenzoFumar">
-                        </div>
-                        <div class="form-group">
-                            <label>Años fumando</label>
-                            <input type="number" id="anosFumando">
-                        </div>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>¿Dejó de fumar?</label>
-                            <select id="dejoFumar" onchange="toggleDejoFumar()">
-                                <option value="">Seleccionar...</option>
-                                <option value="Si">Sí</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="cuandoDejoContainer" style="display: none;">
-                            <label>Cuándo dejó de fumar</label>
-                            <input type="text" id="cuandoDejoFumar" placeholder="Ej: Hace 2 años">
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="porqueDejoContainer" style="display: none;">
-                        <label>¿Por qué dejó de fumar?</label>
-                        <textarea id="porqueDejoFumar" rows="2"></textarea>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Peso a los 21 años (libras)</label>
-                        <input type="number" id="peso21" placeholder="Libras">
-                    </div>
-                    <div class="form-group">
-                        <label>¿Está actualmente a dieta?</label>
-                        <select id="dieta" onchange="toggleDieta()">
-                            <option value="">Seleccionar...</option>
-                            <option value="Si">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group" id="tipoDietaContainer" style="display: none;">
-                    <label>Qué clase de dieta</label>
-                    <input type="text" id="tipoDieta" placeholder="Ej: Baja en carbohidratos">
-                </div>
-
-                <!-- ===== MEDICAMENTOS ===== -->
-                <h3 class="form-subtitle">💊 MEDICAMENTOS</h3>
-                
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>¿Usa nitroglicerina o equivalente?</label>
-                        <select id="usaNitroglicerina" onchange="toggleNitroglicerina()">
-                            <option value="">Seleccionar...</option>
-                            <option value="Si">Sí</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="cantidadNitroglicerinaContainer" style="display: none;">
-                        <label>Cuántas tabletas</label>
-                        <input type="text" id="cantidadNitroglicerina" placeholder="Ej: 2">
-                    </div>
-                </div>
-
-                <div class="grid-2" id="frecuenciaNitroglicerinaContainer" style="display: none;">
-                    <div class="form-group">
-                        <label>Por día</label>
-                        <input type="text" id="nitroPorDia">
-                    </div>
-                    <div class="form-group">
-                        <label>Por semana</label>
-                        <input type="text" id="nitroPorSemana">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Condición actual de salud</label>
-                    <textarea id="condicionSalud" rows="2" placeholder="Describa su condición actual..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Medicamentos que usa actualmente</label>
-                    <textarea id="medicamentos" rows="4" placeholder="Escriba los medicamentos que está usando actualmente..."></textarea>
-                </div>
-
-                <!-- ===== RELEVOS Y CONSENTIMIENTOS ===== -->
-                <h3 class="form-subtitle">📄 RELEVOS Y CONSENTIMIENTOS</h3>
-                
-                <div class="info-box">
-                    <strong>RELEVO Y CONSENTIMIENTO PARA EVALUACION Y PLAN DE ACONDICIONAMIENTO FISICO</strong>
-                    <p style="margin-top: 10px;">Doy mi consentimiento voluntario para participar de una evaluación física con el propósito de determinar mi condición física actual y un plan de acondicionamiento individualizado. Todas son realizadas por un capacitador Físico, Entrenador Personal Certificado. Cualquier prueba puede ser detenida en cualquier momento por signos de fatiga o agotamiento.</p>
-                    <p style="margin-top: 10px;">Las pruebas para realizarse requieren una indumentaria para hacer ejercicio que no restrinja el movimiento corporal, ni sea excesivamente calurosa. También requiere calzado deportivo adecuado. Todos los parámetros para seguir durante la evaluación serán explicados por el Capacitador Físico, Entrenador Personal antes de comenzar. Hay pruebas que se pueden modificar o eliminar según las particularidades de cada caso.</p>
-                </div>
-
-                <div class="info-box">
-                    <strong>Breve descripción de las pruebas a realizarse</strong>
-                    <ul style="margin-top: 10px; margin-left: 20px;">
-                        <li>Por ciento % de grasa, medidas de pliegues en la piel en área del cuerpo, hombre - parte central del lado exterior del pectoral, abdomen el punto medio del muslo. Mujer- parte posterior del brazo, punto lateral superior de la cadera y el punto medio del muslo.</li>
-                        <li>Peso corporal, presión sanguínea y pulso en reposo. Medidas anatómicas.</li>
-                        <li>Prueba de flexibilidad, sentada, inclinándose y estirándose hace el frente.</li>
-                        <li>Prueba de resistencia abdominal tipo "crunch" en un periodo de un minuto.</li>
-                        <li>Prueba de resistencia muscular tipo lagartija "push-up" modificada para hombres y mujeres.</li>
-                        <li>Prueba de tolerancia cardiovascular subiendo y bajando un escalón por 3 min. Se tomará el pulso de recuperación en el minuto subsiguiente al concluir la prueba.</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <p>Entiendo que toda evaluación física y rutina de acondicionamiento físico presentan unos riesgos a mi salud. Acepto someterme a las pruebas y plan de acondicionamiento, para lo cual tengo autorización y consentimiento de un médico autorizado a practicar la medicina en Puerto Rico (en caso de tener factores de riesgo moderado o alto).</p>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Yo (nombre completo)</label>
-                        <input type="text" id="consentimientoNombre" placeholder="Nombre completo">
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="consentimientoFecha">
-                    </div>
-                </div>
-
-                <!-- ===== POLÍTICAS DEL GIMNASIO ===== -->
-                <h3 class="form-subtitle">🏋️ POLÍTICAS DEL GIMNASIO</h3>
-                
-                <div class="info-box">
-                    <ul style="margin-left: 20px;">
-                        <li>High Quality Training LLC, le hace entrega de una llave para el registro diario de sus visitas, si usted pierde o se le daña la llave tendrá que sustituirla por un costo de $10.00 dólares. Es requisito el uso de esta llave, si se le queda High Quality Training le dará la entrada hasta un máximo de 3 veces, después de esto se le vende una llave o se le deniega la entrada.</li>
-                        <li>Además, nuestra matrícula tiene un costo de $30.00 dólares anuales. Por lo que el sistema le cobrará este cargo anualmente.</li>
-                        <li>Si usted No quiere evaluación ni rutina favor de firmar con sus iniciales.</li>
-                        <li>Además de nuestros entrenadores de piso que lo estarán ayudando, contamos con servicios de Personal Training que se trata de un entrenamiento personalizado, esto conlleva un costo adicional. Para más información pregunte en Servicio al Cliente.</li>
-                    </ul>
-                </div>
-
-                <div class="info-box" style="background: #ffe6e6; border-left-color: #dc3545;">
-                    <strong style="color: #dc3545;">¡¡¡¡SE REQUIERE EL USO DE 2 TOALLAS!!!!</strong>
-                    <ul style="margin-top: 10px; margin-left: 20px; color: #dc3545; font-weight: bold;">
-                        <li>TOALLA #1 ES PARA PONER EN LAS MAQUINAS.</li>
-                        <li>TOALLA #2 ES PARA DESINFECTAR LAS MAQUINAS.</li>
-                    </ul>
-                </div>
-
-                <div class="form-group">
-                    <label>Doy fe que se me dio a leer y se me entregaron los reglamentos del gimnasio</label>
-                    <select id="aceptaReglamentos" required>
-                        <option value="">Seleccionar...</option>
-                        <option value="Si">Sí, acepto</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Firma</label>
-                        <input type="text" id="firmaReglamentos" placeholder="Nombre completo">
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="fechaReglamentos">
-                    </div>
-                </div>
-
-                <!-- ===== AUTORIZACIÓN DE IMAGEN ===== -->
-                <h3 class="form-subtitle">📸 AUTORIZACIÓN DE IMAGEN</h3>
-                
-                <div class="info-box">
-                    <p>Yo, ___________________________, por la presente concedo al High Quality Training LLC, sus directores, oficiales, empleados, agentes y designados (en adelante colectivamente referidos como, el "HQT"), el permiso irrevocable de capturar imágenes de mi persona a través de fotografías, videos, grabaciones o cualquier otro medio electrónico o impreso (en adelante colectivamente, "Imágenes") en relación a promociones del gimnasio conozco que el HTQ será el único dueño y custodio de las Imágenes y le concedo permiso para reproducir, mostrar, distribuir, usar, modificar e imprimir dichas Imágenes de cualquier manera relacionada al negocio del HTQ incluyendo, pero sin limitarse a: publicaciones, afiches, página web, redes sociales u otros medios utilizados únicamente para la promoción de los productos y servicios ofrecidos por el HTQ.</p>
-                    <p style="margin-top: 10px;">Además, relevo al HTQ de toda responsabilidad derivada del uso y reproducción de las Imágenes a través de cualquier medio y renuncio toda causa de acción relacionada al uso de las Imágenes incluyendo, pero sin limitarse a reclamaciones por invasión a la intimidad.</p>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Nombre en letra de molde</label>
-                        <input type="text" id="autorizacionNombre">
-                    </div>
-                    <div class="form-group">
-                        <label>Firma</label>
-                        <input type="text" id="autorizacionFirma">
-                    </div>
-                </div>
-
-                <!-- ===== CLASES GRUPALES ===== -->
-                <h3 class="form-subtitle">👥 CLASES GRUPALES</h3>
-                
-                <div class="info-box">
-                    <p>Estoy consciente que, de no existir quorum de 4 o más, la clase grupal se suspenderá y podrá reponerla con el uso del Gimnasio. Por otro lado, si la maestra(o), faltara las clases se le sustituye con el uso de las facilidades.</p>
-                </div>
-
-                <div class="form-group">
-                    <label>Iniciales</label>
-                    <input type="text" id="inicialesClases" maxlength="3" placeholder="Ej: JPG">
-                </div>
-
-                <!-- ===== RELEVO Y LIBERACION DE RESPONSABILIDAD ===== -->
-                <h3 class="form-subtitle">⚖️ RELEVO Y LIBERACION DE RESPONSABILIDAD</h3>
-                
-                <div class="info-box">
-                    <p><strong>High Quality Training LLC</strong></p>
-                    <p style="margin-top: 10px;">Se entiende y acuerda que EL SOCIO tiene el permiso de su médico para realizar ejercicio físico y que el GYM no ofrece ninguna garantía o representación con respecto a la conveniencia/no conveniencia de EL SOCIO realizar dicho ejercicio. Por la presente, EL SOCIO libera para siempre al GYM de todas las acciones y causas de acciones, demandas, reclamos y demandas que surjan de las lesiones sufridas por las promesas del Vendedor.</p>
-                    <p style="margin-top: 10px;"><strong>Aceptación expresa de riesgo:</strong> El abajo firmante es consciente de que existen riesgos importantes involucrados en todos los aspectos del entrenamiento físico. Estos riesgos incluyen, entre otros: caídas que pueden provocar lesiones graves o la muerte; lesión o muerte debido a negligencia por su parte, su compañero de entrenamiento u otras personas a su alrededor; lesiones o muerte debido al uso inadecuado o falla del equipo; Esguinces y torceduras. Soy consciente de que cualquiera de los riesgos mencionados anteriormente puede provocar lesiones graves o la muerte para mí o para mi(s) pareja(s). Asumo voluntariamente la responsabilidad total por los riesgos a los que me estoy exponiendo y acepto la responsabilidad total por cualquier lesión o muerte que pueda resultar de la participación en cualquier actividad o clase mientras estoy en o bajo la dirección de HIGH QUALITY TRAINING LLC (GYM). Reconozco que no tengo impedimentos físicos, lesiones o enfermedades que puedan ponerme en peligro a mí o a otros.</p>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Firma</label>
-                        <input type="text" id="firmaLiberacion">
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="fechaLiberacion">
-                    </div>
-                </div>
-
-                <!-- MEMBRESÍA -->
-                <h3 class="form-subtitle">💳 MEMBRESÍA</h3>
-                
-                <div class="form-group">
-                    <label>Tipo de membresía</label>
-                    <select id="membresia" required>
-                        <option value="Básica">Básica - $29/mes</option>
-                        <option value="Estándar" selected>Estándar - $49/mes</option>
-                        <option value="Premium">Premium - $79/mes</option>
-                        <option value="VIP">VIP - $129/mes</option>
-                    </select>
                 </div>
 
                 <!-- BOTONES -->
@@ -2740,7 +2379,7 @@
         mostrarClientes();
            document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
     
-          // Generar número de socio automático
+        // Generar número de socio automático
           document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
         });
 
@@ -2749,7 +2388,7 @@
             mostrarClientes();
             document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
             
-            // Generar número de socio automático
+        // Generar número de socio automático
             document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
         });
     </script>
