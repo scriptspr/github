@@ -1467,13 +1467,19 @@
                     <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
                 </div>
 
-<!-- ===== DATOS PERSONALES ===== -->
-<h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
-
-<div class="form-group">
-    <label>Fecha de Comienzo *</label>
-    <input type="date" id="fechaComienzo" required>
-</div>
+                <!-- ===== DATOS PERSONALES ===== -->
+                <h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Fecha de Comienzo *</label>
+                        <input type="date" id="fechaComienzo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Núm. Socio *</label>
+                        <input type="text" id="numSocio" required placeholder="Ej: SOC-001">
+                    </div>
+                </div>
 
                 <div class="grid-2">
                     <div class="form-group">
@@ -1887,7 +1893,7 @@
             const cliente = {
                 id: Date.now(),
                 // Datos personales básicos
-                //numSocio: document.getElementById('numSocio').value || `SOC-${Date.now()}`,
+                numSocio: document.getElementById('numSocio').value || `SOC-${Date.now()}`,
                 fechaComienzo: document.getElementById('fechaComienzo').value,
                 nombre: document.getElementById('nombre').value,
                 sexo: document.getElementById('sexo').value,
