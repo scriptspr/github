@@ -215,6 +215,12 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .package-card.popular {
@@ -294,6 +300,72 @@
 
         .package-btn:active {
             transform: scale(0.98);
+        }
+
+        /* ===== SECCIÓN DE OFERTAS ===== */
+        .ofertas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .oferta-card {
+            background: linear-gradient(135deg, #f8f8f8, #e9e9e9);
+            padding: 20px;
+            border-radius: 15px;
+            color: #333;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+        }
+
+        .oferta-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .oferta-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .oferta-card .precio-oferta {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #63318A;
+            margin: 8px 0;
+        }
+
+        .oferta-card .ahorro {
+            background: #40D32A;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .oferta-card .btn-oferta {
+            background: #63318A;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .oferta-card .btn-oferta:hover {
+            background: #4a2568;
         }
 
         /* ===== SECCIÓN DE MÉTODOS DE PAGO ===== */
@@ -1102,7 +1174,7 @@
     </style>
 </head>
 <body>
-    <!-- MENÚ HAMBURGUESA -->
+    <!-- MENÚ HAMBURGUESA ACTUALIZADO -->
     <div class="menu-container">
         <div class="menu-header">
             <div class="menu-logo">
@@ -1115,15 +1187,16 @@
             <div class="menu-item active" onclick="showSection('inicio', this)">
                 <span>🏠</span> Inicio
             </div>
+            <div class="menu-item" onclick="showSection('planes', this)">
+                <span>🏋️</span> Planes y Ofertas
+            </div>
             <div class="menu-item" onclick="showSection('registro', this)">
                 <span>📝</span> Registrar Cliente
             </div>
             <div class="menu-item" onclick="showSection('clientes', this)">
                 <span>📋</span> Mis Clientes
             </div>
-            <div class="menu-item" onclick="showSection('pagos', this)">
-                <span>💰</span> Procesar Pago
-            </div>
+            <!-- El botón de Procesar Pago ha sido eliminado y reemplazado por Planes y Ofertas -->
         </div>
     </div>
 
@@ -1137,15 +1210,98 @@
                     <h1>WHERE FITNESS<br>FINDS ITS HOME</h1>
                     <p>Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
                     <button class="hero-btn" onclick="showSection('registro', document.querySelector('.menu-item[onclick*=\"registro\"]'))">ÚNETE AHORA</button>
+					<button class="hero-btn" onclick="showPlanesSection()" style="margin-top: 10px; background: #40D32A;">VER PLANES Y OFERTAS</button>
                 </div>
             </div>
+			<!-- SECCIÓN INFORMACIÓN DEL GYM -->
+<div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    <h2 style="text-align: center; font-size: 2.5em; color: #63318A; margin-bottom: 30px; font-weight: 800; text-transform: uppercase;">CONTACT US</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; background: white; border-radius: 30px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+        
+        <!-- COLUMNA IZQUIERDA - INFORMACIÓN DE CONTACTO -->
+        <div>
+            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; background: #f8f8f8; padding: 20px; border-radius: 20px;">
+                <div style="width: 60px; height: 60px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; color: white;">
+                    📍
+                </div>
+                <div>
+                    <h3 style="color: #333; margin-bottom: 5px; font-weight: 700;">Dirección</h3>
+                    <p style="color: #666; line-height: 1.5;">315 Ave Lauro Piñero<br>Ceiba, PR</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; background: #f8f8f8; padding: 20px; border-radius: 20px;">
+                <div style="width: 60px; height: 60px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; color: white;">
+                    📞
+                </div>
+                <div>
+                    <h3 style="color: #333; margin-bottom: 5px; font-weight: 700;">Teléfono</h3>
+                    <p style="color: #666; line-height: 1.5;">
+                        <a href="tel:7876130243" style="color: #63318A; text-decoration: none; font-weight: 600;">787-613-0243</a>
+                    </p>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; background: #f8f8f8; padding: 20px; border-radius: 20px;">
+                <div style="width: 60px; height: 60px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; color: white;">
+                    ✉️
+                </div>
+                <div>
+                    <h3 style="color: #333; margin-bottom: 5px; font-weight: 700;">Email</h3>
+                    <p style="color: #666; line-height: 1.5;">
+                        <a href="mailto:info@qualitytraining.com" style="color: #63318A; text-decoration: none; font-weight: 600;">info@qualitytraining.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- COLUMNA DERECHA - HORARIOS -->
+        <div style="background: linear-gradient(135deg, #63318A 0%, #40D32A 100%); border-radius: 20px; padding: 30px; color: white;">
+            <h3 style="font-size: 2em; margin-bottom: 30px; display: flex; align-items: center; gap: 10px;">
+                <span>⏰</span> Horarios
+            </h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 1.5em;">📅</span>
+                        <span style="font-weight: 600;">Lunes a Jueves</span>
+                    </div>
+                    <span style="font-weight: 700; font-size: 1.2em;">5:00am - 9:00pm</span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 1.5em;">📅</span>
+                        <span style="font-weight: 600;">Viernes</span>
+                    </div>
+                    <span style="font-weight: 700; font-size: 1.2em;">5:00am - 8:00pm</span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 1.5em;">📅</span>
+                        <span style="font-weight: 600;">Sábados</span>
+                    </div>
+                    <span style="font-weight: 700; font-size: 1.2em;">8:00am - 2:00pm</span>
+                </div>
+                
+                <div style="margin-top: 20px; background: rgba(255,255,255,0.2); padding: 15px; border-radius: 15px; text-align: center;">
+                    <span style="font-weight: 600;">Domingos: CERRADO</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
 
-            <!-- MEMBERSHIP PACKAGES -->
-            <h2 class="section-title">MEMBERSHIP PACKAGES</h2>
-            <p class="section-subtitle">Elige el plan que mejor se adapte a tus metas</p>
-
+        <!-- SECCIÓN PLANES Y OFERTAS -->
+        <div id="planes" class="section">
+            <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
+            
             <div class="packages-grid">
-                <div class="package-card">
+                <div class="package-card" onclick="seleccionarPlan('basico')">
                     <div class="package-name">BÁSICO</div>
                     <div class="package-price">$29<span>/mes</span></div>
                     <ul class="package-features">
@@ -1157,7 +1313,7 @@
                     <button class="package-btn" onclick="seleccionarPlan('basico')">SELECCIONAR</button>
                 </div>
 
-                <div class="package-card popular">
+                <div class="package-card popular" onclick="seleccionarPlan('estandar')">
                     <div class="package-name">ESTÁNDAR</div>
                     <div class="package-price">$49<span>/mes</span></div>
                     <ul class="package-features">
@@ -1170,7 +1326,7 @@
                     <button class="package-btn popular-btn" onclick="seleccionarPlan('estandar')">SELECCIONAR</button>
                 </div>
 
-                <div class="package-card">
+                <div class="package-card" onclick="seleccionarPlan('premium')">
                     <div class="package-name">PREMIUM</div>
                     <div class="package-price">$79<span>/mes</span></div>
                     <ul class="package-features">
@@ -1182,7 +1338,7 @@
                     <button class="package-btn" onclick="seleccionarPlan('premium')">SELECCIONAR</button>
                 </div>
 
-                <div class="package-card">
+                <div class="package-card" onclick="seleccionarPlan('vip')">
                     <div class="package-name">VIP</div>
                     <div class="package-price">$129<span>/mes</span></div>
                     <ul class="package-features">
@@ -1195,109 +1351,50 @@
                 </div>
             </div>
 
-            <!-- TESTIMONIALS SECTION -->
-            <div class="testimonials-section">
-                <h2 class="section-title">REAL PEOPLE. REAL TRUST. REAL REVIEWS.</h2>
+            <!-- OFERTAS ESPECIALES -->
+            <h3 class="form-subtitle">🔥 OFERTAS ESPECIALES</h3>
+            
+            <div class="ofertas-grid">
+                <div class="oferta-card" onclick="seleccionarOferta('anual')">
+                    <h4><span>✨</span> MEMBRESÍA ANUAL</h4>
+                    <div class="ahorro">Ahorras $98</div>
+                    <div class="precio-oferta">$490</div>
+                    <p style="margin: 8px 0; font-size: 0.9em;">Paga 10 meses y recibe 2 GRATIS</p>
+                    <p style="font-size: 0.8em; color: #666;">Precio regular: $588</p>
+                    <button class="btn-oferta" onclick="seleccionarOferta('anual')">VER OFERTA</button>
+                </div>
                 
-                <div class="testimonials-grid">
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">C</div>
-                            <div class="testimonial-info">
-                                <h4>Chris</h4>
-                                <p>hace 2 meses</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-text">
-                            "Quality Training es el mejor gimnasio que he visto en años. Máquinas actualizadas, muy limpio y excelente servicio al cliente. También preparan los mejores batidos, especialmente el Mr. Peanut #1. Amplio estacionamiento. Muy recomendado."
-                        </div>
-                        <div class="testimonial-stars">★★★★★</div>
-                    </div>
-
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">J</div>
-                            <div class="testimonial-info">
-                                <h4>Jonathan</h4>
-                                <p>hace 2 meses</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-text">
-                            "Super limpio, super cómodo, servicio al cliente 10 de 10. La mejor experiencia."
-                        </div>
-                        <div class="testimonial-stars">★★★★★</div>
-                    </div>
-
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">J</div>
-                            <div class="testimonial-info">
-                                <h4>Julio</h4>
-                                <p>hace 7 meses</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-text">
-                            "Excelente gimnasio. El personal fue servicial y me acomodaron con un plan de una semana perfecto. Las instalaciones están limpias y organizadas, el equipo en perfectas condiciones. 100% recomendado."
-                        </div>
-                        <div class="testimonial-stars">★★★★★</div>
-                    </div>
+                <div class="oferta-card" onclick="seleccionarOferta('pareja')">
+                    <h4><span>👥</span> MEMBRESÍA PAREJA</h4>
+                    <div class="ahorro">Ahorras $19/mes</div>
+                    <div class="precio-oferta">$79<span style="font-size: 0.5em;">/mes</span></div>
+                    <p style="margin: 8px 0; font-size: 0.9em;">2 personas por $79/mes</p>
+                    <p style="font-size: 0.8em; color: #666;">Incluye todos los beneficios</p>
+                    <button class="btn-oferta" onclick="seleccionarOferta('pareja')">VER OFERTA</button>
+                </div>
+                
+                <div class="oferta-card" onclick="seleccionarOferta('estudiante')">
+                    <h4><span>🎓</span> DESCUENTO ESTUDIANTIL</h4>
+                    <div class="ahorro">15% OFF</div>
+                    <div class="precio-oferta">$41.65<span style="font-size: 0.5em;">/mes</span></div>
+                    <p style="margin: 8px 0; font-size: 0.9em;">Plan Estándar con credencial</p>
+                    <p style="font-size: 0.8em; color: #666;">Válido para estudiantes</p>
+                    <button class="btn-oferta" onclick="seleccionarOferta('estudiante')">VER OFERTA</button>
+                </div>
+                
+                <div class="oferta-card" onclick="seleccionarOferta('primeravez')">
+                    <h4><span>⏰</span> PRIMERA VEZ</h4>
+                    <div class="ahorro">-41%</div>
+                    <div class="precio-oferta">$29<span style="font-size: 0.5em;">/mes</span></div>
+                    <p style="margin: 8px 0; font-size: 0.9em;">Primer mes a $29</p>
+                    <p style="font-size: 0.8em; color: #666;">Prueba cualquier plan</p>
+                    <button class="btn-oferta" onclick="seleccionarOferta('primeravez')">VER OFERTA</button>
                 </div>
             </div>
-
-            <!-- CONTACT SECTION -->
-            <div class="contact-section">
-                <div class="contact-container">
-                    <h2 class="section-title">CONTACT US</h2>
-                    
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <div class="contact-icon">📍</div>
-                            <div class="contact-details">
-                                <h4>Dirección</h4>
-                                <p>Ceiba, PR</p>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">📞</div>
-                            <div class="contact-details">
-                                <h4>Teléfono</h4>
-                                <p><a href="tel:0000000000" style="color: #333; text-decoration: none;">000-000-0000</a></p>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">✉️</div>
-                            <div class="contact-details">
-                                <h4>Email</h4>
-                                <p>info@qualitytraining.com</p>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-item">
-                            <div class="contact-icon">⏰</div>
-                            <div class="contact-details">
-                                <h4>Horario</h4>
-                                <p>Lunes a Viernes: 5am - 9pm<br>Sábados: 8am - 2pm</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="contact-form">
-                        <h3>Envíanos un mensaje</h3>
-                        <div class="form-group">
-                            <input type="text" id="contactNombre" placeholder="Tu nombre">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="contactEmail" placeholder="Tu email">
-                        </div>
-                        <div class="form-group">
-                            <textarea id="contactMensaje" rows="4" placeholder="Tu mensaje..."></textarea>
-                        </div>
-                        <button class="contact-submit" onclick="enviarMensaje()">ENVIAR MENSAJE</button>
-                    </div>
-                </div>
-            </div>
+            
+            <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8em;">
+                * Las ofertas pueden combinarse. Aplican restricciones.
+            </p>
         </div>
 
         <!-- SECCIÓN REGISTRAR CLIENTE (CON FORMULARIO COMPLETO) -->
@@ -1830,113 +1927,6 @@
 
             <div class="clients-grid" id="clientsList"></div>
         </div>
-
-        <!-- SECCIÓN PROCESAR PAGO -->
-        <div id="pagos" class="section">
-            <h2 class="form-title">💰 Procesar Pago</h2>
-
-            <div class="form-group">
-                <label>Seleccionar Cliente</label>
-                <select id="pagoCliente" class="form-group">
-                    <option value="">Seleccionar cliente...</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Monto a pagar ($)</label>
-                <input type="number" id="pagoMonto" value="49" step="0.01" min="0">
-            </div>
-
-            <div class="form-group">
-                <label>Concepto</label>
-                <input type="text" id="pagoConcepto" value="Membresía mensual">
-            </div>
-
-            <h3 style="margin: 20px 0; color: #63318A;">Método de Pago</h3>
-            
-            <div class="payment-methods-grid">
-                <div class="payment-card" onclick="seleccionarMetodoPago('ath')">
-                    <div class="payment-icon">📱</div>
-                    <div class="payment-name">ATH Móvil</div>
-                </div>
-                <div class="payment-card" onclick="seleccionarMetodoPago('tarjeta')">
-                    <div class="payment-icon">💳</div>
-                    <div class="payment-name">Tarjeta</div>
-                </div>
-                <div class="payment-card" onclick="seleccionarMetodoPago('paypal')">
-                    <div class="payment-icon">🅿️</div>
-                    <div class="payment-name">PayPal</div>
-                </div>
-                <div class="payment-card" onclick="seleccionarMetodoPago('efectivo')">
-                    <div class="payment-icon">💵</div>
-                    <div class="payment-name">Efectivo</div>
-                </div>
-            </div>
-
-            <div id="ath-details" class="payment-details hidden">
-                <h4>📱 Pago con ATH Móvil</h4>
-                <div class="ath-number">787-555-1234</div>
-                <p style="text-align: center; margin: 10px 0;"><strong>Comercio:</strong> Quality Training</p>
-                <div class="form-group">
-                    <label>Número de confirmación</label>
-                    <input type="text" id="athReferencia" placeholder="Ej: ATH123456">
-                </div>
-            </div>
-
-            <div id="tarjeta-details" class="payment-details hidden">
-                <h4>💳 Pago con Tarjeta</h4>
-                <div class="credit-card-form">
-                    <input type="text" placeholder="Número de tarjeta" id="cardNumber">
-                    <div class="card-row">
-                        <input type="text" placeholder="MM/AA" id="cardExpiry">
-                        <input type="text" placeholder="CVV" id="cardCVV">
-                    </div>
-                    <input type="text" placeholder="Nombre del titular" id="cardName">
-                </div>
-            </div>
-
-            <div id="paypal-details" class="payment-details hidden">
-                <h4>🅿️ Pago con PayPal</h4>
-                <div style="text-align: center; padding: 20px;">
-                    <p>Serás redirigido a PayPal</p>
-                    <p><strong>Email:</strong> pagos@qualitytraining.com</p>
-                </div>
-            </div>
-
-            <div id="efectivo-details" class="payment-details hidden">
-                <h4>💵 Pago en Efectivo</h4>
-                <div class="form-group">
-                    <label>Monto recibido ($)</label>
-                    <input type="number" id="efectivoRecibido" onchange="calcularCambio()">
-                </div>
-                <div class="form-group">
-                    <label>Cambio ($)</label>
-                    <input type="number" id="efectivoCambio" readonly>
-                </div>
-            </div>
-
-            <div style="margin-top: 30px;">
-                <div class="form-group">
-                    <label>Fecha del pago</label>
-                    <input type="date" id="pagoFecha">
-                </div>
-                <div class="form-group">
-                    <label>Estado</label>
-                    <select id="pagoEstado">
-                        <option value="completado">Completado</option>
-                        <option value="pendiente">Pendiente</option>
-                        <option value="fallido">Fallido</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="btn btn-primary" onclick="registrarPago()" style="margin-top: 20px;">PROCESAR PAGO</button>
-
-            <div style="margin-top: 30px;">
-                <h3 style="color: #333;">📋 Últimos Pagos</h3>
-                <div id="pagosRecientes" class="timeline-list" style="margin-top: 15px;"></div>
-            </div>
-        </div>
     </div>
 
     <!-- MODAL DE CONTRASEÑA PARA MIS CLIENTES -->
@@ -2095,16 +2085,58 @@
             if (sectionId === 'clientes' && sesionClientesActiva) {
                 mostrarClientes();
             }
-            if (sectionId === 'pagos') actualizarSelectPagos();
         }
 
         function seleccionarPlan(plan) {
             showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
-            const precios = { basico: 29, estandar: 49, premium: 79, vip: 129 };
-            document.getElementById('membresia').value = 
-                plan === 'basico' ? 'Básica' :
-                plan === 'estandar' ? 'Estándar' :
-                plan === 'premium' ? 'Premium' : 'VIP';
+            const precios = {
+                'basico': 29,
+                'estandar': 49,
+                'premium': 79,
+                'vip': 129
+            };
+            
+            // Mapear el nombre del plan al valor del select
+            const planMap = {
+                'basico': 'Básica',
+                'estandar': 'Estándar',
+                'premium': 'Premium',
+                'vip': 'VIP'
+            };
+            
+            document.getElementById('membresia').value = planMap[plan] || 'Estándar';
+            
+            // Opcional: mostrar mensaje
+            alert(`✅ Has seleccionado el Plan ${planMap[plan]}. Completa el registro para continuar.`);
+        }
+
+        function seleccionarOferta(oferta) {
+            let mensaje = '';
+            let plan = 'estandar'; // Por defecto
+            let monto = 49;
+            
+            if (oferta === 'anual') {
+                mensaje = 'OFERTA ANUAL: 12 meses al precio de 10 ($490)';
+                plan = 'estandar';
+                monto = 490;
+            } else if (oferta === 'pareja') {
+                mensaje = 'OFERTA PAREJA: 2 personas por $79/mes';
+                plan = 'estandar';
+                monto = 79;
+            } else if (oferta === 'estudiante') {
+                mensaje = 'DESCUENTO ESTUDIANTIL: 15% off en plan Estándar ($41.65/mes)';
+                plan = 'estandar';
+                monto = 41.65;
+            } else if (oferta === 'primeravez') {
+                mensaje = 'PRIMERA VEZ: Primer mes a $29';
+                plan = 'estandar';
+                monto = 29;
+            }
+            
+            if (confirm(`✅ ${mensaje}\n\n¿Quieres ir a Registrar Cliente para aprovechar esta oferta?`)) {
+                showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
+                // Opcional: establecer el monto en el campo de pago después del registro
+            }
         }
 
         // ===== FUNCIONES DE REGISTRO =====
@@ -2310,28 +2342,11 @@
             localStorage.setItem('clientes', JSON.stringify(clientes));
             limpiarFormulario();
             
-            // Seleccionar el cliente en el selector de pagos y mostrar la sección
-            const selectPago = document.getElementById('pagoCliente');
-            setTimeout(() => {
-                actualizarSelectPagos();
-                selectPago.value = cliente.id;
-            }, 100);
-            
-            // Actualizar monto según membresía
-            const montos = {
-                'Básica': 29,
-                'Estándar': 49,
-                'Premium': 79,
-                'VIP': 129
-            };
-            document.getElementById('pagoMonto').value = montos[cliente.membresia] || 49;
-            document.getElementById('pagoConcepto').value = `Membresía ${cliente.membresia}`;
-            
-            // Mostrar sección de pagos
-            showSection('pagos', document.querySelector('.menu-item[onclick*="pagos"]'));
-            
             // Mensaje de confirmación
-            alert(`✅ Cliente registrado exitosamente. Ahora procesa el pago de $${montos[cliente.membresia] || 49} para ${cliente.nombre}`);
+            alert(`✅ Cliente ${cliente.nombre} registrado exitosamente.`);
+            
+            // Volver al inicio
+            showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
         });
 
         // ===== FUNCIONES DE CLIENTES =====
@@ -2369,9 +2384,9 @@
             mostrarClientes(document.getElementById('searchClient').value);
         }
 
-        // ===== FUNCIONES DE ELIMINACIÓN - VERSIÓN SIMPLIFICADA =====
+        // ===== FUNCIONES DE ELIMINACIÓN =====
         function mostrarConfirmEliminar(id, nombre) {
-            console.log("ID a eliminar:", id); // Para depuración
+            console.log("ID a eliminar:", id);
             clienteAEliminar = id;
             document.getElementById('deleteClientMessage').innerHTML = `¿Estás seguro que deseas eliminar a <strong>${nombre}</strong>? Esta acción eliminará permanentemente al cliente y todo su historial.`;
             document.getElementById('confirmDeleteModal').classList.add('active');
@@ -2404,75 +2419,6 @@
                 // Limpiar variable
                 clienteAEliminar = null;
             }
-        }
-
-        // ===== FUNCIONES DE PAGOS =====
-        function actualizarSelectPagos() {
-            const select = document.getElementById('pagoCliente');
-            select.innerHTML = '<option value="">Seleccionar cliente...</option>' + 
-                clientes.filter(c => c.activo).map(c => `<option value="${c.id}">${c.nombre} - ${c.membresia || 'Básica'} (#${c.numSocio || ''})</option>`).join('');
-            
-            document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
-        }
-
-        function seleccionarMetodoPago(metodo) {
-            metodoPagoSeleccionado = metodo;
-            document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
-            event.target.closest('.payment-card').classList.add('selected');
-            document.querySelectorAll('.payment-details').forEach(d => d.classList.add('hidden'));
-            document.getElementById(metodo + '-details').classList.remove('hidden');
-        }
-
-        function calcularCambio() {
-            const monto = parseFloat(document.getElementById('pagoMonto').value) || 0;
-            const recibido = parseFloat(document.getElementById('efectivoRecibido').value) || 0;
-            document.getElementById('efectivoCambio').value = (recibido - monto).toFixed(2);
-        }
-
-        function registrarPago() {
-            const clienteId = document.getElementById('pagoCliente').value;
-            if (!clienteId) { alert('❌ Selecciona un cliente'); return; }
-            if (!metodoPagoSeleccionado) { alert('❌ Selecciona un método de pago'); return; }
-
-            const cliente = clientes.find(c => String(c.id) === String(clienteId));
-            const pago = {
-                id: Date.now(),
-                fecha: document.getElementById('pagoFecha').value,
-                monto: parseFloat(document.getElementById('pagoMonto').value),
-                concepto: document.getElementById('pagoConcepto').value,
-                metodo: metodoPagoSeleccionado,
-                estado: document.getElementById('pagoEstado').value,
-                factura: `FAC-${new Date().getFullYear()}-${String(clientes.length).padStart(4,'0')}`
-            };
-
-            if (!cliente.historial) cliente.historial = { pagos: [] };
-            if (!cliente.historial.pagos) cliente.historial.pagos = [];
-            cliente.historial.pagos.push(pago);
-            localStorage.setItem('clientes', JSON.stringify(clientes));
-
-            alert('✅ Pago registrado exitosamente');
-            actualizarPagosRecientes();
-            
-            // Limpiar selección después del pago
-            metodoPagoSeleccionado = null;
-            document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
-            document.querySelectorAll('.payment-details').forEach(d => d.classList.add('hidden'));
-        }
-
-        function actualizarPagosRecientes() {
-            const pagos = clientes.flatMap(c => (c.historial?.pagos || []).map(p => ({ ...p, cliente: c.nombre })))
-                .sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).slice(0,5);
-            
-            document.getElementById('pagosRecientes').innerHTML = pagos.length ? 
-                pagos.map(p => `
-                    <div class="timeline-item">
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>📅 ${new Date(p.fecha).toLocaleDateString()}</span>
-                            <span style="color: #63318A; font-weight: bold;">$${p.monto}</span>
-                        </div>
-                        <div>${p.cliente} - ${p.concepto}</div>
-                    </div>
-                `).join('') : '<p style="text-align: center; color: #666;">No hay pagos recientes</p>';
         }
 
         // ===== FUNCIONES DE HISTORIAL (simplificadas) =====
@@ -2715,11 +2661,36 @@
                 cerrarPasswordClientes();
             }
         });
+		
+		// Función para mostrar la sección de Planes y Ofertas desde el botón del hero
+        function showPlanesSection() {
+            // Cambiar la sección activa
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('planes').classList.add('active');
+    
+           // Cambiar el menú activo
+           document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+           const menuItem = document.querySelector('.menu-item[onclick*="planes"]');
+           if (menuItem) menuItem.classList.add('active');
+    
+           // Cerrar el menú si está abierto
+           document.getElementById('menuItems').classList.remove('show');
+           document.getElementById('menuToggle').classList.remove('active');
+           document.getElementById('menuToggle').textContent = '☰';
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+        mostrarClientes();
+           document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
+    
+          // Generar número de socio automático
+          document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
+        });
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             mostrarClientes();
-            actualizarPagosRecientes();
             document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
             
             // Generar número de socio automático
