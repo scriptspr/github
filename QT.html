@@ -1318,106 +1318,142 @@
     </div>
 </div>
 
-        <!-- SECCIÓN PLANES Y OFERTAS -->
-        <div id="planes" class="section">
-            <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
-            
-            <div class="packages-grid">
-                <div class="package-card" onclick="seleccionarPlan('basico')">
-                    <div class="package-name">BÁSICO</div>
-                    <div class="package-price">$29<span>/mes</span></div>
-                    <ul class="package-features">
-                        <li>Acceso en hora valle</li>
-                        <li>2 clases grupales</li>
-                        <li>Sin evaluación inicial</li>
-                        <li>Horario limitado</li>
-                    </ul>
-                    <button class="package-btn" onclick="seleccionarPlan('basico')">SELECCIONAR</button>
-                </div>
-
-                <div class="package-card popular" onclick="seleccionarPlan('estandar')">
-                    <div class="package-name">ESTÁNDAR</div>
-                    <div class="package-price">$49<span>/mes</span></div>
-                    <ul class="package-features">
-                        <li>Acceso 24/7</li>
-                        <li>Clases grupales ilimitadas</li>
-                        <li>Evaluación inicial</li>
-                        <li>1 sesión de entrenador/mes</li>
-                        <li>App de seguimiento</li>
-                    </ul>
-                    <button class="package-btn popular-btn" onclick="seleccionarPlan('estandar')">SELECCIONAR</button>
-                </div>
-
-                <div class="package-card" onclick="seleccionarPlan('premium')">
-                    <div class="package-name">PREMIUM</div>
-                    <div class="package-price">$79<span>/mes</span></div>
-                    <ul class="package-features">
-                        <li>Todo lo del plan Estándar</li>
-                        <li>Entrenador personal 4x/mes</li>
-                        <li>Nutricionista incluido</li>
-                        <li>Acceso a todos los centros</li>
-                    </ul>
-                    <button class="package-btn" onclick="seleccionarPlan('premium')">SELECCIONAR</button>
-                </div>
-
-                <div class="package-card" onclick="seleccionarPlan('vip')">
-                    <div class="package-name">VIP</div>
-                    <div class="package-price">$129<span>/mes</span></div>
-                    <ul class="package-features">
-                        <li>Entrenador personal ilimitado</li>
-                        <li>Spa y recuperación</li>
-                        <li>Estacionamiento VIP</li>
-                        <li>Eventos exclusivos</li>
-                    </ul>
-                    <button class="package-btn" onclick="seleccionarPlan('vip')">SELECCIONAR</button>
-                </div>
-            </div>
-
-            <!-- OFERTAS ESPECIALES -->
-            <h3 class="form-subtitle">🔥 OFERTAS ESPECIALES</h3>
-            
-            <div class="ofertas-grid">
-                <div class="oferta-card" onclick="seleccionarOferta('anual')">
-                    <h4><span>✨</span> MEMBRESÍA ANUAL</h4>
-                    <div class="ahorro">Ahorras $98</div>
-                    <div class="precio-oferta">$490</div>
-                    <p style="margin: 8px 0; font-size: 0.9em;">Paga 10 meses y recibe 2 GRATIS</p>
-                    <p style="font-size: 0.8em; color: #666;">Precio regular: $588</p>
-                    <button class="btn-oferta" onclick="seleccionarOferta('anual')">VER OFERTA</button>
-                </div>
-                
-                <div class="oferta-card" onclick="seleccionarOferta('pareja')">
-                    <h4><span>👥</span> MEMBRESÍA PAREJA</h4>
-                    <div class="ahorro">Ahorras $19/mes</div>
-                    <div class="precio-oferta">$79<span style="font-size: 0.5em;">/mes</span></div>
-                    <p style="margin: 8px 0; font-size: 0.9em;">2 personas por $79/mes</p>
-                    <p style="font-size: 0.8em; color: #666;">Incluye todos los beneficios</p>
-                    <button class="btn-oferta" onclick="seleccionarOferta('pareja')">VER OFERTA</button>
-                </div>
-                
-                <div class="oferta-card" onclick="seleccionarOferta('estudiante')">
-                    <h4><span>🎓</span> DESCUENTO ESTUDIANTIL</h4>
-                    <div class="ahorro">15% OFF</div>
-                    <div class="precio-oferta">$41.65<span style="font-size: 0.5em;">/mes</span></div>
-                    <p style="margin: 8px 0; font-size: 0.9em;">Plan Estándar con credencial</p>
-                    <p style="font-size: 0.8em; color: #666;">Válido para estudiantes</p>
-                    <button class="btn-oferta" onclick="seleccionarOferta('estudiante')">VER OFERTA</button>
-                </div>
-                
-                <div class="oferta-card" onclick="seleccionarOferta('primeravez')">
-                    <h4><span>⏰</span> PRIMERA VEZ</h4>
-                    <div class="ahorro">-41%</div>
-                    <div class="precio-oferta">$29<span style="font-size: 0.5em;">/mes</span></div>
-                    <p style="margin: 8px 0; font-size: 0.9em;">Primer mes a $29</p>
-                    <p style="font-size: 0.8em; color: #666;">Prueba cualquier plan</p>
-                    <button class="btn-oferta" onclick="seleccionarOferta('primeravez')">VER OFERTA</button>
-                </div>
-            </div>
-            
-            <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8em;">
-                * Las ofertas pueden combinarse. Aplican restricciones.
-            </p>
+<!-- SECCIÓN PLANES Y OFERTAS -->
+<div id="planes" class="section">
+    <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
+    
+    <div class="packages-grid">
+        <div class="package-card" onclick="seleccionarPlan('basico')">
+            <div class="package-name">BÁSICO</div>
+            <div class="package-price">$29<span>/mes</span></div>
+            <ul class="package-features">
+                <li>Acceso en hora valle</li>
+                <li>2 clases grupales</li>
+                <li>Sin evaluación inicial</li>
+                <li>Horario limitado</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('basico')">SELECCIONAR</button>
         </div>
+
+        <div class="package-card popular" onclick="seleccionarPlan('estandar')">
+            <div class="package-name">ESTÁNDAR</div>
+            <div class="package-price">$49<span>/mes</span></div>
+            <ul class="package-features">
+                <li>Acceso 24/7</li>
+                <li>Clases grupales ilimitadas</li>
+                <li>Evaluación inicial</li>
+                <li>1 sesión de entrenador/mes</li>
+                <li>App de seguimiento</li>
+            </ul>
+            <button class="package-btn popular-btn" onclick="seleccionarPlan('estandar')">SELECCIONAR</button>
+        </div>
+
+        <div class="package-card" onclick="seleccionarPlan('premium')">
+            <div class="package-name">PREMIUM</div>
+            <div class="package-price">$79<span>/mes</span></div>
+            <ul class="package-features">
+                <li>Todo lo del plan Estándar</li>
+                <li>Entrenador personal 4x/mes</li>
+                <li>Nutricionista incluido</li>
+                <li>Acceso a todos los centros</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('premium')">SELECCIONAR</button>
+        </div>
+
+        <div class="package-card" onclick="seleccionarPlan('vip')">
+            <div class="package-name">VIP</div>
+            <div class="package-price">$129<span>/mes</span></div>
+            <ul class="package-features">
+                <li>Entrenador personal ilimitado</li>
+                <li>Spa y recuperación</li>
+                <li>Estacionamiento VIP</li>
+                <li>Eventos exclusivos</li>
+            </ul>
+            <button class="package-btn" onclick="seleccionarPlan('vip')">SELECCIONAR</button>
+        </div>
+    </div>
+
+    <!-- OFERTAS ESPECIALES EN ESTILO TARJETA BLANCA -->
+    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
+        🔥 OFERTAS ESPECIALES
+    </h3>
+    
+    <!-- CONTENEDOR VERTICAL -->
+    <div style="display: flex; flex-direction: column; gap: 20px; margin: 30px 0; padding: 0 10px;">
+        
+        <!-- OFERTA 1 - ANUAL (borde violeta) -->
+        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #63318A; position: relative;">
+            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span>✨</span> MEMBRESÍA ANUAL
+            </h4>
+            <div style="background: #63318A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
+                Ahorras $98
+            </div>
+            <div style="font-size: 2.5em; font-weight: 800; color: #63318A; margin: 15px 0;">$490</div>
+            <p style="margin: 10px 0; color: #666;">Paga 10 meses y recibe 2 GRATIS</p>
+            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Precio regular: $588</p>
+            <button class="package-btn" onclick="seleccionarOferta('anual')" 
+                    style="background: #63318A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
+                VER OFERTA
+            </button>
+        </div>
+        
+        <!-- OFERTA 2 - PAREJA (borde verde) -->
+        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #40D32A; position: relative;">
+            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span>👥</span> MEMBRESÍA PAREJA
+            </h4>
+            <div style="background: #40D32A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
+                Ahorras $19/mes
+            </div>
+            <div style="font-size: 2.5em; font-weight: 800; color: #40D32A; margin: 15px 0;">$79<span style="font-size: 0.4em;">/mes</span></div>
+            <p style="margin: 10px 0; color: #666;">2 personas por $79/mes</p>
+            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Incluye todos los beneficios</p>
+            <button class="package-btn" onclick="seleccionarOferta('pareja')" 
+                    style="background: #40D32A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
+                VER OFERTA
+            </button>
+        </div>
+        
+        <!-- OFERTA 3 - ESTUDIANTIL (borde violeta) -->
+        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #63318A; position: relative;">
+            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span>🎓</span> DESCUENTO ESTUDIANTIL
+            </h4>
+            <div style="background: #63318A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
+                15% OFF
+            </div>
+            <div style="font-size: 2.5em; font-weight: 800; color: #63318A; margin: 15px 0;">$41.65<span style="font-size: 0.4em;">/mes</span></div>
+            <p style="margin: 10px 0; color: #666;">Plan Estándar con credencial</p>
+            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Válido para estudiantes</p>
+            <button class="package-btn" onclick="seleccionarOferta('estudiante')" 
+                    style="background: #63318A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
+                VER OFERTA
+            </button>
+        </div>
+        
+        <!-- OFERTA 4 - PRIMERA VEZ (borde verde) -->
+        <div style="background: white; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 2px solid #40D32A; position: relative;">
+            <h4 style="font-size: 1.8em; margin-bottom: 10px; color: #333; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <span>⏰</span> PRIMERA VEZ
+            </h4>
+            <div style="background: #40D32A; color: white; padding: 5px 15px; border-radius: 50px; font-size: 1em; font-weight: 700; display: inline-block; margin-bottom: 15px;">
+                -41%
+            </div>
+            <div style="font-size: 2.5em; font-weight: 800; color: #40D32A; margin: 15px 0;">$29<span style="font-size: 0.4em;">/mes</span></div>
+            <p style="margin: 10px 0; color: #666;">Primer mes a $29</p>
+            <p style="font-size: 0.9em; color: #999; margin-bottom: 20px;">Prueba cualquier plan</p>
+            <button class="package-btn" onclick="seleccionarOferta('primeravez')" 
+                    style="background: #40D32A; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1em; font-weight: 600; width: 100%; cursor: pointer;">
+                VER OFERTA
+            </button>
+        </div>
+    </div>
+    
+    <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8em;">
+        * Las ofertas pueden combinarse. Aplican restricciones.
+    </p>
+</div>
 
         <!-- SECCIÓN REGISTRAR CLIENTE (CON FORMULARIO COMPLETO) -->
         <div id="registro" class="section">
