@@ -1260,18 +1260,19 @@
 </div>
 
 <script>
+// ===== FUNCIÓN PARA ABRIR EMAIL (UNIVERSAL) =====
 function abrirEmail() {
     const email = "qualitytrainingsh.md@gmail.com";
     const asunto = "Consulta desde Quality Training";
-    const cuerpo = "Hola, me gustaría obtener más información sobre...";
+    const cuerpo = "Hola, me gustaría obtener más información sobre los planes y membresías de Quality Training.%0D%0A%0D%0A%0D%0A---%0D%0AEnviado desde la página web de Quality Training";
     
-    // Intenta con mailto primero
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+    // Intentar abrir con mailto primero
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(asunto)}&body=${cuerpo}`;
     
-    // Si no funciona en 2 segundos, ofrece opción de Gmail
+    // Si no funciona, ofrecer opción de Gmail después de 2 segundos
     setTimeout(() => {
-        if(confirm('¿No se abrió tu correo? ¿Quieres usar Gmail en el navegador?')) {
-            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`, '_blank');
+        if(confirm('¿No se abrió tu aplicación de correo?\n\n¿Quieres usar Gmail en el navegador?')) {
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(asunto)}&body=${cuerpo}`, '_blank');
         }
     }, 2000);
 }
