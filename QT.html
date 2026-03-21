@@ -1171,8 +1171,131 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+
+        /* ============================================ */
+        /* ===== EFECTOS ANIMADOS ===== */
+        /* ============================================ */
+        
+        /* Scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Animación de entrada para secciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Efecto hover en botones */
+        .btn, .hero-btn, .package-btn, .contact-submit, .password-btn, .photo-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover, .hero-btn:hover, .package-btn:hover, .contact-submit:hover, .password-btn:hover, .photo-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(99, 49, 138, 0.3);
+        }
+        
+        /* Efecto hover en tarjetas de planes */
+        .package-card, .client-card, .oferta-card, .payment-card {
+            transition: all 0.3s ease;
+        }
+        
+        .package-card:hover, .client-card:hover, .oferta-card:hover, .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Efecto en inputs cuando están en foco */
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #63318A;
+            box-shadow: 0 0 0 3px rgba(99, 49, 138, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        /* Efecto pulsación en el safacón (botón eliminar) */
+        .delete-client-btn {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(220, 53, 69, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+            }
+        }
+        
+        /* Feedback al hacer clic en botones */
+        button:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+        
+        /* Efecto hover en los items del menú */
+        .menu-item {
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            background: #f5f5f5;
+            padding-left: 30px;
+        }
+        
+        /* Efecto de brillo en el hero button */
+        .hero-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(30deg);
+            animation: shine 4s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            20% { transform: translateX(100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        /* Efecto de carga suave para imágenes */
+        .client-photo img, .photo-preview img {
+            transition: transform 0.3s ease;
+        }
+        
+        .client-photo img:hover, .photo-preview img:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
+<body>
+    <!-- El resto de tu HTML va aquí -->
+</body>
+</html>
 <body>
     <!-- MENÚ HAMBURGUESA ACTUALIZADO -->
     <div class="menu-container">
@@ -1193,10 +1316,12 @@
             <div class="menu-item" onclick="showSection('registro', this)">
                 <span>📝</span> Inscribirme
             </div>
-			<!-- 👇 PEGA ESTO AQUÍ 👇 -->
-            <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view?utm_content=DAGzoaORiFg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h68c62c8712&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnYWWnGR3U4cmEQwznp_dw4c72ziW2r5jDFEP2e6Ylb3fUXjdZeLi8Br9F7Vs_aem_ybRM9yftbP3kZYemE05nPg', '_blank')">
-            <span>💅</span> Gaia Esthetics
-            </div>
+			<div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view?utm_content=DAGzoaORiFg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h68c62c8712&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnYWWnGR3U4cmEQwznp_dw4c72ziW2r5jDFEP2e6Ylb3fUXjdZeLi8Br9F7Vs_aem_ybRM9yftbP3kZYemE05nPg', '_blank')">
+    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #ff69b4, #dc3545); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.3em; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+        G
+    </div>
+    Estética
+</div>
             <div class="menu-item" onclick="showSection('clientes', this)">
                 <span>📋</span> Mis Clientes
             </div>
