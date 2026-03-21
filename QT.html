@@ -1195,7 +1195,7 @@
             </div>
 			<!-- 👇 PEGA ESTO AQUÍ 👇 -->
             <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view?utm_content=DAGzoaORiFg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h68c62c8712&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnYWWnGR3U4cmEQwznp_dw4c72ziW2r5jDFEP2e6Ylb3fUXjdZeLi8Br9F7Vs_aem_ybRM9yftbP3kZYemE05nPg', '_blank')">
-            <span>💅</span> Estética
+            <span>💅</span> Gaia Esthetics
             </div>
             <div class="menu-item" onclick="showSection('clientes', this)">
                 <span>📋</span> Mis Clientes
@@ -1244,19 +1244,38 @@
                     </div>
                 </div>
                 
-                <!-- Email - Centrado -->
-                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
-                    <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
-                        ✉️
-                    </div>
-                    <div>
-                        <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Email</h3>
-                        <p style="color: #666; font-size: 0.9em;">
-                            <a href="mailto:info@qualitytraining.com" style="color: #63318A; text-decoration: none; font-weight: 600;">info@qualitytraining.com</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+                <!-- Email - Centrado (abre aplicación de correo) -->
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
+    <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
+        ✉️
+    </div>
+    <div>
+        <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Email</h3>
+        <p style="color: #666; font-size: 0.9em;">
+            <a href="#" onclick="abrirEmail()" style="color: #63318A; text-decoration: none; font-weight: 600; cursor: pointer;">
+                qualitytrainingsh.md@gmail.com
+            </a>
+        </p>
+    </div>
+</div>
+
+<script>
+function abrirEmail() {
+    const email = "qualitytrainingsh.md@gmail.com";
+    const asunto = "Consulta desde Quality Training";
+    const cuerpo = "Hola, me gustaría obtener más información sobre...";
+    
+    // Intenta con mailto primero
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+    
+    // Si no funciona en 2 segundos, ofrece opción de Gmail
+    setTimeout(() => {
+        if(confirm('¿No se abrió tu correo? ¿Quieres usar Gmail en el navegador?')) {
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`, '_blank');
+        }
+    }, 2000);
+}
+</script>
             
             <!-- SECCIÓN HORARIOS - VERSIÓN MÁS PEQUEÑA -->
             <div style="background: #63318A; border-radius: 20px; padding: 15px; color: white; text-align: center;">
