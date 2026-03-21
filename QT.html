@@ -1369,493 +1369,476 @@
     </style>
 </head>
 <body>
-    <!-- El resto de tu HTML va aquí -->
-</body>
-</html>
-<body>
     <!-- MENÚ HAMBURGUESA ACTUALIZADO -->
-<div class="menu-header">
-    <div class="menu-logo">
-        QUALITY TRAINING
+    <div class="menu-header">
+        <div class="menu-logo">
+            QUALITY TRAINING
+        </div>
+        <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
     </div>
-    <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
-</div>
         
-<div class="menu-items" id="menuItems">
-    <div class="menu-item active" onclick="showSection('inicio', this)">
-        <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-            🏠
+    <div class="menu-items" id="menuItems">
+        <div class="menu-item active" onclick="showSection('inicio', this)">
+            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
+                🏠
+            </div>
+            Inicio
         </div>
-        Inicio
-    </div>
-    <div class="menu-item" onclick="showSection('planes', this)">
-        <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-            🏋️
+        <div class="menu-item" onclick="showSection('planes', this)">
+            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
+                🏋️
+            </div>
+            Planes y Ofertas
         </div>
-        Planes y Ofertas
-    </div>
-    <div class="menu-item" onclick="showSection('registro', this)">
-        <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-            📝
+        <div class="menu-item" onclick="showSection('registro', this)">
+            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
+                📝
+            </div>
+            Registrarme
         </div>
-        Registrarme
-    </div>
-    <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view?utm_content=DAGzoaORiFg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h68c62c8712&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnYWWnGR3U4cmEQwznp_dw4c72ziW2r5jDFEP2e6Ylb3fUXjdZeLi8Br9F7Vs_aem_ybRM9yftbP3kZYemE05nPg', '_blank')">
-        <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2em;">
-            G
+        <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view?utm_content=DAGzoaORiFg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h68c62c8712&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnYWWnGR3U4cmEQwznp_dw4c72ziW2r5jDFEP2e6Ylb3fUXjdZeLi8Br9F7Vs_aem_ybRM9yftbP3kZYemE05nPg', '_blank')">
+            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2em;">
+                G
+            </div>
+            Estética
         </div>
-        Estética
-    </div>
-    <div class="menu-item" onclick="showSection('clientes', this)">
-        <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-            📋
-        </div>
-        Mis Clientes
-    </div>
-</div>
-
-            <!-- El botón de Procesar Pago ha sido eliminado y reemplazado por Planes y Ofertas -->
+        <div class="menu-item" onclick="showSection('clientes', this)">
+            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
+                📋
+            </div>
+            Mis Clientes
         </div>
     </div>
 
-<!-- HERO SECTION - VERSIÓN RESPONSIVE -->
-<div class="hero-section" style="display: flex; align-items: flex-end; padding-bottom: 30px;">
-    <div class="hero-content" style="margin-bottom: 20px;">
-        <h1 style="font-size: 2.2em; margin-bottom: 15px;">WHERE FITNESS<br>FINDS ITS HOME</h1>
-        <p style="font-size: 1.1em; max-width: 600px; margin: 0 auto;">Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
-    </div>
-</div>
-    
-    <!-- SECCIÓN INFORMACIÓN DEL GYM - CENTRALIZADA -->
-    <div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
-        <h2 style="text-align: center; font-size: 2.2em; color: #63318A; margin-bottom: 25px; font-weight: 800;">CONTACT US</h2>
+    <!-- HERO SECTION - VERSIÓN RESPONSIVE -->
+    <div id="inicio" class="section active">
+        <div class="hero-section" style="display: flex; align-items: flex-end; padding-bottom: 30px;">
+            <div class="hero-content" style="margin-bottom: 20px;">
+                <h1 style="font-size: 2.2em; margin-bottom: 15px;">WHERE FITNESS<br>FINDS ITS HOME</h1>
+                <p style="font-size: 1.1em; max-width: 600px; margin: 0 auto;">Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
+            </div>
+        </div>
         
-        <div style="display: grid; grid-template-columns: 1fr; gap: 20px; background: white; border-radius: 30px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+        <!-- SECCIÓN INFORMACIÓN DEL GYM - CENTRALIZADA -->
+        <div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+            <h2 style="text-align: center; font-size: 2.2em; color: #63318A; margin-bottom: 25px; font-weight: 800;">CONTACT US</h2>
             
-            <!-- CONTACTO - TODO CENTRADO -->
-            <div>
-                <!-- Dirección - Centrado -->
-                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
-                    <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
-                        📍
-                    </div>
-                    <div>
-                        <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Dirección</h3>
-                        <p style="color: #666; line-height: 1.4; font-size: 0.9em;">315 Ave Lauro Piñero<br>Ceiba, PR</p>
-                    </div>
-                </div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px; background: white; border-radius: 30px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
                 
-                <!-- Teléfono - Centrado -->
-                <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
-                    <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
-                        📞
-                    </div>
-                    <div>
-                        <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Teléfono</h3>
-                        <p style="color: #666; font-size: 0.9em;">
-                            <a href="tel:7876130243" style="color: #63318A; text-decoration: none; font-weight: 600;">787-613-0243</a>
-                        </p>
-                    </div>
-                </div>
-                
-                <!-- Email - Centrado (abre aplicación de correo) -->
-<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
-    <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
-        ✉️
-    </div>
-    <div>
-        <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Email</h3>
-        <p style="color: #666; font-size: 0.9em;">
-            <a href="#" onclick="abrirEmail()" style="color: #63318A; text-decoration: none; font-weight: 600; cursor: pointer;">
-                qualitytrainingsh.md@gmail.com
-            </a>
-        </p>
-    </div>
-</div>
-
-<script>
-// ===== FUNCIÓN PARA ABRIR EMAIL (UNIVERSAL) =====
-function abrirEmail() {
-    const email = "qualitytrainingsh.md@gmail.com";
-    const asunto = "Consulta desde Quality Training";
-    const cuerpo = "Hola, me gustaría obtener más información sobre los planes y membresías de Quality Training.%0D%0A%0D%0A%0D%0A---%0D%0AEnviado desde la página web de Quality Training";
-    
-    // Intentar abrir con mailto primero
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(asunto)}&body=${cuerpo}`;
-    
-    // Si no funciona, ofrecer opción de Gmail después de 2 segundos
-    setTimeout(() => {
-        if(confirm('¿No se abrió tu aplicación de correo?\n\n¿Quieres usar Gmail en el navegador?')) {
-            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(asunto)}&body=${cuerpo}`, '_blank');
-        }
-    }, 2000);
-}
-</script>
-            
-            <!-- SECCIÓN HORARIOS - VERSIÓN MÁS PEQUEÑA -->
-            <div style="background: #63318A; border-radius: 20px; padding: 15px; color: white; text-align: center;">
-                <h3 style="font-size: 1.5em; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    <span>⏰</span> Horarios
-                </h3>
-                
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <!-- Lunes a Jueves -->
-                    <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
-                            <span style="font-size: 1em;">📅</span>
-                            <span style="font-weight: 600; font-size: 0.9em;">Lunes a Jueves</span>
+                <!-- CONTACTO - TODO CENTRADO -->
+                <div>
+                    <!-- Dirección - Centrado -->
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
+                        <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
+                            📍
                         </div>
-                        <span style="font-weight: 700; font-size: 1em;">5:00am - 9:00pm</span>
+                        <div>
+                            <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Dirección</h3>
+                            <p style="color: #666; line-height: 1.4; font-size: 0.9em;">315 Ave Lauro Piñero<br>Ceiba, PR</p>
+                        </div>
                     </div>
                     
-                    <!-- Viernes -->
-                    <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
-                            <span style="font-size: 1em;">📅</span>
-                            <span style="font-weight: 600; font-size: 0.9em;">Viernes</span>
+                    <!-- Teléfono - Centrado -->
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
+                        <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
+                            📞
                         </div>
-                        <span style="font-weight: 700; font-size: 1em;">5:00am - 8:00pm</span>
+                        <div>
+                            <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Teléfono</h3>
+                            <p style="color: #666; font-size: 0.9em;">
+                                <a href="tel:7876130243" style="color: #63318A; text-decoration: none; font-weight: 600;">787-613-0243</a>
+                            </p>
+                        </div>
                     </div>
                     
-                    <!-- Sábados -->
-                    <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
-                            <span style="font-size: 1em;">📅</span>
-                            <span style="font-weight: 600; font-size: 0.9em;">Sábados</span>
+                    <!-- Email - Centrado (abre aplicación de correo) -->
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
+                        <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
+                            ✉️
                         </div>
-                        <span style="font-weight: 700; font-size: 1em;">8:00am - 2:00pm</span>
+                        <div>
+                            <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Email</h3>
+                            <p style="color: #666; font-size: 0.9em;">
+                                <a href="#" onclick="abrirEmail()" style="color: #63318A; text-decoration: none; font-weight: 600; cursor: pointer;">
+                                    qualitytrainingsh.md@gmail.com
+                                </a>
+                            </p>
+                        </div>
                     </div>
-                    
-                    <!-- Domingo -->
-                    <div style="margin-top: 5px; background: rgba(255,255,255,0.2); padding: 8px; border-radius: 30px; text-align: center;">
-                        <span style="font-weight: 600; font-size: 0.9em;">Domingos: CERRADO</span>
+                
+                    <!-- SECCIÓN HORARIOS - VERSIÓN MÁS PEQUEÑA -->
+                    <div style="background: #63318A; border-radius: 20px; padding: 15px; color: white; text-align: center;">
+                        <h3 style="font-size: 1.5em; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <span>⏰</span> Horarios
+                        </h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Lunes a Jueves -->
+                            <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
+                                    <span style="font-size: 1em;">📅</span>
+                                    <span style="font-weight: 600; font-size: 0.9em;">Lunes a Jueves</span>
+                                </div>
+                                <span style="font-weight: 700; font-size: 1em;">5:00am - 9:00pm</span>
+                            </div>
+                            
+                            <!-- Viernes -->
+                            <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
+                                    <span style="font-size: 1em;">📅</span>
+                                    <span style="font-weight: 600; font-size: 0.9em;">Viernes</span>
+                                </div>
+                                <span style="font-weight: 700; font-size: 1em;">5:00am - 8:00pm</span>
+                            </div>
+                            
+                            <!-- Sábados -->
+                            <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
+                                    <span style="font-size: 1em;">📅</span>
+                                    <span style="font-weight: 600; font-size: 0.9em;">Sábados</span>
+                                </div>
+                                <span style="font-weight: 700; font-size: 1em;">8:00am - 2:00pm</span>
+                            </div>
+                            
+                            <!-- Domingo -->
+                            <div style="margin-top: 5px; background: rgba(255,255,255,0.2); padding: 8px; border-radius: 30px; text-align: center;">
+                                <span style="font-weight: 600; font-size: 0.9em;">Domingos: CERRADO</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- BOTONES CENTRADOS (tamaño normal) -->
-    <div style="max-width: 1200px; margin: 30px auto 50px; padding: 0 20px;">
-        <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-            <button class="hero-btn" onclick="showSection('registro', document.querySelector('.menu-item[onclick*=\"registro\"]'))" 
-                    style="width: 100%; max-width: 350px; padding: 15px 25px; font-size: 1.1em; border-radius: 50px; 
-                           background: #63318A; color: white; border: none; cursor: pointer; font-weight: 600;
-                           box-shadow: 0 4px 15px rgba(99, 49, 138, 0.4);">
-                ÚNETE AHORA
-            </button>
-            <button class="hero-btn" onclick="showPlanesSection()" 
-                    style="width: 100%; max-width: 350px; padding: 15px 25px; font-size: 1.1em; border-radius: 50px; 
-                           background: #40D32A; color: white; border: none; cursor: pointer; font-weight: 600;
-                           box-shadow: 0 4px 15px rgba(64, 211, 42, 0.4);">
-                VER PLANES Y OFERTAS
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- SECCIÓN PLANES Y OFERTAS -->
-<div id="planes" class="section">
-    <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
-    
-    <!-- PLANES INDIVIDUALES -->
-    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px;">
-        📅 MEMBRESÍAS INDIVIDUALES
-    </h3>
-    
-    <div class="packages-grid" style="margin-bottom: 30px;">
-        <div class="package-card" onclick="seleccionarPlan('1mes')">
-            <div class="package-name">1 MES</div>
-            <div class="package-price">$45.00</div>
-            <ul class="package-features">
-                <li>Acceso por 30 días</li>
-                <li>Incluye evaluación física inicial</li>
-                <li>Rutina de entrenamiento </li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('1mes')">SELECCIONAR</button>
-        </div>
-
-        <div class="package-card" onclick="seleccionarPlan('3meses')">
-            <div class="package-name">3 MESES</div>
-            <div class="package-price">$114.00</div>
-            <ul class="package-features">
-                <li>Acceso por 90 días</li>
-                <li>Ahorras $21</li>
-                <li>Incluye evaluación física inicial</li>
-                <li>Rutina de entrenamiento </li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('3meses')">SELECCIONAR</button>
-        </div>
-
-        <div class="package-card" onclick="seleccionarPlan('6meses')">
-            <div class="package-name">6 MESES</div>
-            <div class="package-price">$210.00</div>
-            <ul class="package-features">
-                <li>Acceso por 180 días</li>
-                <li>Ahorras $60</li>
-                <li>Incluye evaluación física inicial</li>
-                <li>Rutina de entrenamiento </li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('6meses')">SELECCIONAR</button>
-        </div>
-
-        <div class="package-card popular" onclick="seleccionarPlan('1año')">
-            <div class="package-name">1 AÑO</div>
-            <div class="package-price">$360.00</div>
-            <ul class="package-features">
-                <li>Acceso por 365 días</li>
-                <li>Ahorras $180</li>
-                <li>Incluye evaluación física inicial</li>
-                <li>Rutina de entrenamiento </li>
-            </ul>
-            <button class="package-btn popular-btn" onclick="seleccionarPlan('1año')">SELECCIONAR</button>
+        <!-- BOTONES CENTRADOS (tamaño normal) -->
+        <div style="max-width: 1200px; margin: 30px auto 50px; padding: 0 20px;">
+            <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                <button class="hero-btn" onclick="showSection('registro', document.querySelector('.menu-item[onclick*=\"registro\"]'))" 
+                        style="width: 100%; max-width: 350px; padding: 15px 25px; font-size: 1.1em; border-radius: 50px; 
+                               background: #63318A; color: white; border: none; cursor: pointer; font-weight: 600;
+                               box-shadow: 0 4px 15px rgba(99, 49, 138, 0.4);">
+                    ÚNETE AHORA
+                </button>
+                <button class="hero-btn" onclick="showPlanesSection()" 
+                        style="width: 100%; max-width: 350px; padding: 15px 25px; font-size: 1.1em; border-radius: 50px; 
+                               background: #40D32A; color: white; border: none; cursor: pointer; font-weight: 600;
+                               box-shadow: 0 4px 15px rgba(64, 211, 42, 0.4);">
+                    VER PLANES Y OFERTAS
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- MEMBRESÍA ESPECIAL -->
-    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
-        ⭐ MEMBRESÍA ESPECIAL - $35.00/mes
-    </h3>
-    
-    <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #40D32A; text-align: center;">
-        <p style="font-size: 1.2em; color: #333; margin-bottom: 20px;"><strong>¡Homenaje a nuestros héroes!</strong></p>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👮 Policías</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚒 Bomberos</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚑 Paramédicos</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">⚕️ Manejo de Emergencias</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🎖️ Militares</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🪖 Veteranos</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👩‍⚕️ Enfermeras</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👨‍⚕️ Doctores</span>
-            <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👴 Seniors 65+ años</span>
+    <!-- SECCIÓN PLANES Y OFERTAS -->
+    <div id="planes" class="section">
+        <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
+        
+        <!-- PLANES INDIVIDUALES -->
+        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px;">
+            📅 MEMBRESÍAS INDIVIDUALES
+        </h3>
+        
+        <div class="packages-grid" style="margin-bottom: 30px;">
+            <div class="package-card" onclick="seleccionarPlan('1mes')">
+                <div class="package-name">1 MES</div>
+                <div class="package-price">$45.00</div>
+                <ul class="package-features">
+                    <li>Acceso por 30 días</li>
+                    <li>Incluye evaluación física inicial</li>
+                    <li>Rutina de entrenamiento </li>
+                </ul>
+                <button class="package-btn" onclick="seleccionarPlan('1mes')">SELECCIONAR</button>
+            </div>
+
+            <div class="package-card" onclick="seleccionarPlan('3meses')">
+                <div class="package-name">3 MESES</div>
+                <div class="package-price">$114.00</div>
+                <ul class="package-features">
+                    <li>Acceso por 90 días</li>
+                    <li>Ahorras $21</li>
+                    <li>Incluye evaluación física inicial</li>
+                    <li>Rutina de entrenamiento </li>
+                </ul>
+                <button class="package-btn" onclick="seleccionarPlan('3meses')">SELECCIONAR</button>
+            </div>
+
+            <div class="package-card" onclick="seleccionarPlan('6meses')">
+                <div class="package-name">6 MESES</div>
+                <div class="package-price">$210.00</div>
+                <ul class="package-features">
+                    <li>Acceso por 180 días</li>
+                    <li>Ahorras $60</li>
+                    <li>Incluye evaluación física inicial</li>
+                    <li>Rutina de entrenamiento </li>
+                </ul>
+                <button class="package-btn" onclick="seleccionarPlan('6meses')">SELECCIONAR</button>
+            </div>
+
+            <div class="package-card popular" onclick="seleccionarPlan('1año')">
+                <div class="package-name">1 AÑO</div>
+                <div class="package-price">$360.00</div>
+                <ul class="package-features">
+                    <li>Acceso por 365 días</li>
+                    <li>Ahorras $180</li>
+                    <li>Incluye evaluación física inicial</li>
+                    <li>Rutina de entrenamiento </li>
+                </ul>
+                <button class="package-btn popular-btn" onclick="seleccionarPlan('1año')">SELECCIONAR</button>
+            </div>
         </div>
-        <button class="package-btn" onclick="seleccionarPlan('especial')" style="background: #40D32A; max-width: 300px; margin: 0 auto;">SELECCIONAR MEMBRESÍA ESPECIAL</button>
-    </div>
 
-    <!-- MEMBRESÍA ESTUDIANTIL -->
-    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
-        🎓 MEMBRESÍA ESTUDIANTIL - $23.00/mes
-    </h3>
-    
-    <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #63318A; text-align: center;">
-        <p style="font-size: 1.2em; color: #333; margin-bottom: 15px;">Estudiantes de 18 años o más deben traer <strong>matrícula del semestre en curso</strong></p>
-        <p style="color: #666;">Válido con identificación estudiantil vigente</p>
-        <button class="package-btn" onclick="seleccionarPlan('estudiante')" style="background: #63318A; max-width: 300px; margin: 20px auto 0;">SELECCIONAR MEMBRESÍA ESTUDIANTIL</button>
-    </div>
+        <!-- MEMBRESÍA ESPECIAL -->
+        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
+            ⭐ MEMBRESÍA ESPECIAL - $35.00/mes
+        </h3>
+        
+        <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #40D32A; text-align: center;">
+            <p style="font-size: 1.2em; color: #333; margin-bottom: 20px;"><strong>¡Homenaje a nuestros héroes!</strong></p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👮 Policías</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚒 Bomberos</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚑 Paramédicos</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">⚕️ Manejo de Emergencias</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🎖️ Militares</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🪖 Veteranos</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👩‍⚕️ Enfermeras</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👨‍⚕️ Doctores</span>
+                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👴 Seniors 65+ años</span>
+            </div>
+            <button class="package-btn" onclick="seleccionarPlan('especial')" style="background: #40D32A; max-width: 300px; margin: 0 auto;">SELECCIONAR MEMBRESÍA ESPECIAL</button>
+        </div>
 
-    <!-- MEMBRESÍAS GRUPALES -->
-    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
-        👥 MEMBRESÍAS GRUPALES
-    </h3>
-    
-    <div class="packages-grid" style="margin-bottom: 30px;">
-        <div class="package-card" onclick="seleccionarPlan('2personas')">
-            <div class="package-name">2 PERSONAS</div>
-            <div class="package-price">$40<span>/c/u mes</span></div>
-            <ul class="package-features">
-                <li>Total: $80/mes</li>
-                <li>Incluye evaluación física inicial</li>
-                <li>Rutina de entrenamiento </li>
+        <!-- MEMBRESÍA ESTUDIANTIL -->
+        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
+            🎓 MEMBRESÍA ESTUDIANTIL - $23.00/mes
+        </h3>
+        
+        <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #63318A; text-align: center;">
+            <p style="font-size: 1.2em; color: #333; margin-bottom: 15px;">Estudiantes de 18 años o más deben traer <strong>matrícula del semestre en curso</strong></p>
+            <p style="color: #666;">Válido con identificación estudiantil vigente</p>
+            <button class="package-btn" onclick="seleccionarPlan('estudiante')" style="background: #63318A; max-width: 300px; margin: 20px auto 0;">SELECCIONAR MEMBRESÍA ESTUDIANTIL</button>
+        </div>
+
+        <!-- MEMBRESÍAS GRUPALES -->
+        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
+            👥 MEMBRESÍAS GRUPALES
+        </h3>
+        
+        <div class="packages-grid" style="margin-bottom: 30px;">
+            <div class="package-card" onclick="seleccionarPlan('2personas')">
+                <div class="package-name">2 PERSONAS</div>
+                <div class="package-price">$40<span>/c/u mes</span></div>
+                <ul class="package-features">
+                    <li>Total: $80/mes</li>
+                    <li>Incluye evaluación física inicial</li>
+                    <li>Rutina de entrenamiento </li>
+                </ul>
+                <button class="package-btn" onclick="seleccionarPlan('2personas')">SELECCIONAR</button>
+            </div>
+
+            <div class="package-card popular" onclick="seleccionarPlan('3personas')">
+                <div class="package-name">3+ PERSONAS</div>
+                <div class="package-price">$35<span>/c/u mes</span></div>
+                <ul class="package-features">
+                    <li>Mejor precio por persona</li>
+                    <li>Incluye evaluación física inicial</li>
+                    <li>Rutina de entrenamiento </li>
+                </ul>
+                <button class="package-btn popular-btn" onclick="seleccionarPlan('3personas')">SELECCIONAR</button>
+            </div>
+        </div>
+
+        <!-- PASES DIARIOS Y SEMANALES -->
+        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
+            🎟️ PASES ESPECIALES
+        </h3>
+        
+        <div class="packages-grid" style="margin-bottom: 30px;">
+            <div class="package-card" onclick="seleccionarPlan('daypass')">
+                <div class="package-name">DAY PASS</div>
+                <div class="package-price">$8.97</div>
+                <ul class="package-features">
+                    <li>Acceso por 1 día</li>
+                    <li>Ideal para probar</li>
+                    <li>Sin compromiso</li>
+                </ul>
+                <button class="package-btn" onclick="seleccionarPlan('daypass')">SELECCIONAR</button>
+            </div>
+
+            <div class="package-card" onclick="seleccionarPlan('weekpass')">
+                <div class="package-name">WEEK PASS</div>
+                <div class="package-price">$23.00</div>
+                <ul class="package-features">
+                    <li>Acceso por 1 semana</li>
+                    <li>7 días de entrenamiento</li>
+                    <li>Flexibilidad total</li>
+                </ul>
+                <button class="package-btn" onclick="seleccionarPlan('weekpass')">SELECCIONAR</button>
+            </div>
+        </div>
+
+        <!-- INFORMACIÓN IMPORTANTE -->
+        <div style="background: #f8f8f8; border-radius: 20px; padding: 25px; margin-top: 30px; border-left: 5px solid #63318A;">
+            <h4 style="color: #63318A; margin-bottom: 15px; font-size: 1.3em;">📌 INFORMACIÓN IMPORTANTE</h4>
+            <ul style="color: #666; line-height: 1.8; margin-left: 20px;">
+                <li>💰 Los precios <strong>NO incluyen IVU</strong></li>
+                <li>📅 Al inscribirse se paga <strong>CUOTA ANUAL DE MANTENIMIENTO: $30.00</strong> (una vez al año)</li>
+                <li>✅ Todas nuestras membresías son <strong>SIN CONTRATO y SIN DÉBITO AUTOMÁTICO (Auto Pay)</strong></li>
+                <li>🏋️ Nuestras membresías incluyen: <strong>Evaluación Física Inicial</strong> y <strong>rutina de entrenamiento</strong> con uno de nuestros entrenadores por un periodo de <strong>2 semanas</strong></li>
             </ul>
-            <button class="package-btn" onclick="seleccionarPlan('2personas')">SELECCIONAR</button>
         </div>
 
-        <div class="package-card popular" onclick="seleccionarPlan('3personas')">
-            <div class="package-name">3+ PERSONAS</div>
-            <div class="package-price">$35<span>/c/u mes</span></div>
-            <ul class="package-features">
-                <li>Mejor precio por persona</li>
-                <li>Incluye evaluación física inicial</li>
-                <li>Rutina de entrenamiento </li>
-            </ul>
-            <button class="package-btn popular-btn" onclick="seleccionarPlan('3personas')">SELECCIONAR</button>
-        </div>
+        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8em;">
+            * Las promociones no son acumulables. Aplican restricciones.
+        </p>
     </div>
 
-    <!-- PASES DIARIOS Y SEMANALES -->
-    <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
-        🎟️ PASES ESPECIALES
-    </h3>
-    
-    <div class="packages-grid" style="margin-bottom: 30px;">
-        <div class="package-card" onclick="seleccionarPlan('daypass')">
-            <div class="package-name">DAY PASS</div>
-            <div class="package-price">$8.97</div>
-            <ul class="package-features">
-                <li>Acceso por 1 día</li>
-                <li>Ideal para probar</li>
-                <li>Sin compromiso</li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('daypass')">SELECCIONAR</button>
-        </div>
+    <!-- SECCIÓN REGISTRAR CLIENTE -->
+    <div id="registro" class="section">
+        <h2 class="form-title">📝 REGISTRO COMPLETO DE CLIENTE</h2>
 
-        <div class="package-card" onclick="seleccionarPlan('weekpass')">
-            <div class="package-name">WEEK PASS</div>
-            <div class="package-price">$23.00</div>
-            <ul class="package-features">
-                <li>Acceso por 1 semana</li>
-                <li>7 días de entrenamiento</li>
-                <li>Flexibilidad total</li>
-            </ul>
-            <button class="package-btn" onclick="seleccionarPlan('weekpass')">SELECCIONAR</button>
-        </div>
-    </div>
-
-    <!-- INFORMACIÓN IMPORTANTE -->
-    <div style="background: #f8f8f8; border-radius: 20px; padding: 25px; margin-top: 30px; border-left: 5px solid #63318A;">
-        <h4 style="color: #63318A; margin-bottom: 15px; font-size: 1.3em;">📌 INFORMACIÓN IMPORTANTE</h4>
-        <ul style="color: #666; line-height: 1.8; margin-left: 20px;">
-            <li>💰 Los precios <strong>NO incluyen IVU</strong></li>
-            <li>📅 Al inscribirse se paga <strong>CUOTA ANUAL DE MANTENIMIENTO: $30.00</strong> (una vez al año)</li>
-            <li>✅ Todas nuestras membresías son <strong>SIN CONTRATO y SIN DÉBITO AUTOMÁTICO (Auto Pay)</strong></li>
-            <li>🏋️ Nuestras membresías incluyen: <strong>Evaluación Física Inicial</strong> y <strong>rutina de entrenamiento</strong> con uno de nuestros entrenadores por un periodo de <strong>2 semanas</strong></li>
-        </ul>
-    </div>
-
-    <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8em;">
-        * Las promociones no son acumulables. Aplican restricciones.
-    </p>
-</div>
-
-        <!-- SECCIÓN REGISTRAR CLIENTE (CON FORMULARIO COMPLETO) -->
-        <div id="registro" class="section">
-            <h2 class="form-title">📝 REGISTRO COMPLETO DE CLIENTE</h2>
-
-            <form id="clientForm">
-                <!-- FOTO -->
-                <div class="photo-section">
-                    <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoInput').click()">
-                        <div class="photo-placeholder">📸</div>
-                    </div>
-                    <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewImage(this)">
-                    <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
+        <form id="clientForm">
+            <!-- FOTO -->
+            <div class="photo-section">
+                <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoInput').click()">
+                    <div class="photo-placeholder">📸</div>
                 </div>
+                <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewImage(this)">
+                <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
+            </div>
 
-                <!-- ===== DATOS PERSONALES ===== -->
-                <h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
-                
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Fecha de Comienzo *</label>
-                        <input type="date" id="fechaComienzo" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Núm. Socio *</label>
-                        <input type="text" id="numSocio" required placeholder="Ej: SOC-001">
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Nombre completo *</label>
-                        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
-                    </div>
-                    <div class="form-group">
-                        <label>Sexo *</label>
-                        <select id="sexo" required>
-                            <option value="">Seleccionar...</option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Femenino</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Fecha de nacimiento *</label>
-                        <input type="date" id="fechaNacimiento" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Edad *</label>
-                        <input type="number" id="edad" readonly>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Peso (kg)</label>
-                        <input type="text" id="peso" placeholder="Ej: 70 kg">
-                    </div>
-                    <div class="form-group">
-                        <label>Estatura (m)</label>
-                        <input type="text" id="estatura" placeholder="Ej: 1.75 m">
-                    </div>
-                </div>
-
+            <!-- ===== DATOS PERSONALES ===== -->
+            <h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
+            
+            <div class="grid-2">
                 <div class="form-group">
-                    <label>Dirección</label>
-                    <input type="text" id="direccion" placeholder="Calle, ciudad, código postal">
+                    <label>Fecha de Comienzo *</label>
+                    <input type="date" id="fechaComienzo" required>
                 </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Teléfono / Celular</label>
-                        <input type="tel" id="telefono" placeholder="123-456-7890">
-                    </div>
-                    <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" id="email" required placeholder="ejemplo@email.com">
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Contacto de emergencia (nombre)</label>
-                        <input type="text" id="contactoEmergencia" placeholder="Nombre completo">
-                    </div>
-                    <div class="form-group">
-                        <label>Teléfono de emergencia</label>
-                        <input type="tel" id="telEmergencia" placeholder="123-456-7890">
-                    </div>
-                </div>
-
-                <!-- ===== HISTORIAL MÉDICO PASADO/PRESENTE ===== -->
-                <h3 class="form-subtitle">🏥 HISTORIAL MÉDICO PASADO Y/O PRESENTE</h3>
-                
-                <div class="checkbox-group">
-                    <div class="grid-3">
-                        <label class="checkbox-item"><input type="checkbox" id="histAltaPresion" value="Alta Presión"> Alta Presión</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histAtaqueCorazon" value="Ataque al Corazón"> Ataque al Corazón</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histArtritis" value="Artritis"> Artritis</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histArterias" value="Enfermedad de las arterias"> Enfermedad de las arterias</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histPulmonar" value="Enfermedad Pulmonar"> Enfermedad Pulmonar</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histEpilepsia" value="Epilepsia"> Epilepsia</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histEspalda" value="Espalda Lastimada"> Espalda Lastimada</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histReumatica" value="Fiebre Reumática"> Fiebre Reumática</label>
-                        <label class="checkbox-item"><input type="checkbox" id="histOperaciones" value="Operaciones"> Operaciones</label>
-                    </div>
-                </div>
-
                 <div class="form-group">
-                    <label>Explique lo marcado (si es necesario):</label>
-                    <textarea id="explicacionHistorial" rows="2" placeholder="Detalles adicionales..."></textarea>
+                    <label>Núm. Socio *</label>
+                    <input type="text" id="numSocio" required placeholder="Ej: SOC-001">
                 </div>
+            </div>
 
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Nombre completo *</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
                 </div>
-
-                <!-- BOTONES -->
-                <div style="display: flex; gap: 15px; margin-top: 30px;">
-                    <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()" style="flex: 1;">LIMPIAR</button>
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">REGISTRARME</button>
+                <div class="form-group">
+                    <label>Sexo *</label>
+                    <select id="sexo" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                    </select>
                 </div>
-            </form>
-        </div>
+            </div>
 
-        <!-- SECCIÓN MIS CLIENTES -->
-        <div id="clientes" class="section">
-            <div class="clientes-header">
-                <h2 class="form-title">📋 Mis Clientes</h2>
-                <button class="btn-logout" onclick="cerrarSesionClientes()">🔒 Cerrar Sesión</button>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Fecha de nacimiento *</label>
+                    <input type="date" id="fechaNacimiento" required>
+                </div>
+                <div class="form-group">
+                    <label>Edad *</label>
+                    <input type="number" id="edad" readonly>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Peso (kg)</label>
+                    <input type="text" id="peso" placeholder="Ej: 70 kg">
+                </div>
+                <div class="form-group">
+                    <label>Estatura (m)</label>
+                    <input type="text" id="estatura" placeholder="Ej: 1.75 m">
+                </div>
             </div>
 
             <div class="form-group">
-                <input type="text" id="searchClient" placeholder="🔍 Buscar cliente..." onkeyup="buscarClientes()">
+                <label>Dirección</label>
+                <input type="text" id="direccion" placeholder="Calle, ciudad, código postal">
             </div>
 
-            <div class="clients-grid" id="clientsList"></div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Teléfono / Celular</label>
+                    <input type="tel" id="telefono" placeholder="123-456-7890">
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="email" required placeholder="ejemplo@email.com">
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Contacto de emergencia (nombre)</label>
+                    <input type="text" id="contactoEmergencia" placeholder="Nombre completo">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono de emergencia</label>
+                    <input type="tel" id="telEmergencia" placeholder="123-456-7890">
+                </div>
+            </div>
+
+            <!-- ===== MEMBRESÍA ===== -->
+            <h3 class="form-subtitle">💳 SELECCIONA TU PLAN</h3>
+            <div class="form-group">
+                <select id="membresia" required>
+                    <option value="Básica">Plan Básico - $45/mes</option>
+                    <option value="Estándar">Plan Estándar - $49/mes</option>
+                    <option value="Premium">Plan Premium - $79/mes</option>
+                    <option value="VIP">Plan VIP - $129/mes</option>
+                </select>
+            </div>
+
+            <!-- ===== HISTORIAL MÉDICO PASADO/PRESENTE ===== -->
+            <h3 class="form-subtitle">🏥 HISTORIAL MÉDICO PASADO Y/O PRESENTE</h3>
+            
+            <div class="checkbox-group">
+                <div class="grid-3">
+                    <label class="checkbox-item"><input type="checkbox" id="histAltaPresion" value="Alta Presión"> Alta Presión</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histAtaqueCorazon" value="Ataque al Corazón"> Ataque al Corazón</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histArtritis" value="Artritis"> Artritis</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histArterias" value="Enfermedad de las arterias"> Enfermedad de las arterias</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histPulmonar" value="Enfermedad Pulmonar"> Enfermedad Pulmonar</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histEpilepsia" value="Epilepsia"> Epilepsia</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histEspalda" value="Espalda Lastimada"> Espalda Lastimada</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histReumatica" value="Fiebre Reumática"> Fiebre Reumática</label>
+                    <label class="checkbox-item"><input type="checkbox" id="histOperaciones" value="Operaciones"> Operaciones</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Explique lo marcado (si es necesario):</label>
+                <textarea id="explicacionHistorial" rows="2" placeholder="Detalles adicionales..."></textarea>
+            </div>
+
+            <!-- BOTONES -->
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()" style="flex: 1;">LIMPIAR</button>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">REGISTRARME</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- SECCIÓN MIS CLIENTES -->
+    <div id="clientes" class="section">
+        <div class="clientes-header">
+            <h2 class="form-title">📋 Mis Clientes</h2>
+            <button class="btn-logout" onclick="cerrarSesionClientes()">🔒 Cerrar Sesión</button>
         </div>
+
+        <div class="form-group">
+            <input type="text" id="searchClient" placeholder="🔍 Buscar cliente..." onkeyup="buscarClientes()">
+        </div>
+
+        <div class="clients-grid" id="clientsList"></div>
     </div>
 
     <!-- MODAL DE CONTRASEÑA PARA MIS CLIENTES -->
@@ -1893,7 +1876,7 @@ function abrirEmail() {
         </div>
     </div>
 
-    <!-- MODAL DE HISTORIAL (simplificado) -->
+    <!-- MODAL DE HISTORIAL -->
     <div id="historialModal" class="historial-modal">
         <div class="historial-header" id="historialHeader"></div>
         <div class="historial-tabs" id="historialTabs">
@@ -1916,7 +1899,7 @@ function abrirEmail() {
         // ===== SISTEMA DE CONTRASEÑA PARA MIS CLIENTES =====
         let sesionClientesActiva = false;
         let intentosFallidos = 0;
-        const CONTRASENA_CLIENTES = "gym2024"; // 🔑 CAMBIA ESTA CONTRASEÑA
+        const CONTRASENA_CLIENTES = "gym2024";
 
         function mostrarPasswordClientes() {
             document.getElementById('passwordModal').classList.add('active');
@@ -1928,7 +1911,6 @@ function abrirEmail() {
             document.getElementById('passwordInput').value = '';
             document.getElementById('passwordError').innerHTML = '';
             document.getElementById('passwordAttempts').innerHTML = '';
-            // Volver al inicio
             showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
         }
 
@@ -1944,17 +1926,14 @@ function abrirEmail() {
             }
             
             if (password === CONTRASENA_CLIENTES) {
-                // Contraseña correcta
                 sesionClientesActiva = true;
                 intentosFallidos = 0;
                 cerrarPasswordClientes();
-                // Ahora sí mostrar la sección de clientes
                 document.getElementById('clientes').classList.add('active');
                 document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
                 document.querySelector('.menu-item[onclick*="clientes"]').classList.add('active');
                 mostrarClientes();
             } else {
-                // Contraseña incorrecta
                 intentosFallidos++;
                 
                 if (intentosFallidos >= 3) {
@@ -1981,7 +1960,6 @@ function abrirEmail() {
 
         function cerrarSesionClientes() {
             sesionClientesActiva = false;
-            // Volver a inicio
             showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
         }
 
@@ -1995,7 +1973,6 @@ function abrirEmail() {
         }
 
         function showSection(sectionId, element) {
-            // Si es la sección de clientes y no hay sesión activa, mostrar password
             if (sectionId === 'clientes' && !sesionClientesActiva) {
                 mostrarPasswordClientes();
                 return;
@@ -2016,56 +1993,47 @@ function abrirEmail() {
             }
         }
 
-        function seleccionarPlan(plan) {
-            showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
-            const precios = {
-                'basico': 29,
-                'estandar': 49,
-                'premium': 79,
-                'vip': 129
-            };
-            
-            // Mapear el nombre del plan al valor del select
-            const planMap = {
-                'basico': 'Básica',
-                'estandar': 'Estándar',
-                'premium': 'Premium',
-                'vip': 'VIP'
-            };
-            
-            document.getElementById('membresia').value = planMap[plan] || 'Estándar';
-            
-            // Opcional: mostrar mensaje
-            alert(`✅ Has seleccionado el Plan ${planMap[plan]}. Completa el registro para continuar.`);
+        function showPlanesSection() {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('planes').classList.add('active');
+    
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            const menuItem = document.querySelector('.menu-item[onclick*="planes"]');
+            if (menuItem) menuItem.classList.add('active');
+    
+            document.getElementById('menuItems').classList.remove('show');
+            document.getElementById('menuToggle').classList.remove('active');
+            document.getElementById('menuToggle').textContent = '☰';
         }
 
-        function seleccionarOferta(oferta) {
-            let mensaje = '';
-            let plan = 'estandar'; // Por defecto
-            let monto = 49;
+        function seleccionarPlan(plan) {
+            showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
             
-            if (oferta === 'anual') {
-                mensaje = 'OFERTA ANUAL: 12 meses al precio de 10 ($490)';
-                plan = 'estandar';
-                monto = 490;
-            } else if (oferta === 'pareja') {
-                mensaje = 'OFERTA PAREJA: 2 personas por $79/mes';
-                plan = 'estandar';
-                monto = 79;
-            } else if (oferta === 'estudiante') {
-                mensaje = 'DESCUENTO ESTUDIANTIL: 15% off en plan Estándar ($41.65/mes)';
-                plan = 'estandar';
-                monto = 41.65;
-            } else if (oferta === 'primeravez') {
-                mensaje = 'PRIMERA VEZ: Primer mes a $29';
-                plan = 'estandar';
-                monto = 29;
+            const planMap = {
+                '1mes': 'Básica',
+                '3meses': 'Estándar',
+                '6meses': 'Premium',
+                '1año': 'VIP',
+                'especial': 'Especial',
+                'estudiante': 'Estudiante',
+                '2personas': 'Grupal 2',
+                '3personas': 'Grupal 3+',
+                'daypass': 'Day Pass',
+                'weekpass': 'Week Pass'
+            };
+            
+            const selectPlan = document.getElementById('membresia');
+            if (selectPlan && planMap[plan]) {
+                for(let i = 0; i < selectPlan.options.length; i++) {
+                    if(selectPlan.options[i].value === planMap[plan] || 
+                       selectPlan.options[i].text.includes(planMap[plan])) {
+                        selectPlan.selectedIndex = i;
+                        break;
+                    }
+                }
             }
             
-            if (confirm(`✅ ${mensaje}\n\n¿Quieres ir a Registrar Cliente para aprovechar esta oferta?`)) {
-                showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
-                // Opcional: establecer el monto en el campo de pago después del registro
-            }
+            alert(`✅ Has seleccionado el Plan ${planMap[plan] || plan}. Completa el registro para continuar.`);
         }
 
         // ===== FUNCIONES DE REGISTRO =====
@@ -2078,7 +2046,6 @@ function abrirEmail() {
             }
         }
 
-        // Calcular edad automáticamente
         document.getElementById('fechaNacimiento').addEventListener('change', function() {
             if (this.value) {
                 const hoy = new Date();
@@ -2090,50 +2057,29 @@ function abrirEmail() {
             }
         });
 
-        // Funciones para mostrar/ocultar campos condicionales
-        function toggleFumador() {
-            const fuma = document.getElementById('fuma').value;
-            const container = document.getElementById('cantidadFumaContainer');
-            const detalles = document.getElementById('fumadorDetalles');
+        function limpiarFormulario() {
+            const form = document.getElementById('clientForm');
+            if (form) form.reset();
+            const photoPreview = document.getElementById('photoPreview');
+            if (photoPreview) photoPreview.innerHTML = '<div class="photo-placeholder">📸</div>';
+            const edadInput = document.getElementById('edad');
+            if (edadInput) edadInput.value = '';
+            const numSocio = document.getElementById('numSocio');
+            if (numSocio) numSocio.value = `SOC-${Date.now().toString().slice(-6)}`;
             
-            if (fuma === 'Si') {
-                container.style.display = 'block';
-                detalles.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-                detalles.style.display = 'none';
-            }
+            // Limpiar checkboxes
+            document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(cb => cb.checked = false);
         }
 
-        function toggleDejoFumar() {
-            const dejo = document.getElementById('dejoFumar').value;
-            document.getElementById('cuandoDejoContainer').style.display = dejo === 'Si' ? 'block' : 'none';
-            document.getElementById('porqueDejoContainer').style.display = dejo === 'Si' ? 'block' : 'none';
-        }
-
-        function toggleDieta() {
-            const dieta = document.getElementById('dieta').value;
-            document.getElementById('tipoDietaContainer').style.display = dieta === 'Si' ? 'block' : 'none';
-        }
-
-        function toggleNitroglicerina() {
-            const usa = document.getElementById('usaNitroglicerina').value;
-            document.getElementById('cantidadNitroglicerinaContainer').style.display = usa === 'Si' ? 'block' : 'none';
-            document.getElementById('frecuenciaNitroglicerinaContainer').style.display = usa === 'Si' ? 'block' : 'none';
-        }
-
-        // Guardar cliente con todos los datos
+        // Guardar cliente
         document.getElementById('clientForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Recoger condiciones médicas simples
             const condiciones = [];
-            document.querySelectorAll('.medical-item input:checked').forEach(cb => condiciones.push(cb.value));
+            document.querySelectorAll('.checkbox-item input:checked').forEach(cb => condiciones.push(cb.value));
 
-            // Crear objeto con todos los datos del formulario
             const cliente = {
                 id: Date.now(),
-                // Datos personales básicos
                 numSocio: document.getElementById('numSocio').value || `SOC-${Date.now()}`,
                 fechaComienzo: document.getElementById('fechaComienzo').value,
                 nombre: document.getElementById('nombre').value,
@@ -2147,123 +2093,12 @@ function abrirEmail() {
                 email: document.getElementById('email').value,
                 contactoEmergencia: document.getElementById('contactoEmergencia').value,
                 telEmergencia: document.getElementById('telEmergencia').value,
-                
-                // Membresía
                 membresia: document.getElementById('membresia').value,
-                
-                // Foto
                 foto: document.getElementById('photoPreview').querySelector('img')?.src || '',
-                
-                // Historial médico simple (para compatibilidad)
                 condiciones: condiciones,
                 observaciones: document.getElementById('explicacionHistorial').value,
-                
                 fechaRegistro: new Date().toLocaleDateString(),
                 activo: true,
-                
-                // Guardar TODO el formulario completo
-                formularioCompleto: {
-                    // Historial médico detallado
-                    historialPasado: {
-                        altaPresion: document.getElementById('histAltaPresion')?.checked || false,
-                        ataqueCorazon: document.getElementById('histAtaqueCorazon')?.checked || false,
-                        artritis: document.getElementById('histArtritis')?.checked || false,
-                        diabetes: document.getElementById('histDiabetes')?.checked || false,
-                        arterias: document.getElementById('histArterias')?.checked || false,
-                        pulmonar: document.getElementById('histPulmonar')?.checked || false,
-                        epilepsia: document.getElementById('histEpilepsia')?.checked || false,
-                        espalda: document.getElementById('histEspalda')?.checked || false,
-                        reumatica: document.getElementById('histReumatica')?.checked || false,
-                        operaciones: document.getElementById('histOperaciones')?.checked || false,
-                        explicacion: document.getElementById('explicacionHistorial').value
-                    },
-                    
-                    historialFamiliar: {
-                        altaPresion: document.getElementById('famAltaPresion')?.checked || false,
-                        diabetes: document.getElementById('famDiabetes')?.checked || false,
-                        corazon: document.getElementById('famCorazon')?.checked || false,
-                        operacionCorazon: document.getElementById('famOperacionCorazon')?.checked || false,
-                        otras: document.getElementById('famOtras')?.checked || false,
-                        tobillos: document.getElementById('famTobillos')?.checked || false
-                    },
-                    
-                    sintomas: {
-                        artritis: document.getElementById('sinArtritis')?.checked || false,
-                        dificultadRespirar: document.getElementById('sinDificultadRespirar')?.checked || false,
-                        dificultadDormir: document.getElementById('sinDificultadDormir')?.checked || false,
-                        dolorCadera: document.getElementById('sinDolorCadera')?.checked || false,
-                        dolorPecho: document.getElementById('sinDolorPecho')?.checked || false,
-                        dolorRodillas: document.getElementById('sinDolorRodillas')?.checked || false,
-                        fatiga: document.getElementById('sinFatiga')?.checked || false,
-                        flema: document.getElementById('sinFlema')?.checked || false,
-                        mareos: document.getElementById('sinMareos')?.checked || false,
-                        almohada: document.getElementById('sinAlmohada')?.checked || false,
-                        palpitaciones: document.getElementById('sinPalpitaciones')?.checked || false,
-                        pulsoAcelerado: document.getElementById('sinPulsoAcelerado')?.checked || false,
-                        soplo: document.getElementById('sinSoplo')?.checked || false,
-                        tos: document.getElementById('sinTos')?.checked || false,
-                        tobillosInflamados: document.getElementById('sinTobillosInflamados')?.checked || false
-                    },
-                    
-                    trabajo: {
-                        compania: document.getElementById('compania').value,
-                        tipoTrabajo: document.getElementById('tipoTrabajo').value,
-                        nivelActividad: document.getElementById('nivelActividad').value,
-                        minutosCamina: document.getElementById('minutosCamina').value,
-                        millasCamina: document.getElementById('millasCamina').value,
-                        programaEjercicio: document.getElementById('programaEjercicio').value,
-                        gustariaComenzar: document.getElementById('gustariaComenzar').value,
-                        tomaPulso: document.getElementById('tomaPulso').value,
-                        pulsoMinuto: document.getElementById('pulsoMinuto').value
-                    },
-                    
-                    sintomasEjercicio: {
-                        dolorPecho: document.getElementById('ejerDolorPecho')?.checked || false,
-                        dolorPiernas: document.getElementById('ejerDolorPiernas')?.checked || false,
-                        faltaRespiración: document.getElementById('ejerFaltaRespiración')?.checked || false,
-                        mareo: document.getElementById('ejerMareo')?.checked || false,
-                        presion: document.getElementById('ejerPresion')?.checked || false,
-                        cansancio: document.getElementById('ejerCansancio')?.checked || false,
-                        tiempoRecuperacion: document.getElementById('tiempoRecuperacion').value,
-                        tieneLesion: document.getElementById('tieneLesion').value
-                    },
-                    
-                    habitos: {
-                        fuma: document.getElementById('fuma').value,
-                        cantidadFuma: document.getElementById('cantidadFuma').value,
-                        edadComenzoFumar: document.getElementById('edadComenzoFumar').value,
-                        anosFumando: document.getElementById('anosFumando').value,
-                        dejoFumar: document.getElementById('dejoFumar').value,
-                        cuandoDejo: document.getElementById('cuandoDejoFumar').value,
-                        porqueDejo: document.getElementById('porqueDejoFumar').value,
-                        peso21: document.getElementById('peso21').value,
-                        dieta: document.getElementById('dieta').value,
-                        tipoDieta: document.getElementById('tipoDieta').value
-                    },
-                    
-                    medicamentos: {
-                        usaNitroglicerina: document.getElementById('usaNitroglicerina').value,
-                        cantidadNitroglicerina: document.getElementById('cantidadNitroglicerina').value,
-                        nitroPorDia: document.getElementById('nitroPorDia').value,
-                        nitroPorSemana: document.getElementById('nitroPorSemana').value,
-                        condicionSalud: document.getElementById('condicionSalud').value,
-                        listaMedicamentos: document.getElementById('medicamentos').value
-                    },
-                    
-                    consentimientos: {
-                        nombreConsentimiento: document.getElementById('consentimientoNombre').value,
-                        fechaConsentimiento: document.getElementById('consentimientoFecha').value,
-                        aceptaReglamentos: document.getElementById('aceptaReglamentos').value,
-                        firmaReglamentos: document.getElementById('firmaReglamentos').value,
-                        fechaReglamentos: document.getElementById('fechaReglamentos').value,
-                        autorizacionNombre: document.getElementById('autorizacionNombre').value,
-                        autorizacionFirma: document.getElementById('autorizacionFirma').value,
-                        inicialesClases: document.getElementById('inicialesClases').value,
-                        firmaLiberacion: document.getElementById('firmaLiberacion').value,
-                        fechaLiberacion: document.getElementById('fechaLiberacion').value
-                    }
-                },
-                
                 historial: { pagos: [], visitas: [], progreso: [], medico: [], notas: [] }
             };
 
@@ -2271,16 +2106,15 @@ function abrirEmail() {
             localStorage.setItem('clientes', JSON.stringify(clientes));
             limpiarFormulario();
             
-            // Mensaje de confirmación
             alert(`✅ Cliente ${cliente.nombre} registrado exitosamente.`);
-            
-            // Volver al inicio
             showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
         });
 
         // ===== FUNCIONES DE CLIENTES =====
         function mostrarClientes(filtro = '') {
             const container = document.getElementById('clientsList');
+            if (!container) return;
+            
             let filtrados = filtro ? clientes.filter(c => c.nombre.toLowerCase().includes(filtro.toLowerCase()) || c.email.toLowerCase().includes(filtro.toLowerCase())) : clientes;
 
             if (filtrados.length === 0) {
@@ -2289,7 +2123,6 @@ function abrirEmail() {
             }
 
             container.innerHTML = filtrados.map(cliente => {
-                // Asegurarse de que el ID sea un string para evitar problemas
                 const clienteId = String(cliente.id);
                 return `
                 <div class="client-card" data-cliente-id="${clienteId}">
@@ -2313,9 +2146,7 @@ function abrirEmail() {
             mostrarClientes(document.getElementById('searchClient').value);
         }
 
-        // ===== FUNCIONES DE ELIMINACIÓN =====
         function mostrarConfirmEliminar(id, nombre) {
-            console.log("ID a eliminar:", id);
             clienteAEliminar = id;
             document.getElementById('deleteClientMessage').innerHTML = `¿Estás seguro que deseas eliminar a <strong>${nombre}</strong>? Esta acción eliminará permanentemente al cliente y todo su historial.`;
             document.getElementById('confirmDeleteModal').classList.add('active');
@@ -2328,29 +2159,15 @@ function abrirEmail() {
 
         function confirmarEliminarCliente() {
             if (clienteAEliminar) {
-                console.log("Eliminando ID:", clienteAEliminar);
-                
-                // Filtrar el cliente eliminado
                 clientes = clientes.filter(c => String(c.id) !== String(clienteAEliminar));
-                
-                // Guardar en localStorage
                 localStorage.setItem('clientes', JSON.stringify(clientes));
-                
-                // Cerrar modal
                 cerrarConfirmModal();
-                
-                // Actualizar la lista
                 mostrarClientes();
-                
-                // Mostrar mensaje de éxito
                 alert('✅ Cliente eliminado permanentemente');
-                
-                // Limpiar variable
                 clienteAEliminar = null;
             }
         }
 
-        // ===== FUNCIONES DE HISTORIAL (simplificadas) =====
         function verHistorial(id) {
             clienteSeleccionado = clientes.find(c => String(c.id) === String(id));
             if (!clienteSeleccionado) return;
@@ -2377,23 +2194,23 @@ function abrirEmail() {
 
         function showHistorialTab(tab) {
             document.querySelectorAll('.historial-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) event.target.classList.add('active');
             actualizarHistorialCompleto(tab);
         }
 
         function actualizarHistorialCompleto(seccionActiva = 'pagos') {
             if (!clienteSeleccionado) return;
 
-            const pagos = clienteSeleccionado.historial.pagos || [];
-            const visitas = clienteSeleccionado.historial.visitas || [];
-            const progreso = clienteSeleccionado.historial.progreso || [];
-            const medico = clienteSeleccionado.historial.medico || [];
-            const notas = clienteSeleccionado.historial.notas || [];
+            const pagos = clienteSeleccionado.historial?.pagos || [];
+            const visitas = clienteSeleccionado.historial?.visitas || [];
+            const progreso = clienteSeleccionado.historial?.progreso || [];
+            const medico = clienteSeleccionado.historial?.medico || [];
+            const notas = clienteSeleccionado.historial?.notas || [];
 
             const totalPagado = pagos.reduce((s, p) => s + (p.monto || 0), 0);
 
             document.getElementById('historialContent').innerHTML = `
-                <div id="pagos-section" class="historial-section ${seccionActiva === 'pagos' ? 'active' : ''}">
+                <div id="pagos-section" class="historial-section" style="${seccionActiva !== 'pagos' ? 'display: none;' : ''}">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
                         <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
                             <div>Total Pagado</div>
@@ -2404,7 +2221,7 @@ function abrirEmail() {
                             <div style="font-size: 1.5em; font-weight: bold; color: #333;">${pagos.length ? new Date(pagos[pagos.length-1].fecha).toLocaleDateString() : '-'}</div>
                         </div>
                     </div>
-                    ${pagos.length ? pagos.reverse().map(p => `
+                    ${pagos.length ? pagos.slice().reverse().map(p => `
                         <div class="timeline-item">
                             <div style="display: flex; justify-content: space-between;">
                                 <span>📅 ${new Date(p.fecha).toLocaleDateString()}</span>
@@ -2415,7 +2232,7 @@ function abrirEmail() {
                     `).join('') : '<p style="text-align: center; color: #666;">No hay pagos</p>'}
                 </div>
 
-                <div id="visitas-section" class="historial-section ${seccionActiva === 'visitas' ? 'active' : ''}">
+                <div id="visitas-section" class="historial-section" style="${seccionActiva !== 'visitas' ? 'display: none;' : ''}">
                     <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
                         <h4 style="margin-bottom: 10px; color: #63318A;">📅 Registrar Visita</h4>
                         <input type="date" id="visitaFecha" class="form-group" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
@@ -2426,7 +2243,7 @@ function abrirEmail() {
                         </select>
                         <button class="btn btn-primary" onclick="registrarVisita()">Registrar Visita</button>
                     </div>
-                    ${visitas.length ? visitas.reverse().map(v => `
+                    ${visitas.length ? visitas.slice().reverse().map(v => `
                         <div class="timeline-item">
                             <div>📅 ${new Date(v.fecha).toLocaleDateString()}</div>
                             <div>${v.tipo}</div>
@@ -2434,7 +2251,7 @@ function abrirEmail() {
                     `).join('') : '<p style="text-align: center; color: #666;">No hay visitas</p>'}
                 </div>
 
-                <div id="progreso-section" class="historial-section ${seccionActiva === 'progreso' ? 'active' : ''}">
+                <div id="progreso-section" class="historial-section" style="${seccionActiva !== 'progreso' ? 'display: none;' : ''}">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
                         <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
                             <div>Peso Inicial</div>
@@ -2452,7 +2269,7 @@ function abrirEmail() {
                         <input type="date" id="medicionFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
                         <button class="btn btn-primary" onclick="registrarMedicion()">Guardar Medición</button>
                     </div>
-                    ${progreso.length ? progreso.reverse().map(p => `
+                    ${progreso.length ? progreso.slice().reverse().map(p => `
                         <div class="timeline-item">
                             <div>📅 ${new Date(p.fecha).toLocaleDateString()}</div>
                             <div>⚖️ ${p.peso} kg</div>
@@ -2460,7 +2277,7 @@ function abrirEmail() {
                     `).join('') : '<p style="text-align: center; color: #666;">No hay mediciones</p>'}
                 </div>
 
-                <div id="medico-section" class="historial-section ${seccionActiva === 'medico' ? 'active' : ''}">
+                <div id="medico-section" class="historial-section" style="${seccionActiva !== 'medico' ? 'display: none;' : ''}">
                     <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
                         <h4 style="margin-bottom: 10px; color: #63318A;">🏥 Registrar Evolución Médica</h4>
                         <select id="medicoTipo" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
@@ -2472,7 +2289,7 @@ function abrirEmail() {
                         <input type="date" id="medicoFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
                         <button class="btn btn-primary" onclick="registrarEvolucionMedica()">Registrar Evolución</button>
                     </div>
-                    ${medico.length ? medico.reverse().map(m => `
+                    ${medico.length ? medico.slice().reverse().map(m => `
                         <div class="timeline-item">
                             <div>📅 ${new Date(m.fecha).toLocaleDateString()}</div>
                             <div><strong>${m.tipo}</strong></div>
@@ -2481,7 +2298,7 @@ function abrirEmail() {
                     `).join('') : '<p style="text-align: center; color: #666;">No hay registros médicos</p>'}
                 </div>
 
-                <div id="notas-section" class="historial-section ${seccionActiva === 'notas' ? 'active' : ''}">
+                <div id="notas-section" class="historial-section" style="${seccionActiva !== 'notas' ? 'display: none;' : ''}">
                     <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
                         <h4 style="margin-bottom: 10px; color: #63318A;">📝 Agregar Nota</h4>
                         <input type="text" id="notaTitulo" placeholder="Título" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
@@ -2489,7 +2306,7 @@ function abrirEmail() {
                         <input type="date" id="notaFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
                         <button class="btn btn-primary" onclick="registrarNota()">Guardar Nota</button>
                     </div>
-                    ${notas.length ? notas.reverse().map(n => `
+                    ${notas.length ? notas.slice().reverse().map(n => `
                         <div class="timeline-item">
                             <div>📅 ${new Date(n.fecha).toLocaleDateString()}</div>
                             <div><strong>${n.titulo}</strong></div>
@@ -2500,13 +2317,13 @@ function abrirEmail() {
             `;
         }
 
-        // ===== FUNCIONES DEL HISTORIAL =====
         function registrarVisita() {
             const visita = {
                 id: Date.now(),
                 fecha: document.getElementById('visitaFecha').value,
                 tipo: document.getElementById('visitaTipo').value
             };
+            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
             if (!clienteSeleccionado.historial.visitas) clienteSeleccionado.historial.visitas = [];
             clienteSeleccionado.historial.visitas.push(visita);
             localStorage.setItem('clientes', JSON.stringify(clientes));
@@ -2520,6 +2337,7 @@ function abrirEmail() {
                 altura: parseFloat(document.getElementById('medicionAltura').value) || null,
                 fecha: document.getElementById('medicionFecha').value
             };
+            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
             if (!clienteSeleccionado.historial.progreso) clienteSeleccionado.historial.progreso = [];
             clienteSeleccionado.historial.progreso.push(medicion);
             localStorage.setItem('clientes', JSON.stringify(clientes));
@@ -2533,6 +2351,7 @@ function abrirEmail() {
                 descripcion: document.getElementById('medicoDescripcion').value,
                 fecha: document.getElementById('medicoFecha').value
             };
+            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
             if (!clienteSeleccionado.historial.medico) clienteSeleccionado.historial.medico = [];
             clienteSeleccionado.historial.medico.push(evolucion);
             localStorage.setItem('clientes', JSON.stringify(clientes));
@@ -2546,41 +2365,25 @@ function abrirEmail() {
                 contenido: document.getElementById('notaContenido').value,
                 fecha: document.getElementById('notaFecha').value
             };
+            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
             if (!clienteSeleccionado.historial.notas) clienteSeleccionado.historial.notas = [];
             clienteSeleccionado.historial.notas.push(nota);
             localStorage.setItem('clientes', JSON.stringify(clientes));
             actualizarHistorialCompleto('notas');
         }
 
-        // ===== FUNCIONES AUXILIARES =====
-        function limpiarFormulario() {
-            document.getElementById('clientForm').reset();
-            document.getElementById('photoPreview').innerHTML = '<div class="photo-placeholder">📸</div>';
-            document.getElementById('edad').value = '';
+        function abrirEmail() {
+            const email = "qualitytrainingsh.md@gmail.com";
+            const asunto = "Consulta desde Quality Training";
+            const cuerpo = "Hola, me gustaría obtener más información sobre los planes y membresías de Quality Training.%0D%0A%0D%0A%0D%0A---%0D%0AEnviado desde la página web de Quality Training";
             
-            // Ocultar secciones condicionales
-            document.getElementById('cantidadFumaContainer').style.display = 'none';
-            document.getElementById('fumadorDetalles').style.display = 'none';
-            document.getElementById('tipoDietaContainer').style.display = 'none';
-            document.getElementById('cantidadNitroglicerinaContainer').style.display = 'none';
-            document.getElementById('frecuenciaNitroglicerinaContainer').style.display = 'none';
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(asunto)}&body=${cuerpo}`;
             
-            // Generar número de socio automático
-            document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
-        }
-
-        function enviarMensaje() {
-            const nombre = document.getElementById('contactNombre').value;
-            const email = document.getElementById('contactEmail').value;
-            const mensaje = document.getElementById('contactMensaje').value;
-            if (nombre && email && mensaje) {
-                alert('✅ Mensaje enviado. Nos comunicaremos contigo pronto.');
-                document.getElementById('contactNombre').value = '';
-                document.getElementById('contactEmail').value = '';
-                document.getElementById('contactMensaje').value = '';
-            } else {
-                alert('❌ Por favor completa todos los campos');
-            }
+            setTimeout(() => {
+                if(confirm('¿No se abrió tu aplicación de correo?\n\n¿Quieres usar Gmail en el navegador?')) {
+                    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(asunto)}&body=${cuerpo}`, '_blank');
+                }
+            }, 2000);
         }
 
         document.addEventListener('keydown', function(e) {
@@ -2590,40 +2393,14 @@ function abrirEmail() {
                 cerrarPasswordClientes();
             }
         });
-		
-		// Función para mostrar la sección de Planes y Ofertas desde el botón del hero
-        function showPlanesSection() {
-            // Cambiar la sección activa
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById('planes').classList.add('active');
-    
-           // Cambiar el menú activo
-           document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-           const menuItem = document.querySelector('.menu-item[onclick*="planes"]');
-           if (menuItem) menuItem.classList.add('active');
-    
-           // Cerrar el menú si está abierto
-           document.getElementById('menuItems').classList.remove('show');
-           document.getElementById('menuToggle').classList.remove('active');
-           document.getElementById('menuToggle').textContent = '☰';
-        }
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', function() {
-        mostrarClientes();
-           document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
-    
-        // Generar número de socio automático
-          document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
-        });
-
-        // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             mostrarClientes();
-            document.getElementById('pagoFecha').value = new Date().toISOString().split('T')[0];
+            const numSocioInput = document.getElementById('numSocio');
+            if (numSocioInput) numSocioInput.value = `SOC-${Date.now().toString().slice(-6)}`;
             
-        // Generar número de socio automático
-            document.getElementById('numSocio').value = `SOC-${Date.now().toString().slice(-6)}`;
+            const fechaComienzo = document.getElementById('fechaComienzo');
+            if (fechaComienzo) fechaComienzo.value = new Date().toISOString().split('T')[0];
         });
     </script>
 </body>
