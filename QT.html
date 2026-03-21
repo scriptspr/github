@@ -1290,6 +1290,82 @@
         .client-photo img:hover, .photo-preview img:hover {
             transform: scale(1.05);
         }
+
+        /* ===== OPTIMIZACIONES PARA CELULARES ===== */
+        
+        /* Aumentar tamaño de los items del menú para dedos */
+        .menu-item {
+            padding: 18px 25px;
+            min-height: 65px;
+        }
+        
+        /* Mejorar el espacio entre elementos */
+        .menu-item div[style*="border-radius: 50%"] {
+            width: 44px !important;
+            height: 44px !important;
+            font-size: 1.5em !important;
+        }
+        
+        /* Botones más grandes para celular */
+        .hero-btn, .package-btn, .btn, .contact-submit {
+            min-height: 55px;
+            font-size: 1.1em;
+        }
+        
+        /* Ajustar el logo del menú para que no se corte */
+        .menu-logo {
+            font-size: 1.2em;
+            white-space: nowrap;
+        }
+        
+        /* Espaciado en secciones */
+        .section {
+            margin: 0 15px 20px;
+            padding: 20px;
+        }
+        
+        /* Tarjetas con mejor espaciado */
+        .package-card {
+            padding: 20px;
+        }
+        
+        .package-price {
+            font-size: 2em;
+        }
+        
+        /* Ofertas en vertical con buen espaciado */
+        .oferta-card, .info-box {
+            margin: 10px 0;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .menu-logo {
+                font-size: 1em;
+            }
+            
+            .menu-header {
+                padding: 12px 15px;
+            }
+            
+            .hamburger-btn {
+                font-size: 1.6em;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .hero-content h1 {
+                font-size: 2em;
+            }
+            
+            .hero-content p {
+                font-size: 1em;
+            }
+            
+            .hero-btn {
+                padding: 14px 25px;
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
