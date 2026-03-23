@@ -13,9 +13,74 @@
 
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            background: #f5f5f5;
             min-height: 100vh;
             color: #333;
+            /* Fondo oscuro con líneas violetas y verdes */
+            background: #0a0a0a;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Patrón de líneas diagonales violetas y verdes */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 40px,
+                rgba(99, 49, 138, 0.3) 40px,
+                rgba(99, 49, 138, 0.3) 45px,
+                transparent 45px,
+                transparent 85px,
+                rgba(64, 211, 42, 0.3) 85px,
+                rgba(64, 211, 42, 0.3) 90px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Patrón de líneas horizontales con gradiente */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 30px,
+                rgba(99, 49, 138, 0.2) 30px,
+                rgba(99, 49, 138, 0.2) 32px,
+                transparent 32px,
+                transparent 62px,
+                rgba(64, 211, 42, 0.2) 62px,
+                rgba(64, 211, 42, 0.2) 64px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Líneas de borde animadas */
+        @keyframes moveLines {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 100px 100px;
+            }
+        }
+
+        /* Contenedor principal para contenido por encima de las líneas */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
         }
 
         /* ===== MENÚ HAMBURGUESA ===== */
@@ -25,8 +90,10 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: white;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, #63318A, #40D32A) 1;
         }
 
         .menu-header {
@@ -34,14 +101,17 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: white;
+            background: transparent;
             position: relative;
         }
 
         .menu-logo {
             font-size: 1.4em;
             font-weight: 800;
-            color: #63318A;
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             letter-spacing: -0.5px;
             position: absolute;
             left: 50%;
@@ -49,15 +119,10 @@
             white-space: nowrap;
         }
 
-        .menu-logo span {
-            font-size: 1.5em;
-            margin-right: 5px;
-        }
-
         .hamburger-btn {
             background: none;
             border: none;
-            color: #333;
+            color: white;
             font-size: 2em;
             cursor: pointer;
             width: 44px;
@@ -70,18 +135,18 @@
         }
 
         .hamburger-btn:active {
-            background: #f0f0f0;
+            background: rgba(255,255,255,0.1);
         }
 
         .hamburger-btn.active {
-            color: #63318A;
+            color: #40D32A;
         }
 
         .menu-items {
             display: none;
-            background: white;
+            background: rgba(10, 10, 10, 0.98);
             padding: 10px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 1px solid rgba(99, 49, 138, 0.5);
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
@@ -97,27 +162,24 @@
             align-items: center;
             gap: 15px;
             padding: 18px 25px;
-            color: #333;
+            color: #fff;
             text-decoration: none;
             font-size: 1.1em;
             font-weight: 500;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid rgba(99, 49, 138, 0.3);
             transition: all 0.2s ease;
             cursor: pointer;
         }
 
         .menu-item:active {
-            background: #f8f8f8;
+            background: rgba(64, 211, 42, 0.1);
         }
 
         .menu-item.active {
-            color: #63318A;
+            background: linear-gradient(90deg, rgba(99,49,138,0.2), rgba(64,211,42,0.2));
+            color: #40D32A;
             font-weight: 600;
-            border-left: 4px solid #63318A;
-        }
-
-        .menu-item span {
-            font-size: 1.3em;
+            border-left: 4px solid #40D32A;
         }
 
         /* ===== CONTENIDO PRINCIPAL ===== */
@@ -131,7 +193,7 @@
         .hero-section {
             position: relative;
             height: 400px;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -140,6 +202,8 @@
             text-align: center;
             color: white;
             margin-bottom: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(99, 49, 138, 0.5);
         }
 
         .hero-content {
@@ -163,7 +227,7 @@
         }
 
         .hero-btn {
-            background: #63318A;
+            background: linear-gradient(135deg, #63318A, #40D32A);
             color: white;
             border: none;
             padding: 18px 40px;
@@ -171,489 +235,38 @@
             font-size: 1.2em;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(99, 49, 138, 0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .hero-btn:active {
             transform: scale(0.98);
-            box-shadow: 0 2px 10px rgba(99, 49, 138, 0.3);
         }
 
-        /* ===== SECCIÓN DE MEMBRESÍAS ===== */
-        .section-title {
-            font-size: 2em;
-            font-weight: 800;
-            text-align: center;
-            margin: 40px 20px 20px;
-            color: #333;
-            letter-spacing: -0.5px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-            padding: 0 20px;
-        }
-
-        .packages-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding: 0 20px;
-            margin-bottom: 40px;
-        }
-
-        .package-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border: 1px solid #f0f0f0;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .package-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .package-card.popular {
-            border: 2px solid #40D32A;
-            box-shadow: 0 10px 30px rgba(64, 211, 42, 0.1);
-        }
-
-        .package-card.popular::before {
-            content: '🔥 MÁS POPULAR';
-            position: absolute;
-            top: 12px;
-            right: -30px;
-            background: #40D32A;
-            color: white;
-            padding: 8px 40px;
-            font-size: 0.8em;
-            font-weight: 600;
-            transform: rotate(45deg);
-        }
-
-        .package-name {
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .package-price {
-            font-size: 2.5em;
-            font-weight: 800;
-            color: #63318A;
-            margin-bottom: 20px;
-        }
-
-        .package-price span {
-            font-size: 0.4em;
-            font-weight: 400;
-            color: #999;
-        }
-
-        .package-features {
-            list-style: none;
-            margin: 20px 0;
-        }
-
-        .package-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .package-features li::before {
-            content: "✓";
-            color: #63318A;
-            font-weight: bold;
-        }
-
-        .package-btn {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1.1em;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .package-btn.popular-btn {
-            background: #40D32A;
-        }
-
-        .package-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* ===== SECCIÓN DE OFERTAS ===== */
-        .ofertas-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .oferta-card {
-            background: linear-gradient(135deg, #f8f8f8, #e9e9e9);
-            padding: 20px;
-            border-radius: 15px;
-            color: #333;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid #e0e0e0;
-        }
-
-        .oferta-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .oferta-card h4 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .oferta-card .precio-oferta {
-            font-size: 1.4em;
-            font-weight: 800;
-            color: #63318A;
-            margin: 8px 0;
-        }
-
-        .oferta-card .ahorro {
-            background: #40D32A;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 15px;
-            font-size: 0.75em;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-
-        .oferta-card .btn-oferta {
-            background: #63318A;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            width: 100%;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9em;
-        }
-
-        .oferta-card .btn-oferta:hover {
-            background: #4a2568;
-        }
-
-        /* ===== SECCIÓN DE MÉTODOS DE PAGO ===== */
-        .payment-section {
-            background: white;
-            padding: 40px 20px;
-            margin: 40px 0;
-            border-top: 1px solid #f0f0f0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .payment-methods-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 600px;
-            margin: 30px auto 0;
-        }
-
-        .payment-card {
-            background: #f8f8f8;
-            border-radius: 15px;
-            padding: 25px 15px;
-            text-align: center;
-            border: 1px solid #f0f0f0;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .payment-card:active {
-            transform: scale(0.98);
-            background: #f0f0f0;
-        }
-
-        .payment-card.selected {
-            border: 2px solid #63318A;
-            background: #f5f0ff;
-        }
-
-        .payment-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .payment-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 1.1em;
-        }
-
-        .payment-details {
-            background: #f8f8f8;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-            border: 2px solid #63318A;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .payment-details.hidden {
-            display: none;
-        }
-
-        .payment-details h4 {
-            color: #63318A;
-            margin-bottom: 20px;
-            font-size: 1.3em;
-        }
-
-        .ath-number {
-            font-family: monospace;
-            font-size: 2em;
-            color: #63318A;
-            font-weight: bold;
-            margin: 15px 0;
-            padding: 10px;
-            background: white;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .credit-card-form {
-            background: linear-gradient(135deg, #333, #63318A);
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
-        }
-
-        .credit-card-form input {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .credit-card-form input::placeholder {
-            color: rgba(255,255,255,0.8);
-        }
-
-        .card-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        /* ===== SECCIÓN DE TESTIMONIOS ===== */
-        .testimonials-section {
-            background: #f8f8f8;
-            padding: 40px 20px;
-            margin: 40px 0;
-        }
-
-        .testimonials-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.03);
-        }
-
-        .testimonial-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .testimonial-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #63318A, #40D32A);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .testimonial-info h4 {
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
-
-        .testimonial-info p {
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        .testimonial-text {
-            color: #666;
-            line-height: 1.6;
-            font-style: italic;
-        }
-
-        .testimonial-stars {
-            color: #ffc107;
-            margin-top: 10px;
-            font-size: 1.2em;
-        }
-
-        /* ===== SECCIÓN DE CONTACTO ===== */
-        .contact-section {
-            padding: 40px 20px;
-            background: white;
-        }
-
-        .contact-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .contact-info {
-            background: #f8f8f8;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .contact-item:last-child {
-            border-bottom: none;
-        }
-
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            background: #63318A;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5em;
-        }
-
-        .contact-details {
-            flex: 1;
-        }
-
-        .contact-details h4 {
-            font-weight: 600;
-            margin-bottom: 3px;
-            color: #333;
-        }
-
-        .contact-details p {
-            color: #666;
-            font-size: 1em;
-        }
-
-        .contact-form {
-            background: #f8f8f8;
-            border-radius: 20px;
-            padding: 30px;
-        }
-
-        .contact-form h3 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #333;
-            font-weight: 700;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #63318A;
-        }
-
-        .contact-submit {
-            background: #63318A;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1.1em;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-        }
-
-        /* ===== SECCIÓN DE REGISTRO COMPLETO ===== */
+        /* ===== SECCIÓN ===== */
         .section {
             display: none;
-            background: white;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(5px);
             border-radius: 20px;
             margin: 0 20px 20px;
             padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(99, 49, 138, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Líneas decorativas dentro de las tarjetas */
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #63318A, #40D32A, #63318A);
         }
 
         .section.active {
@@ -664,8 +277,10 @@
             font-size: 1.8em;
             font-weight: 700;
             margin-bottom: 25px;
-            color: #333;
-            border-bottom: 3px solid #63318A;
+            color: white;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, #63318A, #40D32A) 1;
+            border-bottom-style: solid;
             padding-bottom: 10px;
         }
 
@@ -673,9 +288,154 @@
             font-size: 1.4em;
             font-weight: 600;
             margin: 30px 0 15px;
-            color: #63318A;
-            border-left: 5px solid #63318A;
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            border-left: 4px solid #40D32A;
             padding-left: 15px;
+        }
+
+        /* Tarjetas de paquetes */
+        .packages-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .package-card {
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(99, 49, 138, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            border-color: #40D32A;
+            box-shadow: 0 10px 30px rgba(64,211,42,0.2);
+        }
+
+        .package-card.popular {
+            border: 2px solid #40D32A;
+            background: linear-gradient(135deg, rgba(99,49,138,0.2), rgba(64,211,42,0.1));
+        }
+
+        .package-card.popular::before {
+            content: '🔥 MÁS POPULAR';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            color: white;
+            padding: 4px 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+            border-radius: 20px;
+        }
+
+        .package-name {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .package-price {
+            font-size: 2.2em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .package-features {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .package-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .package-features li::before {
+            content: "✓";
+            color: #40D32A;
+            font-weight: bold;
+        }
+
+        .package-btn {
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Formulario */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #ccc;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(99, 49, 138, 0.5);
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #40D32A;
+            box-shadow: 0 0 0 2px rgba(64,211,42,0.3);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
         }
 
         .photo-section {
@@ -684,14 +444,14 @@
         }
 
         .photo-preview {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 15px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 12px;
             border-radius: 50%;
-            border: 3px dashed #63318A;
+            border: 2px solid #40D32A;
             overflow: hidden;
             cursor: pointer;
-            background: #f8f8f8;
+            background: rgba(0,0,0,0.5);
         }
 
         .photo-preview img {
@@ -706,48 +466,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
-            font-size: 2.5em;
-        }
-
-        .photo-input {
-            display: none;
+            color: #888;
+            font-size: 2em;
         }
 
         .photo-btn {
-            background: #63318A;
+            background: linear-gradient(135deg, #63318A, #40D32A);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 25px;
-            font-size: 1em;
-            width: 100%;
+            font-size: 0.9em;
             cursor: pointer;
         }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
         .checkbox-group {
-            background: #f8f8f8;
-            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
             border-radius: 15px;
             margin: 15px 0;
+            border: 1px solid rgba(99,49,138,0.5);
         }
 
         .checkbox-item {
@@ -755,119 +493,133 @@
             align-items: center;
             gap: 8px;
             padding: 8px;
-            background: white;
+            background: rgba(0,0,0,0.5);
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(99,49,138,0.5);
+            color: #ccc;
         }
 
         .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: #63318A;
+            width: 18px;
+            height: 18px;
+            accent-color: #40D32A;
         }
 
-        .info-box {
-            background: #f0f0f0;
-            border-left: 4px solid #63318A;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 10px 10px 0;
-            font-size: 0.95em;
-            line-height: 1.6;
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
         }
 
-        .info-box strong {
-            color: #63318A;
+        .btn-primary {
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            color: white;
         }
 
-        /* ===== LISTA DE CLIENTES ===== */
+        .btn-secondary {
+            background: #333;
+            color: white;
+            border: 1px solid rgba(99,49,138,0.5);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #dc3545, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        /* Clientes */
         .clients-grid {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .client-card {
-            background: #f8f8f8;
+            background: rgba(30,30,30,0.9);
             border-radius: 15px;
             overflow: hidden;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(99,49,138,0.5);
             position: relative;
+        }
+
+        .client-card:hover {
+            border-color: #40D32A;
         }
 
         .client-photo {
-            height: 150px;
-            background: #e9ecef;
+            height: 130px;
+            background: linear-gradient(135deg, rgba(99,49,138,0.3), rgba(64,211,42,0.2));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3em;
+            font-size: 2.5em;
             position: relative;
             cursor: pointer;
-        }
-
-        .client-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .client-status {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: #40D32A;
             border: 2px solid white;
         }
 
-        .client-status.inactive {
-            background: #dc3545;
-        }
-
         .client-info {
-            padding: 15px;
+            padding: 12px;
             cursor: pointer;
+            color: white;
         }
 
         .client-info h3 {
-            margin-bottom: 10px;
-            color: #333;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .client-info p {
+            font-size: 0.85em;
+            margin: 4px 0;
+            color: #ccc;
         }
 
         .delete-client-btn {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 44px;
-            height: 44px;
+            top: 8px;
+            left: 8px;
+            width: 36px;
+            height: 36px;
             background: #dc3545;
             border: none;
             border-radius: 50%;
             color: white;
-            font-size: 1.3em;
+            font-size: 1.1em;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
             border: 2px solid white;
-            box-shadow: 0 2px 10px rgba(220,53,69,0.3);
-            transition: all 0.3s ease;
         }
 
-        .delete-client-btn:hover {
-            background: #c82333;
-            transform: scale(1.1);
-        }
-
-        .delete-client-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* ===== SISTEMA DE CONTRASEÑA ===== */
+        /* Modales */
         .password-modal {
             display: none;
             position: fixed;
@@ -875,8 +627,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
             z-index: 3000;
             align-items: center;
             justify-content: center;
@@ -887,1083 +639,508 @@
         }
 
         .password-content {
-            background: white;
-            border-radius: 30px;
-            padding: 40px;
-            max-width: 400px;
+            background: #1a1a1a;
+            border-radius: 28px;
+            padding: 30px;
+            max-width: 320px;
             width: 90%;
             text-align: center;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            border: 1px solid #40D32A;
         }
 
         .password-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            color: #63318A;
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .password-title {
-            font-size: 2em;
-            color: #333;
-            margin-bottom: 10px;
+            font-size: 1.6em;
+            color: white;
+            margin-bottom: 8px;
             font-weight: 700;
         }
 
         .password-subtitle {
-            color: #666;
+            color: #aaa;
             margin-bottom: 20px;
-            font-size: 1.1em;
+            font-size: 0.9em;
         }
 
         .password-input {
             width: 100%;
-            padding: 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            margin: 15px 0;
-            font-size: 1.2em;
+            padding: 14px;
+            border: 1px solid #40D32A;
+            border-radius: 14px;
+            margin: 12px 0;
+            font-size: 1.1em;
             text-align: center;
-            letter-spacing: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .password-input:focus {
-            outline: none;
-            border-color: #63318A;
-            box-shadow: 0 0 0 3px rgba(99, 49, 138, 0.1);
+            background: #0a0a0a;
+            color: white;
         }
 
         .password-btn {
             width: 100%;
-            padding: 18px;
-            background: #63318A;
+            padding: 14px;
+            background: linear-gradient(135deg, #63318A, #40D32A);
             color: white;
             border: none;
-            border-radius: 15px;
-            font-size: 1.2em;
+            border-radius: 14px;
+            font-size: 1em;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
-
-        .password-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(99, 49, 138, 0.3);
-        }
-
-        .password-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+            margin-bottom: 8px;
         }
 
         .password-btn-secondary {
             width: 100%;
-            padding: 18px;
-            background: #6c757d;
+            padding: 14px;
+            background: #333;
             color: white;
             border: none;
-            border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 10px;
-        }
-
-        .password-btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
-
-        .password-error {
-            margin-top: 15px;
-            color: #63318A;
-            font-weight: 600;
-            min-height: 24px;
-        }
-
-        .password-attempts {
-            margin-top: 10px;
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        /* Botón de cerrar sesión */
-        .btn-logout {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
+            border-radius: 14px;
             font-size: 1em;
             font-weight: 600;
-            margin-left: 10px;
-            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .btn-logout:active {
-            transform: scale(0.98);
-        }
-
-        /* ===== MODALES ===== */
-        .confirm-modal,
-        .historial-modal {
+        .confirm-modal, .historial-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: white;
+            background: #0a0a0a;
             z-index: 2000;
             overflow-y: auto;
         }
 
-        .confirm-modal.active,
-        .historial-modal.active {
+        .confirm-modal.active, .historial-modal.active {
             display: block;
         }
 
         .confirm-content {
-            background: white;
-            padding: 30px;
+            background: #1a1a1a;
+            padding: 25px;
             text-align: center;
-            max-width: 400px;
+            max-width: 300px;
             margin: 100px auto;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border: 1px solid #40D32A;
         }
 
-        .confirm-icon {
-            font-size: 4em;
-            color: #dc3545;
-            margin-bottom: 20px;
+        .timeline-item {
+            background: rgba(0,0,0,0.5);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border-left: 4px solid #40D32A;
+            color: #ccc;
         }
 
         .historial-header {
-            background: #63318A;
+            background: linear-gradient(135deg, #63318A, #40D32A);
             color: white;
-            padding: 20px;
+            padding: 16px;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
-        .historial-header-content {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .historial-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid white;
-            object-fit: cover;
-        }
-
-        .historial-back {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            margin-left: auto;
-        }
-
         .historial-tabs {
             display: flex;
             overflow-x: auto;
-            gap: 5px;
-            padding: 15px;
-            background: white;
-            border-bottom: 1px solid #f0f0f0;
+            gap: 8px;
+            padding: 12px;
+            background: #1a1a1a;
+            border-bottom: 1px solid rgba(99,49,138,0.5);
         }
 
         .historial-tab {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
             border-radius: 25px;
-            background: #f8f8f8;
-            color: #666;
-            font-size: 0.9em;
+            background: #2a2a2a;
+            color: #aaa;
+            font-size: 0.8em;
             white-space: nowrap;
             cursor: pointer;
         }
 
         .historial-tab.active {
-            background: #63318A;
+            background: linear-gradient(135deg, #63318A, #40D32A);
             color: white;
         }
 
-        .historial-content {
-            padding: 20px;
-        }
-
-        .timeline-item {
-            background: #f8f8f8;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            border-left: 4px solid #63318A;
-        }
-
-        .btn {
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin: 5px 0;
-        }
-
-        .btn-primary {
-            background: #63318A;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #333;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-success {
-            background: #40D32A;
-            color: white;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Header de clientes con botón de logout */
         .clientes-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
             gap: 10px;
         }
 
-        /* ============================================ */
-        /* ===== EFECTOS ANIMADOS ===== */
-        /* ============================================ */
-        
-        /* Scroll suave */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Animación de entrada para secciones */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .section {
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        /* Efecto hover en botones */
-        .btn, .hero-btn, .package-btn, .contact-submit, .password-btn, .photo-btn {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .btn:hover, .hero-btn:hover, .package-btn:hover, .contact-submit:hover, .password-btn:hover, .photo-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(99, 49, 138, 0.3);
-        }
-        
-        /* Efecto hover en tarjetas de planes */
-        .package-card, .client-card, .oferta-card, .payment-card {
-            transition: all 0.3s ease;
-        }
-        
-        .package-card:hover, .client-card:hover, .oferta-card:hover, .payment-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* Efecto en inputs cuando están en foco */
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: #63318A;
-            box-shadow: 0 0 0 3px rgba(99, 49, 138, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        /* Efecto pulsación en el safacón (botón eliminar) */
-        .delete-client-btn {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 8px rgba(220, 53, 69, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-            }
-        }
-        
-        /* Feedback al hacer clic en botones */
-        button:active {
-            transform: scale(0.98);
-            transition: transform 0.1s ease;
-        }
-        
-        /* Efecto hover en los items del menú */
-        .menu-item {
-            transition: all 0.3s ease;
-        }
-        
-        .menu-item:hover {
-            background: #f5f5f5;
-            padding-left: 30px;
-        }
-        
-        /* Efecto de brillo en el hero button */
-        .hero-btn {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(30deg);
-            animation: shine 4s infinite;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(30deg); }
-            20% { transform: translateX(100%) rotate(30deg); }
-            100% { transform: translateX(100%) rotate(30deg); }
-        }
-        
-        /* Efecto de carga suave para imágenes */
-        .client-photo img, .photo-preview img {
-            transition: transform 0.3s ease;
-        }
-        
-        .client-photo img:hover, .photo-preview img:hover {
-            transform: scale(1.05);
+        /* Info cards */
+        .info-card {
+            background: rgba(30,30,30,0.9);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(99,49,138,0.5);
         }
 
-        /* ===== OPTIMIZACIONES PARA CELULARES ===== */
-        
-        /* Aumentar tamaño de los items del menú para dedos */
-        .menu-item {
-            padding: 18px 25px;
-            min-height: 65px;
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 12px;
         }
-        
-        /* Mejorar el espacio entre elementos */
-        .menu-item div[style*="border-radius: 50%"] {
-            width: 44px !important;
-            height: 44px !important;
-            font-size: 1.5em !important;
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #63318A, #40D32A);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
         }
-        
-        /* Botones más grandes para celular */
-        .hero-btn, .package-btn, .btn, .contact-submit {
-            min-height: 55px;
-            font-size: 1.1em;
-        }
-        
-        /* Ajustar el logo del menú para que no se corte */
-        .menu-logo {
-            font-size: 1.2em;
-            white-space: nowrap;
-        }
-        
-        /* Espaciado en secciones */
-        .section {
-            margin: 0 15px 20px;
+
+        .horarios-card {
+            background: linear-gradient(135deg, rgba(99,49,138,0.3), rgba(64,211,42,0.2));
+            border-radius: 20px;
             padding: 20px;
+            color: white;
+            text-align: center;
+            border: 1px solid rgba(64,211,42,0.5);
         }
-        
-        /* Tarjetas con mejor espaciado */
-        .package-card {
-            padding: 20px;
+
+        .text-white {
+            color: white;
         }
-        
-        .package-price {
-            font-size: 2em;
+
+        .text-center {
+            text-align: center;
         }
-        
-        /* Ofertas en vertical con buen espaciado */
-        .oferta-card, .info-box {
-            margin: 10px 0;
-        }
-        
+
         @media screen and (max-width: 768px) {
-            .menu-logo {
-                font-size: 1em;
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
             }
-            
-            .menu-header {
-                padding: 12px 15px;
-            }
-            
-            .hamburger-btn {
-                font-size: 1.6em;
-                width: 40px;
-                height: 40px;
-            }
-            
-            .hero-content h1 {
-                font-size: 2em;
-            }
-            
-            .hero-content p {
-                font-size: 1em;
-            }
-            
-            .hero-btn {
-                padding: 14px 25px;
-                font-size: 1em;
+        }
+
+        @media screen and (max-width: 480px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- MENÚ HAMBURGUESA ACTUALIZADO -->
-    <div class="menu-header">
-        <div class="menu-logo">
-            QUALITY TRAINING
-        </div>
-        <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
-    </div>
-        
-    <div class="menu-items" id="menuItems">
-        <div class="menu-item active" onclick="showSection('inicio', this)">
-            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-                🏠
+    <div class="content-wrapper">
+        <!-- MENÚ HAMBURGUESA -->
+        <div class="menu-container">
+            <div class="menu-header">
+                <div class="menu-logo">QUALITY TRAINING</div>
+                <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
             </div>
-            Inicio
-        </div>
-        <div class="menu-item" onclick="showSection('planes', this)">
-            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-                🏋️
-            </div>
-            Planes y Ofertas
-        </div>
-        <div class="menu-item" onclick="showSection('registro', this)">
-            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-                📝
-            </div>
-            Registrarme
-        </div>
-        <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view?utm_content=DAGzoaORiFg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h68c62c8712&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnYWWnGR3U4cmEQwznp_dw4c72ziW2r5jDFEP2e6Ylb3fUXjdZeLi8Br9F7Vs_aem_ybRM9yftbP3kZYemE05nPg', '_blank')">
-            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2em;">
-                G
-            </div>
-            Estética
-        </div>
-        <div class="menu-item" onclick="showSection('clientes', this)">
-            <div style="width: 32px; height: 32px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2em;">
-                📋
-            </div>
-            Mis Clientes
-        </div>
-    </div>
-
-    <!-- HERO SECTION - VERSIÓN RESPONSIVE -->
-    <div id="inicio" class="section active">
-        <div class="hero-section" style="display: flex; align-items: flex-end; padding-bottom: 30px;">
-            <div class="hero-content" style="margin-bottom: 20px;">
-                <h1 style="font-size: 2.2em; margin-bottom: 15px;">WHERE FITNESS<br>FINDS ITS HOME</h1>
-                <p style="font-size: 1.1em; max-width: 600px; margin: 0 auto;">Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
-            </div>
-        </div>
-        
-        <!-- SECCIÓN INFORMACIÓN DEL GYM - CENTRALIZADA -->
-        <div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
-            <h2 style="text-align: center; font-size: 2.2em; color: #63318A; margin-bottom: 25px; font-weight: 800;">CONTACT US</h2>
             
-            <div style="display: grid; grid-template-columns: 1fr; gap: 20px; background: white; border-radius: 30px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
-                
-                <!-- CONTACTO - TODO CENTRADO -->
-                <div>
-                    <!-- Dirección - Centrado -->
-                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
-                        <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
-                            📍
-                        </div>
+            <div class="menu-items" id="menuItems">
+                <div class="menu-item active" onclick="showSection('inicio', this)">
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🏠</div>
+                    Inicio
+                </div>
+                <div class="menu-item" onclick="showSection('planes', this)">
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🏋️</div>
+                    Planes y Ofertas
+                </div>
+                <div class="menu-item" onclick="showSection('registro', this)">
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">📝</div>
+                    Registrarme
+                </div>
+                <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view', '_blank')">
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">G</div>
+                    Estética
+                </div>
+                <div class="menu-item" onclick="showSection('clientes', this)">
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">📋</div>
+                    Mis Clientes
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- SECCIÓN INICIO -->
+            <div id="inicio" class="section active">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1>WHERE FITNESS<br>FINDS ITS HOME</h1>
+                        <p>Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h2 class="text-center" style="color: #40D32A; margin-bottom: 20px;">CONTACT US</h2>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
                         <div>
-                            <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Dirección</h3>
-                            <p style="color: #666; line-height: 1.4; font-size: 0.9em;">315 Ave Lauro Piñero<br>Ceiba, PR</p>
+                            <h3 style="color: white;">Dirección</h3>
+                            <p style="color: #ccc;">315 Ave Lauro Piñero, Ceiba, PR</p>
                         </div>
                     </div>
                     
-                    <!-- Teléfono - Centrado -->
-                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
-                        <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
-                            📞
-                        </div>
+                    <div class="info-item">
+                        <div class="info-icon">📞</div>
                         <div>
-                            <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Teléfono</h3>
-                            <p style="color: #666; font-size: 0.9em;">
-                                <a href="tel:7876130243" style="color: #63318A; text-decoration: none; font-weight: 600;">787-613-0243</a>
-                            </p>
+                            <h3 style="color: white;">Teléfono</h3>
+                            <a href="tel:7876130243" style="color: #40D32A; text-decoration: none;">787-613-0243</a>
                         </div>
                     </div>
                     
-                    <!-- Email - Centrado (abre aplicación de correo) -->
-                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 15px; background: #f8f8f8; padding: 15px; border-radius: 15px;">
-                        <div style="width: 50px; height: 50px; background: #63318A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; color: white;">
-                            ✉️
-                        </div>
+                    <div class="info-item">
+                        <div class="info-icon">✉️</div>
                         <div>
-                            <h3 style="color: #333; margin-bottom: 3px; font-weight: 700; font-size: 1.1em;">Email</h3>
-                            <p style="color: #666; font-size: 0.9em;">
-                                <a href="#" onclick="abrirEmail()" style="color: #63318A; text-decoration: none; font-weight: 600; cursor: pointer;">
-                                    qualitytrainingsh.md@gmail.com
-                                </a>
-                            </p>
+                            <h3 style="color: white;">Email</h3>
+                            <a href="#" onclick="abrirEmail()" style="color: #40D32A; text-decoration: none;">qualitytrainingsh.md@gmail.com</a>
                         </div>
                     </div>
+                    
+                    <div class="horarios-card">
+                        <h3 style="margin-bottom: 12px;">⏰ Horarios</h3>
+                        <div><strong>Lunes a Jueves:</strong> 5:00am - 9:00pm</div>
+                        <div><strong>Viernes:</strong> 5:00am - 8:00pm</div>
+                        <div><strong>Sábados:</strong> 8:00am - 2:00pm</div>
+                        <div style="margin-top: 8px;"><strong>Domingos: CERRADO</strong></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button class="hero-btn" onclick="showSection('registro', document.querySelector('.menu-item[onclick*=\"registro\"]'))">ÚNETE AHORA</button>
+                    <button class="hero-btn" onclick="showPlanesSection()" style="background: linear-gradient(135deg, #40D32A, #63318A);">VER PLANES Y OFERTAS</button>
+                </div>
+            </div>
+
+            <!-- SECCIÓN PLANES Y OFERTAS (completa) -->
+            <div id="planes" class="section">
+                <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
                 
-                    <!-- SECCIÓN HORARIOS - VERSIÓN MÁS PEQUEÑA -->
-                    <div style="background: #63318A; border-radius: 20px; padding: 15px; color: white; text-align: center;">
-                        <h3 style="font-size: 1.5em; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                            <span>⏰</span> Horarios
-                        </h3>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <!-- Lunes a Jueves -->
-                            <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
-                                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
-                                    <span style="font-size: 1em;">📅</span>
-                                    <span style="font-weight: 600; font-size: 0.9em;">Lunes a Jueves</span>
-                                </div>
-                                <span style="font-weight: 700; font-size: 1em;">5:00am - 9:00pm</span>
-                            </div>
-                            
-                            <!-- Viernes -->
-                            <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
-                                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
-                                    <span style="font-size: 1em;">📅</span>
-                                    <span style="font-weight: 600; font-size: 0.9em;">Viernes</span>
-                                </div>
-                                <span style="font-weight: 700; font-size: 1em;">5:00am - 8:00pm</span>
-                            </div>
-                            
-                            <!-- Sábados -->
-                            <div style="border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
-                                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 3px;">
-                                    <span style="font-size: 1em;">📅</span>
-                                    <span style="font-weight: 600; font-size: 0.9em;">Sábados</span>
-                                </div>
-                                <span style="font-weight: 700; font-size: 1em;">8:00am - 2:00pm</span>
-                            </div>
-                            
-                            <!-- Domingo -->
-                            <div style="margin-top: 5px; background: rgba(255,255,255,0.2); padding: 8px; border-radius: 30px; text-align: center;">
-                                <span style="font-weight: 600; font-size: 0.9em;">Domingos: CERRADO</span>
-                            </div>
-                        </div>
+                <h3 class="form-subtitle">📅 MEMBRESÍAS INDIVIDUALES</h3>
+                <div class="packages-grid">
+                    <div class="package-card" onclick="seleccionarPlan('1mes')">
+                        <div class="package-name">1 MES</div>
+                        <div class="package-price">$45.00</div>
+                        <ul class="package-features">
+                            <li>Acceso por 30 días</li>
+                            <li>Evaluación física inicial</li>
+                            <li>Rutina de entrenamiento</li>
+                        </ul>
+                        <button class="package-btn">SELECCIONAR</button>
+                    </div>
+
+                    <div class="package-card" onclick="seleccionarPlan('3meses')">
+                        <div class="package-name">3 MESES</div>
+                        <div class="package-price">$114.00</div>
+                        <ul class="package-features">
+                            <li>Acceso por 90 días</li>
+                            <li>Ahorras $21</li>
+                            <li>Evaluación física inicial</li>
+                        </ul>
+                        <button class="package-btn">SELECCIONAR</button>
+                    </div>
+
+                    <div class="package-card" onclick="seleccionarPlan('6meses')">
+                        <div class="package-name">6 MESES</div>
+                        <div class="package-price">$210.00</div>
+                        <ul class="package-features">
+                            <li>Acceso por 180 días</li>
+                            <li>Ahorras $60</li>
+                            <li>Evaluación física inicial</li>
+                        </ul>
+                        <button class="package-btn">SELECCIONAR</button>
+                    </div>
+
+                    <div class="package-card popular" onclick="seleccionarPlan('1año')">
+                        <div class="package-name">1 AÑO</div>
+                        <div class="package-price">$360.00</div>
+                        <ul class="package-features">
+                            <li>Acceso por 365 días</li>
+                            <li>Ahorras $180</li>
+                            <li>Evaluación física inicial</li>
+                        </ul>
+                        <button class="package-btn">SELECCIONAR</button>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- BOTONES CENTRADOS (tamaño normal) -->
-        <div style="max-width: 1200px; margin: 30px auto 50px; padding: 0 20px;">
-            <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-                <button class="hero-btn" onclick="showSection('registro', document.querySelector('.menu-item[onclick*=\"registro\"]'))" 
-                        style="width: 100%; max-width: 350px; padding: 15px 25px; font-size: 1.1em; border-radius: 50px; 
-                               background: #63318A; color: white; border: none; cursor: pointer; font-weight: 600;
-                               box-shadow: 0 4px 15px rgba(99, 49, 138, 0.4);">
-                    ÚNETE AHORA
-                </button>
-                <button class="hero-btn" onclick="showPlanesSection()" 
-                        style="width: 100%; max-width: 350px; padding: 15px 25px; font-size: 1.1em; border-radius: 50px; 
-                               background: #40D32A; color: white; border: none; cursor: pointer; font-weight: 600;
-                               box-shadow: 0 4px 15px rgba(64, 211, 42, 0.4);">
-                    VER PLANES Y OFERTAS
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECCIÓN PLANES Y OFERTAS -->
-    <div id="planes" class="section">
-        <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
-        
-        <!-- PLANES INDIVIDUALES -->
-        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px;">
-            📅 MEMBRESÍAS INDIVIDUALES
-        </h3>
-        
-        <div class="packages-grid" style="margin-bottom: 30px;">
-            <div class="package-card" onclick="seleccionarPlan('1mes')">
-                <div class="package-name">1 MES</div>
-                <div class="package-price">$45.00</div>
-                <ul class="package-features">
-                    <li>Acceso por 30 días</li>
-                    <li>Incluye evaluación física inicial</li>
-                    <li>Rutina de entrenamiento </li>
-                </ul>
-                <button class="package-btn" onclick="seleccionarPlan('1mes')">SELECCIONAR</button>
-            </div>
-
-            <div class="package-card" onclick="seleccionarPlan('3meses')">
-                <div class="package-name">3 MESES</div>
-                <div class="package-price">$114.00</div>
-                <ul class="package-features">
-                    <li>Acceso por 90 días</li>
-                    <li>Ahorras $21</li>
-                    <li>Incluye evaluación física inicial</li>
-                    <li>Rutina de entrenamiento </li>
-                </ul>
-                <button class="package-btn" onclick="seleccionarPlan('3meses')">SELECCIONAR</button>
-            </div>
-
-            <div class="package-card" onclick="seleccionarPlan('6meses')">
-                <div class="package-name">6 MESES</div>
-                <div class="package-price">$210.00</div>
-                <ul class="package-features">
-                    <li>Acceso por 180 días</li>
-                    <li>Ahorras $60</li>
-                    <li>Incluye evaluación física inicial</li>
-                    <li>Rutina de entrenamiento </li>
-                </ul>
-                <button class="package-btn" onclick="seleccionarPlan('6meses')">SELECCIONAR</button>
-            </div>
-
-            <div class="package-card popular" onclick="seleccionarPlan('1año')">
-                <div class="package-name">1 AÑO</div>
-                <div class="package-price">$360.00</div>
-                <ul class="package-features">
-                    <li>Acceso por 365 días</li>
-                    <li>Ahorras $180</li>
-                    <li>Incluye evaluación física inicial</li>
-                    <li>Rutina de entrenamiento </li>
-                </ul>
-                <button class="package-btn popular-btn" onclick="seleccionarPlan('1año')">SELECCIONAR</button>
-            </div>
-        </div>
-
-        <!-- MEMBRESÍA ESPECIAL -->
-        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
-            ⭐ MEMBRESÍA ESPECIAL - $35.00/mes
-        </h3>
-        
-        <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #40D32A; text-align: center;">
-            <p style="font-size: 1.2em; color: #333; margin-bottom: 20px;"><strong>¡Homenaje a nuestros héroes!</strong></p>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px;">
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👮 Policías</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚒 Bomberos</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🚑 Paramédicos</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">⚕️ Manejo de Emergencias</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🎖️ Militares</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">🪖 Veteranos</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👩‍⚕️ Enfermeras</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👨‍⚕️ Doctores</span>
-                <span style="background: #f0f0f0; padding: 8px 15px; border-radius: 20px;">👴 Seniors 65+ años</span>
-            </div>
-            <button class="package-btn" onclick="seleccionarPlan('especial')" style="background: #40D32A; max-width: 300px; margin: 0 auto;">SELECCIONAR MEMBRESÍA ESPECIAL</button>
-        </div>
-
-        <!-- MEMBRESÍA ESTUDIANTIL -->
-        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
-            🎓 MEMBRESÍA ESTUDIANTIL - $23.00/mes
-        </h3>
-        
-        <div style="background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px; border: 2px solid #63318A; text-align: center;">
-            <p style="font-size: 1.2em; color: #333; margin-bottom: 15px;">Estudiantes de 18 años o más deben traer <strong>matrícula del semestre en curso</strong></p>
-            <p style="color: #666;">Válido con identificación estudiantil vigente</p>
-            <button class="package-btn" onclick="seleccionarPlan('estudiante')" style="background: #63318A; max-width: 300px; margin: 20px auto 0;">SELECCIONAR MEMBRESÍA ESTUDIANTIL</button>
-        </div>
-
-        <!-- MEMBRESÍAS GRUPALES -->
-        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #40D32A; padding-bottom: 10px; margin-top: 40px;">
-            👥 MEMBRESÍAS GRUPALES
-        </h3>
-        
-        <div class="packages-grid" style="margin-bottom: 30px;">
-            <div class="package-card" onclick="seleccionarPlan('2personas')">
-                <div class="package-name">2 PERSONAS</div>
-                <div class="package-price">$40<span>/c/u mes</span></div>
-                <ul class="package-features">
-                    <li>Total: $80/mes</li>
-                    <li>Incluye evaluación física inicial</li>
-                    <li>Rutina de entrenamiento </li>
-                </ul>
-                <button class="package-btn" onclick="seleccionarPlan('2personas')">SELECCIONAR</button>
-            </div>
-
-            <div class="package-card popular" onclick="seleccionarPlan('3personas')">
-                <div class="package-name">3+ PERSONAS</div>
-                <div class="package-price">$35<span>/c/u mes</span></div>
-                <ul class="package-features">
-                    <li>Mejor precio por persona</li>
-                    <li>Incluye evaluación física inicial</li>
-                    <li>Rutina de entrenamiento </li>
-                </ul>
-                <button class="package-btn popular-btn" onclick="seleccionarPlan('3personas')">SELECCIONAR</button>
-            </div>
-        </div>
-
-        <!-- PASES DIARIOS Y SEMANALES -->
-        <h3 class="form-subtitle" style="text-align: center; border-left: none; border-bottom: 3px solid #63318A; padding-bottom: 10px; margin-top: 40px;">
-            🎟️ PASES ESPECIALES
-        </h3>
-        
-        <div class="packages-grid" style="margin-bottom: 30px;">
-            <div class="package-card" onclick="seleccionarPlan('daypass')">
-                <div class="package-name">DAY PASS</div>
-                <div class="package-price">$8.97</div>
-                <ul class="package-features">
-                    <li>Acceso por 1 día</li>
-                    <li>Ideal para probar</li>
-                    <li>Sin compromiso</li>
-                </ul>
-                <button class="package-btn" onclick="seleccionarPlan('daypass')">SELECCIONAR</button>
-            </div>
-
-            <div class="package-card" onclick="seleccionarPlan('weekpass')">
-                <div class="package-name">WEEK PASS</div>
-                <div class="package-price">$23.00</div>
-                <ul class="package-features">
-                    <li>Acceso por 1 semana</li>
-                    <li>7 días de entrenamiento</li>
-                    <li>Flexibilidad total</li>
-                </ul>
-                <button class="package-btn" onclick="seleccionarPlan('weekpass')">SELECCIONAR</button>
-            </div>
-        </div>
-
-        <!-- INFORMACIÓN IMPORTANTE -->
-        <div style="background: #f8f8f8; border-radius: 20px; padding: 25px; margin-top: 30px; border-left: 5px solid #63318A;">
-            <h4 style="color: #63318A; margin-bottom: 15px; font-size: 1.3em;">📌 INFORMACIÓN IMPORTANTE</h4>
-            <ul style="color: #666; line-height: 1.8; margin-left: 20px;">
-                <li>💰 Los precios <strong>NO incluyen IVU</strong></li>
-                <li>📅 Al inscribirse se paga <strong>CUOTA ANUAL DE MANTENIMIENTO: $30.00</strong> (una vez al año)</li>
-                <li>✅ Todas nuestras membresías son <strong>SIN CONTRATO y SIN DÉBITO AUTOMÁTICO (Auto Pay)</strong></li>
-                <li>🏋️ Nuestras membresías incluyen: <strong>Evaluación Física Inicial</strong> y <strong>rutina de entrenamiento</strong> con uno de nuestros entrenadores por un periodo de <strong>2 semanas</strong></li>
-            </ul>
-        </div>
-
-        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8em;">
-            * Las promociones no son acumulables. Aplican restricciones.
-        </p>
-    </div>
-
-    <!-- SECCIÓN REGISTRAR CLIENTE -->
-    <div id="registro" class="section">
-        <h2 class="form-title">📝 REGISTRO COMPLETO DE CLIENTE</h2>
-
-        <form id="clientForm">
-            <!-- FOTO -->
-            <div class="photo-section">
-                <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoInput').click()">
-                    <div class="photo-placeholder">📸</div>
+                <h3 class="form-subtitle">⭐ MEMBRESÍA ESPECIAL - $35.00/mes</h3>
+                <div style="background: rgba(0,0,0,0.5); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid #40D32A; text-align: center;">
+                    <p style="color: white; margin-bottom: 15px;"><strong>¡Homenaje a nuestros héroes!</strong></p>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                        <span style="background: rgba(99,49,138,0.5); padding: 5px 12px; border-radius: 20px; color: white;">👮 Policías</span>
+                        <span style="background: rgba(99,49,138,0.5); padding: 5px 12px; border-radius: 20px; color: white;">🚒 Bomberos</span>
+                        <span style="background: rgba(99,49,138,0.5); padding: 5px 12px; border-radius: 20px; color: white;">🚑 Paramédicos</span>
+                        <span style="background: rgba(99,49,138,0.5); padding: 5px 12px; border-radius: 20px; color: white;">🎖️ Militares</span>
+                        <span style="background: rgba(99,49,138,0.5); padding: 5px 12px; border-radius: 20px; color: white;">👴 Seniors 65+</span>
+                    </div>
+                    <button class="package-btn" onclick="seleccionarPlan('especial')">SELECCIONAR</button>
                 </div>
-                <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewImage(this)">
-                <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
-            </div>
 
-            <!-- ===== DATOS PERSONALES ===== -->
-            <h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
-            
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Fecha de Comienzo *</label>
-                    <input type="date" id="fechaComienzo" required>
+                <h3 class="form-subtitle">🎓 MEMBRESÍA ESTUDIANTIL - $23.00/mes</h3>
+                <div style="background: rgba(0,0,0,0.5); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid #63318A; text-align: center;">
+                    <p style="color: white;">Estudiantes con matrícula del semestre en curso</p>
+                    <button class="package-btn" onclick="seleccionarPlan('estudiante')" style="margin-top: 15px;">SELECCIONAR</button>
                 </div>
-                <div class="form-group">
-                    <label>Núm. Socio *</label>
-                    <input type="text" id="numSocio" required placeholder="Ej: SOC-001">
+
+                <h3 class="form-subtitle">👥 MEMBRESÍAS GRUPALES</h3>
+                <div class="packages-grid">
+                    <div class="package-card" onclick="seleccionarPlan('2personas')">
+                        <div class="package-name">2 PERSONAS</div>
+                        <div class="package-price">$40<span>/c/u</span></div>
+                        <ul class="package-features">
+                            <li>Total: $80/mes</li>
+                            <li>Evaluación física inicial</li>
+                        </ul>
+                        <button class="package-btn">SELECCIONAR</button>
+                    </div>
+
+                    <div class="package-card popular" onclick="seleccionarPlan('3personas')">
+                        <div class="package-name">3+ PERSONAS</div>
+                        <div class="package-price">$35<span>/c/u</span></div>
+                        <ul class="package-features">
+                            <li>Mejor precio por persona</li>
+                            <li>Evaluación física inicial</li>
+                        </ul>
+                        <button class="package-btn">SELECCIONAR</button>
+                    </div>
+                </div>
+
+                <h3 class="form-subtitle">🎟️ PASES ESPECIALES</h3>
+                <div class="packages-grid">
+                    <div class="package-card" onclick="seleccionarPlan('daypass')">
+                        <div class="package-name">DAY PASS</div>
+                        <div class="package-price">$8.97</div>
+                        <button class="package-btn">SELECCIONAR</button>
+                    </div>
+
+                    <div class="package-card" onclick="seleccionarPlan('weekpass')">
+                        <div class="package-name">WEEK PASS</div>
+                        <div class="package-price">$23.00</div>
+                        <button class="package-btn">SELECCIONAR</button>
+                    </div>
+                </div>
+
+                <div style="background: rgba(0,0,0,0.5); border-radius: 16px; padding: 16px; margin-top: 16px; border-left: 4px solid #40D32A;">
+                    <p style="color: #ccc;">💰 Precios NO incluyen IVU | 📅 Cuota anual: $30.00 | ✅ Sin contrato ni débito automático</p>
                 </div>
             </div>
 
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Nombre completo *</label>
-                    <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
-                </div>
-                <div class="form-group">
-                    <label>Sexo *</label>
-                    <select id="sexo" required>
-                        <option value="">Seleccionar...</option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Femenino</option>
-                    </select>
-                </div>
+            <!-- SECCIÓN REGISTRO (completa) -->
+            <div id="registro" class="section">
+                <h2 class="form-title">📝 REGISTRO COMPLETO DE CLIENTE</h2>
+                <form id="clientForm">
+                    <div class="photo-section">
+                        <div class="photo-preview" id="photoPreview" onclick="document.getElementById('photoInput').click()">
+                            <div class="photo-placeholder">📸</div>
+                        </div>
+                        <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewImage(this)">
+                        <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
+                    </div>
+
+                    <h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Fecha Comienzo *</label><input type="date" id="fechaComienzo" required></div>
+                        <div class="form-group"><label>Núm. Socio *</label><input type="text" id="numSocio" required placeholder="SOC-001"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Nombre completo *</label><input type="text" id="nombre" required placeholder="Juan Pérez"></div>
+                        <div class="form-group"><label>Sexo *</label><select id="sexo" required><option value="">Seleccionar</option><option value="M">Masculino</option><option value="F">Femenino</option></select></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Fecha nacimiento *</label><input type="date" id="fechaNacimiento" required></div>
+                        <div class="form-group"><label>Edad</label><input type="number" id="edad" readonly></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Peso (kg)</label><input type="text" id="peso" placeholder="70 kg"></div>
+                        <div class="form-group"><label>Estatura (m)</label><input type="text" id="estatura" placeholder="1.75 m"></div>
+                    </div>
+                    <div class="form-group"><label>Dirección</label><input type="text" id="direccion" placeholder="Calle, ciudad"></div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Teléfono</label><input type="tel" id="telefono" placeholder="123-456-7890"></div>
+                        <div class="form-group"><label>Email *</label><input type="email" id="email" required placeholder="ejemplo@email.com"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label>Contacto emergencia</label><input type="text" id="contactoEmergencia" placeholder="Nombre"></div>
+                        <div class="form-group"><label>Teléfono emergencia</label><input type="tel" id="telEmergencia" placeholder="123-456-7890"></div>
+                    </div>
+
+                    <h3 class="form-subtitle">💳 SELECCIONA TU PLAN</h3>
+                    <div class="form-group">
+                        <select id="membresia" required>
+                            <option value="Básica">Plan Básico - $45/mes</option>
+                            <option value="Estándar">Plan Estándar - $49/mes</option>
+                            <option value="Premium">Plan Premium - $79/mes</option>
+                            <option value="VIP">Plan VIP - $129/mes</option>
+                        </select>
+                    </div>
+
+                    <h3 class="form-subtitle">🏥 HISTORIAL MÉDICO</h3>
+                    <div class="checkbox-group">
+                        <div class="grid-3">
+                            <label class="checkbox-item"><input type="checkbox" value="Alta Presión"> Alta Presión</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Diabetes"> Diabetes</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Artritis"> Artritis</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Asma"> Asma</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Problemas Cardíacos"> Problemas Cardíacos</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Operaciones"> Operaciones</label>
+                        </div>
+                    </div>
+                    <div class="form-group"><textarea id="explicacionHistorial" rows="2" placeholder="Detalles adicionales..."></textarea></div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 20px;">
+                        <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">LIMPIAR</button>
+                        <button type="submit" class="btn btn-primary">REGISTRARME</button>
+                    </div>
+                </form>
             </div>
 
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Fecha de nacimiento *</label>
-                    <input type="date" id="fechaNacimiento" required>
+            <!-- SECCIÓN MIS CLIENTES -->
+            <div id="clientes" class="section">
+                <div class="clientes-header">
+                    <h2 class="form-title">📋 Mis Clientes</h2>
+                    <button class="btn-logout" onclick="cerrarSesionClientes()">Cerrar Sesión</button>
                 </div>
-                <div class="form-group">
-                    <label>Edad *</label>
-                    <input type="number" id="edad" readonly>
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Peso (kg)</label>
-                    <input type="text" id="peso" placeholder="Ej: 70 kg">
-                </div>
-                <div class="form-group">
-                    <label>Estatura (m)</label>
-                    <input type="text" id="estatura" placeholder="Ej: 1.75 m">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Dirección</label>
-                <input type="text" id="direccion" placeholder="Calle, ciudad, código postal">
-            </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Teléfono / Celular</label>
-                    <input type="tel" id="telefono" placeholder="123-456-7890">
-                </div>
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" id="email" required placeholder="ejemplo@email.com">
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Contacto de emergencia (nombre)</label>
-                    <input type="text" id="contactoEmergencia" placeholder="Nombre completo">
-                </div>
-                <div class="form-group">
-                    <label>Teléfono de emergencia</label>
-                    <input type="tel" id="telEmergencia" placeholder="123-456-7890">
-                </div>
-            </div>
-
-            <!-- ===== MEMBRESÍA ===== -->
-            <h3 class="form-subtitle">💳 SELECCIONA TU PLAN</h3>
-            <div class="form-group">
-                <select id="membresia" required>
-                    <option value="Básica">Plan Básico - $45/mes</option>
-                    <option value="Estándar">Plan Estándar - $49/mes</option>
-                    <option value="Premium">Plan Premium - $79/mes</option>
-                    <option value="VIP">Plan VIP - $129/mes</option>
-                </select>
-            </div>
-
-            <!-- ===== HISTORIAL MÉDICO PASADO/PRESENTE ===== -->
-            <h3 class="form-subtitle">🏥 HISTORIAL MÉDICO PASADO Y/O PRESENTE</h3>
-            
-            <div class="checkbox-group">
-                <div class="grid-3">
-                    <label class="checkbox-item"><input type="checkbox" id="histAltaPresion" value="Alta Presión"> Alta Presión</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histAtaqueCorazon" value="Ataque al Corazón"> Ataque al Corazón</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histArtritis" value="Artritis"> Artritis</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histArterias" value="Enfermedad de las arterias"> Enfermedad de las arterias</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histPulmonar" value="Enfermedad Pulmonar"> Enfermedad Pulmonar</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histEpilepsia" value="Epilepsia"> Epilepsia</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histEspalda" value="Espalda Lastimada"> Espalda Lastimada</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histReumatica" value="Fiebre Reumática"> Fiebre Reumática</label>
-                    <label class="checkbox-item"><input type="checkbox" id="histOperaciones" value="Operaciones"> Operaciones</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Explique lo marcado (si es necesario):</label>
-                <textarea id="explicacionHistorial" rows="2" placeholder="Detalles adicionales..."></textarea>
-            </div>
-
-            <!-- BOTONES -->
-            <div style="display: flex; gap: 15px; margin-top: 30px;">
-                <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()" style="flex: 1;">LIMPIAR</button>
-                <button type="submit" class="btn btn-primary" style="flex: 1;">REGISTRARME</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- SECCIÓN MIS CLIENTES -->
-    <div id="clientes" class="section">
-        <div class="clientes-header">
-            <h2 class="form-title">📋 Mis Clientes</h2>
-            <button class="btn-logout" onclick="cerrarSesionClientes()">🔒 Cerrar Sesión</button>
-        </div>
-
-        <div class="form-group">
-            <input type="text" id="searchClient" placeholder="🔍 Buscar cliente..." onkeyup="buscarClientes()">
-        </div>
-
-        <div class="clients-grid" id="clientsList"></div>
-    </div>
-
-    <!-- MODAL DE CONTRASEÑA PARA MIS CLIENTES -->
-    <div id="passwordModal" class="password-modal">
-        <div class="password-content">
-            <div class="password-icon">🔒</div>
-            <h2 class="password-title">Acceso Restringido</h2>
-            <p class="password-subtitle">Ingresa la contraseña para ver la lista de clientes</p>
-            
-            <input type="password" id="passwordInput" class="password-input" placeholder="Contraseña" onkeypress="if(event.key==='Enter') verificarPasswordClientes()" maxlength="20" autofocus>
-            
-            <button class="password-btn" onclick="verificarPasswordClientes()" id="passwordBtn">
-                INGRESAR
-            </button>
-            
-            <button class="password-btn-secondary" onclick="cerrarPasswordClientes()">
-                ✕ CERRAR Y VOLVER AL INICIO
-            </button>
-            
-            <div class="password-error" id="passwordError"></div>
-            <div class="password-attempts" id="passwordAttempts"></div>
-        </div>
-    </div>
-
-    <!-- MODAL DE CONFIRMACIÓN -->
-    <div id="confirmDeleteModal" class="confirm-modal">
-        <div class="confirm-content">
-            <div class="confirm-icon">🗑️</div>
-            <h3 style="margin-bottom: 10px;">¿Eliminar cliente?</h3>
-            <p id="deleteClientMessage" style="color: #666; margin-bottom: 20px;"></p>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-secondary" onclick="cerrarConfirmModal()">Cancelar</button>
-                <button class="btn btn-danger" onclick="confirmarEliminarCliente()">ELIMINAR</button>
+                <div class="form-group"><input type="text" id="searchClient" placeholder="🔍 Buscar cliente..." onkeyup="buscarClientes()"></div>
+                <div class="clients-grid" id="clientsList"></div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE HISTORIAL -->
-    <div id="historialModal" class="historial-modal">
-        <div class="historial-header" id="historialHeader"></div>
-        <div class="historial-tabs" id="historialTabs">
-            <button class="historial-tab active" onclick="showHistorialTab('pagos')">💰 Pagos</button>
-            <button class="historial-tab" onclick="showHistorialTab('visitas')">📅 Visitas</button>
-            <button class="historial-tab" onclick="showHistorialTab('progreso')">📊 Progreso</button>
-            <button class="historial-tab" onclick="showHistorialTab('medico')">🏥 Médico</button>
-            <button class="historial-tab" onclick="showHistorialTab('notas')">📝 Notas</button>
-        </div>
-        <div class="historial-content" id="historialContent"></div>
-    </div>
+    <!-- MODALES -->
+    <div id="passwordModal" class="password-modal"><div class="password-content"><div class="password-icon">🔒</div><h2 class="password-title">Acceso Restringido</h2><p class="password-subtitle">Ingresa la contraseña</p><input type="password" id="passwordInput" class="password-input" placeholder="Contraseña" onkeypress="if(event.key==='Enter') verificarPasswordClientes()"><button class="password-btn" onclick="verificarPasswordClientes()">INGRESAR</button><button class="password-btn-secondary" onclick="cerrarPasswordClientes()">CERRAR</button><div class="password-error" id="passwordError"></div></div></div>
+    <div id="confirmDeleteModal" class="confirm-modal"><div class="confirm-content"><div class="confirm-icon">🗑️</div><h3>¿Eliminar cliente?</h3><p id="deleteClientMessage"></p><div style="display: flex; gap: 10px;"><button class="btn btn-secondary" onclick="cerrarConfirmModal()">Cancelar</button><button class="btn btn-danger" onclick="confirmarEliminarCliente()">ELIMINAR</button></div></div></div>
+    <div id="historialModal" class="historial-modal"><div class="historial-header" id="historialHeader"></div><div class="historial-tabs"><button class="historial-tab active" onclick="showHistorialTab('pagos')">💰 Pagos</button><button class="historial-tab" onclick="showHistorialTab('visitas')">📅 Visitas</button><button class="historial-tab" onclick="showHistorialTab('progreso')">📊 Progreso</button><button class="historial-tab" onclick="showHistorialTab('medico')">🏥 Médico</button><button class="historial-tab" onclick="showHistorialTab('notas')">📝 Notas</button></div><div class="historial-content" id="historialContent"></div></div>
 
     <script>
         // Variables globales
         let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
         let clienteSeleccionado = null;
         let clienteAEliminar = null;
-        let metodoPagoSeleccionado = null;
-
-        // ===== SISTEMA DE CONTRASEÑA PARA MIS CLIENTES =====
         let sesionClientesActiva = false;
         let intentosFallidos = 0;
         const CONTRASENA_CLIENTES = "gym2024";
 
-        function mostrarPasswordClientes() {
-            document.getElementById('passwordModal').classList.add('active');
-            document.getElementById('passwordInput').focus();
-        }
-
-        function cerrarPasswordClientes() {
-            document.getElementById('passwordModal').classList.remove('active');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').innerHTML = '';
-            document.getElementById('passwordAttempts').innerHTML = '';
-            showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
-        }
-
-        function verificarPasswordClientes() {
-            const password = document.getElementById('passwordInput').value;
-            const error = document.getElementById('passwordError');
-            const attempts = document.getElementById('passwordAttempts');
-            const btn = document.getElementById('passwordBtn');
-            
-            if (!password) {
-                error.innerHTML = '❌ Ingresa una contraseña';
-                return;
-            }
-            
-            if (password === CONTRASENA_CLIENTES) {
-                sesionClientesActiva = true;
-                intentosFallidos = 0;
-                cerrarPasswordClientes();
-                document.getElementById('clientes').classList.add('active');
-                document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-                document.querySelector('.menu-item[onclick*="clientes"]').classList.add('active');
-                mostrarClientes();
-            } else {
-                intentosFallidos++;
-                
-                if (intentosFallidos >= 3) {
-                    btn.disabled = true;
-                    document.getElementById('passwordInput').disabled = true;
-                    error.innerHTML = '🔒 Demasiados intentos. Espera 30 segundos.';
-                    
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        document.getElementById('passwordInput').disabled = false;
-                        document.getElementById('passwordInput').value = '';
-                        intentosFallidos = 0;
-                        error.innerHTML = '';
-                        attempts.innerHTML = '';
-                    }, 30000);
-                } else {
-                    error.innerHTML = `❌ Contraseña incorrecta. Intento ${intentosFallidos} de 3`;
-                    document.getElementById('passwordInput').value = '';
-                    document.getElementById('passwordInput').focus();
-                    attempts.innerHTML = `Intentos restantes: ${3 - intentosFallidos}`;
-                }
-            }
-        }
-
-        function cerrarSesionClientes() {
-            sesionClientesActiva = false;
-            showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
-        }
-
-        // ===== FUNCIONES DEL MENÚ =====
         function toggleMenu() {
             const menu = document.getElementById('menuItems');
             const btn = document.getElementById('menuToggle');
@@ -1977,30 +1154,22 @@
                 mostrarPasswordClientes();
                 return;
             }
-            
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
-            
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
             element.classList.add('active');
-            
             document.getElementById('menuItems').classList.remove('show');
             document.getElementById('menuToggle').classList.remove('active');
             document.getElementById('menuToggle').textContent = '☰';
-            
-            if (sectionId === 'clientes' && sesionClientesActiva) {
-                mostrarClientes();
-            }
+            if (sectionId === 'clientes' && sesionClientesActiva) mostrarClientes();
         }
 
         function showPlanesSection() {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById('planes').classList.add('active');
-    
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
             const menuItem = document.querySelector('.menu-item[onclick*="planes"]');
             if (menuItem) menuItem.classList.add('active');
-    
             document.getElementById('menuItems').classList.remove('show');
             document.getElementById('menuToggle').classList.remove('active');
             document.getElementById('menuToggle').textContent = '☰';
@@ -2008,35 +1177,41 @@
 
         function seleccionarPlan(plan) {
             showSection('registro', document.querySelector('.menu-item[onclick*="registro"]'));
-            
-            const planMap = {
-                '1mes': 'Básica',
-                '3meses': 'Estándar',
-                '6meses': 'Premium',
-                '1año': 'VIP',
-                'especial': 'Especial',
-                'estudiante': 'Estudiante',
-                '2personas': 'Grupal 2',
-                '3personas': 'Grupal 3+',
-                'daypass': 'Day Pass',
-                'weekpass': 'Week Pass'
-            };
-            
-            const selectPlan = document.getElementById('membresia');
-            if (selectPlan && planMap[plan]) {
-                for(let i = 0; i < selectPlan.options.length; i++) {
-                    if(selectPlan.options[i].value === planMap[plan] || 
-                       selectPlan.options[i].text.includes(planMap[plan])) {
-                        selectPlan.selectedIndex = i;
-                        break;
-                    }
-                }
-            }
-            
-            alert(`✅ Has seleccionado el Plan ${planMap[plan] || plan}. Completa el registro para continuar.`);
+            alert(`✅ Has seleccionado el plan. Completa el registro para continuar.`);
         }
 
-        // ===== FUNCIONES DE REGISTRO =====
+        function mostrarPasswordClientes() {
+            document.getElementById('passwordModal').classList.add('active');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function cerrarPasswordClientes() {
+            document.getElementById('passwordModal').classList.remove('active');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').innerHTML = '';
+            showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
+        }
+
+        function verificarPasswordClientes() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === CONTRASENA_CLIENTES) {
+                sesionClientesActiva = true;
+                cerrarPasswordClientes();
+                document.getElementById('clientes').classList.add('active');
+                document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+                document.querySelector('.menu-item[onclick*="clientes"]').classList.add('active');
+                mostrarClientes();
+            } else {
+                document.getElementById('passwordError').innerHTML = '❌ Contraseña incorrecta';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function cerrarSesionClientes() {
+            sesionClientesActiva = false;
+            showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
+        }
+
         function previewImage(input) {
             const preview = document.getElementById('photoPreview');
             if (input.files && input.files[0]) {
@@ -2046,7 +1221,7 @@
             }
         }
 
-        document.getElementById('fechaNacimiento').addEventListener('change', function() {
+        document.getElementById('fechaNacimiento')?.addEventListener('change', function() {
             if (this.value) {
                 const hoy = new Date();
                 const nac = new Date(this.value);
@@ -2066,21 +1241,16 @@
             if (edadInput) edadInput.value = '';
             const numSocio = document.getElementById('numSocio');
             if (numSocio) numSocio.value = `SOC-${Date.now().toString().slice(-6)}`;
-            
-            // Limpiar checkboxes
             document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(cb => cb.checked = false);
         }
 
-        // Guardar cliente
-        document.getElementById('clientForm').addEventListener('submit', function(e) {
+        document.getElementById('clientForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
-
             const condiciones = [];
             document.querySelectorAll('.checkbox-item input:checked').forEach(cb => condiciones.push(cb.value));
-
             const cliente = {
                 id: Date.now(),
-                numSocio: document.getElementById('numSocio').value || `SOC-${Date.now()}`,
+                numSocio: document.getElementById('numSocio').value,
                 fechaComienzo: document.getElementById('fechaComienzo').value,
                 nombre: document.getElementById('nombre').value,
                 sexo: document.getElementById('sexo').value,
@@ -2101,307 +1271,45 @@
                 activo: true,
                 historial: { pagos: [], visitas: [], progreso: [], medico: [], notas: [] }
             };
-
             clientes.push(cliente);
             localStorage.setItem('clientes', JSON.stringify(clientes));
             limpiarFormulario();
-            
             alert(`✅ Cliente ${cliente.nombre} registrado exitosamente.`);
             showSection('inicio', document.querySelector('.menu-item[onclick*="inicio"]'));
         });
 
-        // ===== FUNCIONES DE CLIENTES =====
         function mostrarClientes(filtro = '') {
             const container = document.getElementById('clientsList');
             if (!container) return;
-            
-            let filtrados = filtro ? clientes.filter(c => c.nombre.toLowerCase().includes(filtro.toLowerCase()) || c.email.toLowerCase().includes(filtro.toLowerCase())) : clientes;
-
+            let filtrados = filtro ? clientes.filter(c => c.nombre.toLowerCase().includes(filtro.toLowerCase())) : clientes;
             if (filtrados.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 30px; color: #666;">📭 No hay clientes registrados</div>';
+                container.innerHTML = '<div style="text-align: center; padding: 30px; color: #888;">📭 No hay clientes registrados</div>';
                 return;
             }
-
-            container.innerHTML = filtrados.map(cliente => {
-                const clienteId = String(cliente.id);
-                return `
-                <div class="client-card" data-cliente-id="${clienteId}">
-                    <button class="delete-client-btn" onclick="mostrarConfirmEliminar('${clienteId}', '${cliente.nombre.replace(/'/g, "\\'")}')">🗑️</button>
-                    <div class="client-photo" onclick="verHistorial('${clienteId}')">
-                        ${cliente.foto ? `<img src="${cliente.foto}" alt="${cliente.nombre}">` : '📷'}
-                        <span class="client-status ${cliente.activo ? '' : 'inactive'}"></span>
-                    </div>
-                    <div class="client-info" onclick="verHistorial('${clienteId}')">
+            container.innerHTML = filtrados.map(cliente => `
+                <div class="client-card">
+                    <button class="delete-client-btn" onclick="mostrarConfirmEliminar('${cliente.id}', '${cliente.nombre.replace(/'/g, "\\'")}')">🗑️</button>
+                    <div class="client-photo" onclick="verHistorial('${cliente.id}')">${cliente.foto ? `<img src="${cliente.foto}">` : '📷'}<span class="client-status"></span></div>
+                    <div class="client-info" onclick="verHistorial('${cliente.id}')">
                         <h3>${cliente.nombre}</h3>
                         <p>📧 ${cliente.email}</p>
-                        <p>📞 ${cliente.telefono || 'N/A'}</p>
-                        <p>💳 ${cliente.membresia || 'Básica'}</p>
-                        <p>📋 #${cliente.numSocio || 'N/A'}</p>
+                        <p>💳 ${cliente.membresia}</p>
                     </div>
                 </div>
-            `}).join('');
+            `).join('');
         }
 
-        function buscarClientes() {
-            mostrarClientes(document.getElementById('searchClient').value);
-        }
-
-        function mostrarConfirmEliminar(id, nombre) {
-            clienteAEliminar = id;
-            document.getElementById('deleteClientMessage').innerHTML = `¿Estás seguro que deseas eliminar a <strong>${nombre}</strong>? Esta acción eliminará permanentemente al cliente y todo su historial.`;
-            document.getElementById('confirmDeleteModal').classList.add('active');
-        }
-
-        function cerrarConfirmModal() {
-            document.getElementById('confirmDeleteModal').classList.remove('active');
-            clienteAEliminar = null;
-        }
-
-        function confirmarEliminarCliente() {
-            if (clienteAEliminar) {
-                clientes = clientes.filter(c => String(c.id) !== String(clienteAEliminar));
-                localStorage.setItem('clientes', JSON.stringify(clientes));
-                cerrarConfirmModal();
-                mostrarClientes();
-                alert('✅ Cliente eliminado permanentemente');
-                clienteAEliminar = null;
-            }
-        }
-
-        function verHistorial(id) {
-            clienteSeleccionado = clientes.find(c => String(c.id) === String(id));
-            if (!clienteSeleccionado) return;
-
-            document.getElementById('historialHeader').innerHTML = `
-                <div class="historial-header-content">
-                    <img src="${clienteSeleccionado.foto || 'https://via.placeholder.com/60'}" class="historial-avatar">
-                    <div>
-                        <h3>${clienteSeleccionado.nombre}</h3>
-                        <small>${clienteSeleccionado.email} | #${clienteSeleccionado.numSocio || ''}</small>
-                    </div>
-                    <button class="historial-back" onclick="cerrarHistorial()">✕</button>
-                </div>
-            `;
-
-            actualizarHistorialCompleto();
-            document.getElementById('historialModal').classList.add('active');
-        }
-
-        function cerrarHistorial() {
-            document.getElementById('historialModal').classList.remove('active');
-            clienteSeleccionado = null;
-        }
-
-        function showHistorialTab(tab) {
-            document.querySelectorAll('.historial-tab').forEach(t => t.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
-            actualizarHistorialCompleto(tab);
-        }
-
-        function actualizarHistorialCompleto(seccionActiva = 'pagos') {
-            if (!clienteSeleccionado) return;
-
-            const pagos = clienteSeleccionado.historial?.pagos || [];
-            const visitas = clienteSeleccionado.historial?.visitas || [];
-            const progreso = clienteSeleccionado.historial?.progreso || [];
-            const medico = clienteSeleccionado.historial?.medico || [];
-            const notas = clienteSeleccionado.historial?.notas || [];
-
-            const totalPagado = pagos.reduce((s, p) => s + (p.monto || 0), 0);
-
-            document.getElementById('historialContent').innerHTML = `
-                <div id="pagos-section" class="historial-section" style="${seccionActiva !== 'pagos' ? 'display: none;' : ''}">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
-                            <div>Total Pagado</div>
-                            <div style="font-size: 1.5em; font-weight: bold; color: #63318A;">$${totalPagado}</div>
-                        </div>
-                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
-                            <div>Último Pago</div>
-                            <div style="font-size: 1.5em; font-weight: bold; color: #333;">${pagos.length ? new Date(pagos[pagos.length-1].fecha).toLocaleDateString() : '-'}</div>
-                        </div>
-                    </div>
-                    ${pagos.length ? pagos.slice().reverse().map(p => `
-                        <div class="timeline-item">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>📅 ${new Date(p.fecha).toLocaleDateString()}</span>
-                                <span style="font-weight: bold; color: #63318A;">$${p.monto}</span>
-                            </div>
-                            <div>${p.concepto || 'Membresía'} - ${p.metodo}</div>
-                        </div>
-                    `).join('') : '<p style="text-align: center; color: #666;">No hay pagos</p>'}
-                </div>
-
-                <div id="visitas-section" class="historial-section" style="${seccionActiva !== 'visitas' ? 'display: none;' : ''}">
-                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 10px; color: #63318A;">📅 Registrar Visita</h4>
-                        <input type="date" id="visitaFecha" class="form-group" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
-                        <select id="visitaTipo" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                            <option value="Regular">Regular</option>
-                            <option value="Clase grupal">Clase grupal</option>
-                            <option value="Personal">Entrenamiento personal</option>
-                        </select>
-                        <button class="btn btn-primary" onclick="registrarVisita()">Registrar Visita</button>
-                    </div>
-                    ${visitas.length ? visitas.slice().reverse().map(v => `
-                        <div class="timeline-item">
-                            <div>📅 ${new Date(v.fecha).toLocaleDateString()}</div>
-                            <div>${v.tipo}</div>
-                        </div>
-                    `).join('') : '<p style="text-align: center; color: #666;">No hay visitas</p>'}
-                </div>
-
-                <div id="progreso-section" class="historial-section" style="${seccionActiva !== 'progreso' ? 'display: none;' : ''}">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
-                            <div>Peso Inicial</div>
-                            <div style="font-size: 1.5em; font-weight: bold; color: #63318A;">${progreso[0]?.peso || '-'} kg</div>
-                        </div>
-                        <div class="stat-card" style="background: #f8f8f8; padding: 15px; border-radius: 12px;">
-                            <div>Peso Actual</div>
-                            <div style="font-size: 1.5em; font-weight: bold; color: #333;">${progreso[progreso.length-1]?.peso || '-'} kg</div>
-                        </div>
-                    </div>
-                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 10px; color: #63318A;">📊 Registrar Medición</h4>
-                        <input type="number" id="medicionPeso" placeholder="Peso (kg)" step="0.1" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        <input type="number" id="medicionAltura" placeholder="Altura (cm)" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        <input type="date" id="medicionFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
-                        <button class="btn btn-primary" onclick="registrarMedicion()">Guardar Medición</button>
-                    </div>
-                    ${progreso.length ? progreso.slice().reverse().map(p => `
-                        <div class="timeline-item">
-                            <div>📅 ${new Date(p.fecha).toLocaleDateString()}</div>
-                            <div>⚖️ ${p.peso} kg</div>
-                        </div>
-                    `).join('') : '<p style="text-align: center; color: #666;">No hay mediciones</p>'}
-                </div>
-
-                <div id="medico-section" class="historial-section" style="${seccionActiva !== 'medico' ? 'display: none;' : ''}">
-                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 10px; color: #63318A;">🏥 Registrar Evolución Médica</h4>
-                        <select id="medicoTipo" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                            <option value="Control">Control</option>
-                            <option value="Lesión">Lesión</option>
-                            <option value="Mejoría">Mejoría</option>
-                        </select>
-                        <textarea id="medicoDescripcion" rows="3" placeholder="Descripción..." style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
-                        <input type="date" id="medicoFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
-                        <button class="btn btn-primary" onclick="registrarEvolucionMedica()">Registrar Evolución</button>
-                    </div>
-                    ${medico.length ? medico.slice().reverse().map(m => `
-                        <div class="timeline-item">
-                            <div>📅 ${new Date(m.fecha).toLocaleDateString()}</div>
-                            <div><strong>${m.tipo}</strong></div>
-                            <div>${m.descripcion}</div>
-                        </div>
-                    `).join('') : '<p style="text-align: center; color: #666;">No hay registros médicos</p>'}
-                </div>
-
-                <div id="notas-section" class="historial-section" style="${seccionActiva !== 'notas' ? 'display: none;' : ''}">
-                    <div class="small-form" style="background: #f8f8f8; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                        <h4 style="margin-bottom: 10px; color: #63318A;">📝 Agregar Nota</h4>
-                        <input type="text" id="notaTitulo" placeholder="Título" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                        <textarea id="notaContenido" rows="3" placeholder="Nota..." style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
-                        <input type="date" id="notaFecha" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;" value="${new Date().toISOString().split('T')[0]}">
-                        <button class="btn btn-primary" onclick="registrarNota()">Guardar Nota</button>
-                    </div>
-                    ${notas.length ? notas.slice().reverse().map(n => `
-                        <div class="timeline-item">
-                            <div>📅 ${new Date(n.fecha).toLocaleDateString()}</div>
-                            <div><strong>${n.titulo}</strong></div>
-                            <div>${n.contenido}</div>
-                        </div>
-                    `).join('') : '<p style="text-align: center; color: #666;">No hay notas</p>'}
-                </div>
-            `;
-        }
-
-        function registrarVisita() {
-            const visita = {
-                id: Date.now(),
-                fecha: document.getElementById('visitaFecha').value,
-                tipo: document.getElementById('visitaTipo').value
-            };
-            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
-            if (!clienteSeleccionado.historial.visitas) clienteSeleccionado.historial.visitas = [];
-            clienteSeleccionado.historial.visitas.push(visita);
-            localStorage.setItem('clientes', JSON.stringify(clientes));
-            actualizarHistorialCompleto('visitas');
-        }
-
-        function registrarMedicion() {
-            const medicion = {
-                id: Date.now(),
-                peso: parseFloat(document.getElementById('medicionPeso').value),
-                altura: parseFloat(document.getElementById('medicionAltura').value) || null,
-                fecha: document.getElementById('medicionFecha').value
-            };
-            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
-            if (!clienteSeleccionado.historial.progreso) clienteSeleccionado.historial.progreso = [];
-            clienteSeleccionado.historial.progreso.push(medicion);
-            localStorage.setItem('clientes', JSON.stringify(clientes));
-            actualizarHistorialCompleto('progreso');
-        }
-
-        function registrarEvolucionMedica() {
-            const evolucion = {
-                id: Date.now(),
-                tipo: document.getElementById('medicoTipo').value,
-                descripcion: document.getElementById('medicoDescripcion').value,
-                fecha: document.getElementById('medicoFecha').value
-            };
-            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
-            if (!clienteSeleccionado.historial.medico) clienteSeleccionado.historial.medico = [];
-            clienteSeleccionado.historial.medico.push(evolucion);
-            localStorage.setItem('clientes', JSON.stringify(clientes));
-            actualizarHistorialCompleto('medico');
-        }
-
-        function registrarNota() {
-            const nota = {
-                id: Date.now(),
-                titulo: document.getElementById('notaTitulo').value || 'Sin título',
-                contenido: document.getElementById('notaContenido').value,
-                fecha: document.getElementById('notaFecha').value
-            };
-            if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] };
-            if (!clienteSeleccionado.historial.notas) clienteSeleccionado.historial.notas = [];
-            clienteSeleccionado.historial.notas.push(nota);
-            localStorage.setItem('clientes', JSON.stringify(clientes));
-            actualizarHistorialCompleto('notas');
-        }
-
-        function abrirEmail() {
-            const email = "qualitytrainingsh.md@gmail.com";
-            const asunto = "Consulta desde Quality Training";
-            const cuerpo = "Hola, me gustaría obtener más información sobre los planes y membresías de Quality Training.%0D%0A%0D%0A%0D%0A---%0D%0AEnviado desde la página web de Quality Training";
-            
-            window.location.href = `mailto:${email}?subject=${encodeURIComponent(asunto)}&body=${cuerpo}`;
-            
-            setTimeout(() => {
-                if(confirm('¿No se abrió tu aplicación de correo?\n\n¿Quieres usar Gmail en el navegador?')) {
-                    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(asunto)}&body=${cuerpo}`, '_blank');
-                }
-            }, 2000);
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                cerrarConfirmModal();
-                cerrarHistorial();
-                cerrarPasswordClientes();
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            mostrarClientes();
-            const numSocioInput = document.getElementById('numSocio');
-            if (numSocioInput) numSocioInput.value = `SOC-${Date.now().toString().slice(-6)}`;
-            
-            const fechaComienzo = document.getElementById('fechaComienzo');
-            if (fechaComienzo) fechaComienzo.value = new Date().toISOString().split('T')[0];
-        });
+        function buscarClientes() { mostrarClientes(document.getElementById('searchClient')?.value); }
+        function mostrarConfirmEliminar(id, nombre) { clienteAEliminar = id; document.getElementById('deleteClientMessage').innerHTML = `¿Eliminar a <strong>${nombre}</strong>?`; document.getElementById('confirmDeleteModal').classList.add('active'); }
+        function cerrarConfirmModal() { document.getElementById('confirmDeleteModal').classList.remove('active'); clienteAEliminar = null; }
+        function confirmarEliminarCliente() { if (clienteAEliminar) { clientes = clientes.filter(c => c.id != clienteAEliminar); localStorage.setItem('clientes', JSON.stringify(clientes)); cerrarConfirmModal(); mostrarClientes(); alert('✅ Cliente eliminado'); clienteAEliminar = null; } }
+        function verHistorial(id) { clienteSeleccionado = clientes.find(c => c.id == id); if (!clienteSeleccionado) return; document.getElementById('historialHeader').innerHTML = `<div class="historial-header-content"><div><h3>${clienteSeleccionado.nombre}</h3><small>${clienteSeleccionado.email}</small></div><button class="historial-back" onclick="cerrarHistorial()">✕</button></div>`; actualizarHistorialCompleto(); document.getElementById('historialModal').classList.add('active'); }
+        function cerrarHistorial() { document.getElementById('historialModal').classList.remove('active'); clienteSeleccionado = null; }
+        function showHistorialTab(tab) { document.querySelectorAll('.historial-tab').forEach(t => t.classList.remove('active')); if(event?.target) event.target.classList.add('active'); actualizarHistorialCompleto(tab); }
+        function actualizarHistorialCompleto(seccion = 'pagos') { if (!clienteSeleccionado) return; const pagos = clienteSeleccionado.historial?.pagos || []; const visitas = clienteSeleccionado.historial?.visitas || []; document.getElementById('historialContent').innerHTML = `<div style="${seccion !== 'pagos' ? 'display:none' : ''}">${pagos.length ? pagos.map(p => `<div class="timeline-item">📅 ${p.fecha}<br>💰 $${p.monto}</div>`).join('') : '<p>No hay pagos</p>'}</div><div style="${seccion !== 'visitas' ? 'display:none' : ''}"><div class="small-form" style="background:rgba(0,0,0,0.5);padding:15px;border-radius:12px;margin-bottom:15px;"><h4 style="color:white;">📅 Registrar Visita</h4><input type="date" id="visitaFecha" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #40D32A;border-radius:8px;background:#0a0a0a;color:white;"><button class="btn btn-primary" onclick="registrarVisita()">Registrar</button></div>${visitas.length ? visitas.map(v => `<div class="timeline-item">📅 ${v.fecha}<br>${v.tipo}</div>`).join('') : '<p>No hay visitas</p>'}</div>`; }
+        function registrarVisita() { if (!clienteSeleccionado.historial) clienteSeleccionado.historial = { pagos: [], visitas: [], progreso: [], medico: [], notas: [] }; clienteSeleccionado.historial.visitas.push({ id: Date.now(), fecha: document.getElementById('visitaFecha')?.value || new Date().toISOString().split('T')[0], tipo: 'Regular' }); localStorage.setItem('clientes', JSON.stringify(clientes)); actualizarHistorialCompleto('visitas'); }
+        function abrirEmail() { window.location.href = "mailto:qualitytrainingsh.md@gmail.com?subject=Consulta desde Quality Training"; }
+        document.addEventListener('DOMContentLoaded', () => { mostrarClientes(); const numSocio = document.getElementById('numSocio'); if(numSocio) numSocio.value = `SOC-${Date.now().toString().slice(-6)}`; const fechaComienzo = document.getElementById('fechaComienzo'); if(fechaComienzo) fechaComienzo.value = new Date().toISOString().split('T')[0]; });
     </script>
 </body>
 </html>
