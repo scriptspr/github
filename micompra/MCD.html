@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiCompraVecina PR — Área Este</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #0d6b6b;
+  --teal-light: #14919b;
+  --teal-pale: #e0f5f5;
+  --sun: #f5a623;
+  --sun-pale: #fff6e0;
+  --sea: #1a8caa;
+  --coral: #e85d5d;
+  --green: #22a06b;
+  --green-pale: #d4f5e9;
+  --bg: #f4f7f6;
+  --white: #ffffff;
+  --text: #1a2e2e;
+  --muted: #607070;
+  --border: #d0e4e4;
+  --radius: 18px;
+  --shadow: 0 4px 24px rgba(13,107,107,0.10);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, var(--teal) 0%, #0a4f4f 60%, #0d5e6e 100%);
+  color: white;
+  padding: 22px 32px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  position: relative; overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.logo { display: flex; align-items: center; gap: 14px; }
+.logo-icon {
+  width: 48px; height: 48px; background: var(--sun); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  box-shadow: 0 2px 12px rgba(245,166,35,0.4);
+}
+.logo-text h1 { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+.logo-text p { font-size: 0.78rem; opacity: 0.75; margin-top: 2px; }
+.header-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.badge { padding: 5px 14px; border-radius: 30px; font-size: 0.72rem; font-weight: 600; }
+.badge-live { background: var(--coral); animation: pulse 1.8s infinite; }
+.badge-area { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.65} }
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 0; overflow-x: auto;
+}
+.stat-item {
+  flex: 1; min-width: 120px; padding: 14px 20px;
+  display: flex; align-items: center; gap: 10px;
+  border-right: 1px solid var(--border);
+  cursor: pointer; transition: background 0.2s;
+}
+.stat-item:hover { background: var(--teal-pale); }
+.stat-item:last-child { border-right: none; }
+.stat-icon { font-size: 1.3rem; }
+.stat-info { display: flex; flex-direction: column; }
+.stat-num { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--teal); line-height: 1; }
+.stat-label { font-size: 0.68rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ===== LAYOUT ===== */
+.app-layout { display: grid; grid-template-columns: 420px 1fr; height: calc(100vh - 130px); }
+.left-panel { overflow-y: auto; border-right: 1px solid var(--border); background: white; }
+.right-panel { position: relative; background: var(--bg); }
+
+/* ===== TABS ===== */
+.tabs { display: flex; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: white; z-index: 10; }
+.tab { flex: 1; padding: 13px 8px; text-align: center; font-size: 0.78rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: 0.2s; border-bottom: 3px solid transparent; letter-spacing: 0.3px; text-transform: uppercase; }
+.tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+.tab:hover:not(.active) { background: var(--teal-pale); }
+.tab-count { background: var(--teal); color: white; font-size: 0.6rem; padding: 1px 6px; border-radius: 20px; margin-left: 4px; vertical-align: middle; }
+
+/* ===== PANEL SECTIONS ===== */
+.panel-section { display: none; }
+.panel-section.active { display: block; }
+
+/* ===== FORM STYLES ===== */
+.form-wrapper { padding: 20px; }
+.section-title {
+  font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 14px; margin-top: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.form-group { margin-bottom: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+label { display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 5px; color: var(--text); }
+label span { color: var(--coral); margin-left: 2px; }
+input, textarea, select {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--text);
+  background: var(--bg); transition: border 0.2s, box-shadow 0.2s;
+  appearance: none;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--teal-light);
+  box-shadow: 0 0 0 3px rgba(20,145,155,0.12);
+  background: white;
+}
+textarea { resize: vertical; min-height: 72px; }
+.btn-submit {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  color: white; border: none; border-radius: 12px;
+  font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; transition: 0.2s; letter-spacing: 0.3px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,107,107,0.3); }
+.btn-submit:active { transform: translateY(0); }
+
+/* locality highlight */
+.locality-chip {
+  background: var(--sun-pale); border: 1px solid #f5d080; border-radius: 10px;
+  padding: 10px 14px; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px; font-size: 0.82rem;
+}
+.locality-chip strong { color: var(--teal); }
+
+/* ===== ORDERS LIST ===== */
+.orders-wrapper { padding: 16px; }
+.filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 5px 14px; border-radius: 20px; font-size: 0.74rem; font-weight: 600;
+  border: 1.5px solid var(--border); background: white; cursor: pointer; transition: 0.2s;
+  color: var(--muted);
+}
+.filter-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+
+.order-card {
+  background: white; border-radius: 14px; padding: 14px;
+  margin-bottom: 10px; border: 1.5px solid var(--border);
+  transition: box-shadow 0.2s, border-color 0.2s; position: relative;
+}
+.order-card:hover { box-shadow: var(--shadow); border-color: var(--teal-light); }
+.order-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.order-client-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--teal); display: flex; align-items: center; gap: 6px; }
+.live-dot { width: 7px; height: 7px; background: var(--coral); border-radius: 50%; animation: pulse 1.2s infinite; }
+.status-pill {
+  padding: 3px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.s-pendiente { background: #fff3cd; color: #a06200; }
+.s-recogido { background: #d0eeff; color: #0060a0; }
+.s-entregado { background: var(--green-pale); color: #15783d; }
+
+.order-meta { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+.order-meta strong { color: var(--text); }
+.order-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.btn-sm {
+  padding: 5px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+  border: 1.5px solid var(--border); background: white; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px; transition: 0.15s; color: var(--text);
+}
+.btn-sm:hover { background: var(--bg); }
+.btn-ping { background: var(--sea); color: white; border-color: var(--sea); }
+.btn-ping:hover { background: #146b87; }
+.btn-deliver { background: var(--green); color: white; border-color: var(--green); }
+.btn-danger { color: var(--coral); }
+.btn-danger:hover { background: #fff0f0; border-color: var(--coral); }
+
+.empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.4; }
+.empty-state p { font-size: 0.85rem; }
+
+/* ===== PING PANEL ===== */
+.ping-panel {
+  margin: 0 16px 16px; padding: 14px;
+  background: var(--bg); border-radius: 14px; border: 1.5px solid var(--border);
+}
+.ping-row { display: flex; align-items: center; justify-content: space-between; }
+.ping-label { font-size: 0.78rem; color: var(--muted); }
+.quality-badge {
+  padding: 3px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 700;
+}
+.q-excelente { background: var(--green); color: white; }
+.q-buena { background: var(--sea); color: white; }
+.q-regular { background: var(--sun); color: white; }
+.q-mala { background: var(--coral); color: white; }
+.q-waiting { background: var(--border); color: var(--muted); }
+.signal-bars { display: flex; gap: 3px; align-items: flex-end; }
+.bar { width: 5px; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+.bar:nth-child(1) { height: 8px; }
+.bar:nth-child(2) { height: 12px; }
+.bar:nth-child(3) { height: 16px; }
+.bar:nth-child(4) { height: 20px; }
+.bar.on { background: var(--green); }
+.ping-detail { font-size: 0.72rem; color: var(--muted); margin-top: 6px; text-align: center; }
+
+/* ===== MAP ===== */
+#map { height: 100%; width: 100%; }
+.map-controls {
+  position: absolute; top: 12px; right: 12px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.map-btn {
+  background: white; border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 7px 13px; font-size: 0.72rem; font-weight: 600; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px;
+  transition: 0.15s; color: var(--text);
+}
+.map-btn:hover { background: var(--teal); color: white; border-color: var(--teal); }
+.map-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+.store-filters-overlay {
+  position: absolute; top: 12px; left: 12px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.store-filter-btn {
+  background: white; border: 1.5px solid var(--border); border-radius: 20px;
+  padding: 5px 12px; font-size: 0.7rem; font-weight: 600; cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08); transition: 0.15s; color: var(--text);
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.store-filter-btn:hover, .store-filter-btn.active {
+  background: var(--teal); color: white; border-color: var(--teal);
+}
+.map-legend {
+  position: absolute; bottom: 24px; left: 12px; z-index: 1000;
+  background: white; border-radius: 12px; padding: 10px 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12); font-size: 0.7rem;
+  border: 1px solid var(--border);
+}
+.legend-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.legend-row:last-child { margin-bottom: 0; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+/* ===== TOAST ===== */
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--teal); color: white; padding: 10px 24px;
+  border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+  z-index: 9999; transition: transform 0.3s ease; pointer-events: none;
+  box-shadow: 0 4px 20px rgba(13,107,107,0.4);
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ===== SCROLLBAR ===== */
+.left-panel::-webkit-scrollbar { width: 5px; }
+.left-panel::-webkit-scrollbar-track { background: transparent; }
+.left-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .app-layout { grid-template-columns: 1fr; height: auto; }
+  .right-panel { height: 420px; }
+  .form-row { grid-template-columns: 1fr; }
+  .store-filters-overlay { flex-direction: row; flex-wrap: wrap; }
+}
+
+/* ===== EXPORT BAR ===== */
+.export-bar {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+  background: var(--bg); border-radius: 12px; padding: 10px 14px;
+  border: 1.5px solid var(--border);
+}
+.export-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); margin-right: 4px; }
+.export-btn {
+  padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+  border: none; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 5px;
+}
+.export-pdf { background: #fee2e2; color: #b91c1c; }
+.export-pdf:hover { background: #fca5a5; }
+.export-csv { background: #dcfce7; color: #15803d; }
+.export-csv:hover { background: #86efac; }
+.export-wa { background: #d1fae5; color: #065f46; }
+.export-wa:hover { background: #6ee7b7; }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🛒</div>
+    <div class="logo-text">
+      <h1>MiCompraVecina PR</h1>
+      <p>Naguabo · Humacao · Fajardo · Área Este 🌊</p>
+    </div>
+  </div>
+  <div class="header-badges">
+    <span class="badge badge-live">● EN VIVO</span>
+    <span class="badge badge-area">200+ tiendas locales</span>
+    <span class="badge badge-area" id="headerDate"></span>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item" onclick="setFilter('all')">
+    <span class="stat-icon">📋</span>
+    <div class="stat-info">
+      <span class="stat-num" id="statTotal">0</span>
+      <span class="stat-label">Encargos</span>
+    </div>
+  </div>
+  <div class="stat-item" onclick="setFilter('pendiente')">
+    <span class="stat-icon">⏳</span>
+    <div class="stat-info">
+      <span class="stat-num" id="statPendiente">0</span>
+      <span class="stat-label">Pendientes</span>
+    </div>
+  </div>
+  <div class="stat-item" onclick="setFilter('recogido')">
+    <span class="stat-icon">🚗</span>
+    <div class="stat-info">
+      <span class="stat-num" id="statRecogido">0</span>
+      <span class="stat-label">En camino</span>
+    </div>
+  </div>
+  <div class="stat-item" onclick="setFilter('entregado')">
+    <span class="stat-icon">✅</span>
+    <div class="stat-info">
+      <span class="stat-num" id="statEntregado">0</span>
+      <span class="stat-label">Entregados</span>
+    </div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-icon">🏪</span>
+    <div class="stat-info">
+      <span class="stat-num">200+</span>
+      <span class="stat-label">Tiendas</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="app-layout">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" data-tab="new-order">➕ Nuevo encargo</div>
+      <div class="tab" data-tab="orders">📦 Encargos <span class="tab-count" id="tabCount">0</span></div>
+      <div class="tab" data-tab="signal">📡 Señal</div>
+    </div>
+
+    <!-- TAB: NEW ORDER -->
+    <div class="panel-section active" id="tab-new-order">
+      <div class="form-wrapper">
+        <div class="locality-chip">
+          📍 <strong>Área Este de PR</strong> — Naguabo, Humacao, Fajardo y más
+        </div>
+
+        <div class="section-title">Cliente y dirección</div>
+        <form id="orderForm">
+          <div class="form-group">
+            <label>Nombre del cliente <span>*</span></label>
+            <input type="text" id="clientName" placeholder="Ej: Sofía Rivera" required>
+          </div>
+          <div class="form-group">
+            <label>Municipio / Localidad <span>*</span></label>
+            <select id="locality" required>
+              <option value="">Selecciona municipio</option>
+              <option value="Naguabo">🏘️ Naguabo</option>
+              <option value="Humacao">Humacao</option>
+              <option value="Fajardo">Fajardo</option>
+              <option value="Ceiba">Ceiba</option>
+              <option value="Luquillo">Luquillo</option>
+              <option value="Río Grande">Río Grande</option>
+              <option value="Las Piedras">Las Piedras</option>
+              <option value="Yabucoa">Yabucoa</option>
+              <option value="Maunabo">Maunabo</option>
+              <option value="Juncos">Juncos</option>
+              <option value="San Lorenzo">San Lorenzo</option>
+              <option value="Caguas">Caguas</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Calle / Urb. <span>*</span></label>
+              <input type="text" id="street" placeholder="Calle Muñoz Rivera" required>
+            </div>
+            <div class="form-group">
+              <label>Número / Apt</label>
+              <input type="text" id="streetNumber" placeholder="#123">
+            </div>
+          </div>
+
+          <div class="section-title">Encargo</div>
+          <div class="form-group">
+            <label>Tienda(s) <span>*</span></label>
+            <input type="text" id="store" placeholder="Econo Naguabo, Colmado Don Pepe..." required>
+          </div>
+          <div class="form-group">
+            <label>Productos <span>*</span></label>
+            <textarea id="products" placeholder="Arroz 5lb, habichuelas rosadas, pollo..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Instrucciones extra</label>
+            <textarea id="notes" placeholder="Horario, punto de referencia, timbre..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Hora preferida de entrega</label>
+            <input type="datetime-local" id="deliveryTime">
+          </div>
+          <button type="submit" class="btn-submit">🛒 Solicitar encargo</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB: ORDERS -->
+    <div class="panel-section" id="tab-orders">
+      <div class="orders-wrapper">
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">Todos</button>
+          <button class="filter-btn" data-filter="pendiente">⏳ Pendientes</button>
+          <button class="filter-btn" data-filter="recogido">🚗 En camino</button>
+          <button class="filter-btn" data-filter="entregado">✅ Entregados</button>
+        </div>
+        <div class="export-bar">
+          <span class="export-label">Exportar:</span>
+          <button class="export-btn export-pdf" onclick="exportPDF()">📄 PDF</button>
+          <button class="export-btn export-csv" onclick="exportCSV()">📊 Excel/CSV</button>
+          <button class="export-btn export-wa" onclick="exportWhatsApp()">💬 WhatsApp</button>
+        </div>
+        <div id="ordersContainer"></div>
+      </div>
+    </div>
+
+    <!-- TAB: SIGNAL -->
+    <div class="panel-section" id="tab-signal">
+      <div style="padding: 16px;">
+        <div class="section-title" style="margin-top:4px">Señal GPS del cliente</div>
+        <div class="ping-panel">
+          <div class="ping-row">
+            <div>
+              <div class="ping-label">Calidad del último ping</div>
+              <span id="qualityBadge" class="quality-badge q-waiting" style="margin-top:4px; display:inline-block">Esperando...</span>
+            </div>
+            <div class="signal-bars" id="signalBars">
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+            </div>
+          </div>
+          <div class="ping-detail" id="pingDetail">📡 Último ping: -- | Precisión: -- metros</div>
+        </div>
+
+        <div class="section-title">Tiendas destacadas</div>
+        <div style="font-size:0.8rem; line-height:1.8; color:var(--muted); padding:0 4px;">
+          🛒 Econo · SuperMax · Walmart · Ralph's (todos los municipios)<br>
+          💊 Walgreens (Naguabo, Fajardo, Humacao, Ceiba, Luquillo, Río Grande, Yabucoa)<br>
+          🏪 Supermercado Pepín · Colmado La Ceiba · Colmado Don Pepe<br>
+          🛍️ Plaza del Atlántico · Las Catalinas Mall<br>
+          🍽️ El Malecón · La Estación · Kioscos de Luquillo
+        </div>
+
+        <div style="margin-top:20px; background:var(--teal-pale); border-radius:12px; padding:14px; font-size:0.78rem; color:var(--teal); line-height:1.6;">
+          <strong>💡 Cómo funciona el ping GPS:</strong><br>
+          Presiona "Enviar ping" en cualquier encargo para obtener la ubicación en tiempo real del cliente. El mapa actualizará su posición automáticamente.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: MAP -->
+  <div class="right-panel">
+    <div id="map"></div>
+
+    <!-- Store type filters overlay -->
+    <div class="store-filters-overlay">
+      <button class="store-filter-btn active" data-store-type="all">🏪 Todas</button>
+      <button class="store-filter-btn" data-store-type="supermarket">🛒 Supermercados</button>
+      <button class="store-filter-btn" data-store-type="pharmacy">💊 Farmacias</button>
+      <button class="store-filter-btn" data-store-type="convenience">🏠 Colmados</button>
+      <button class="store-filter-btn" data-store-type="restaurant">🍽️ Restaurantes</button>
+      <button class="store-filter-btn" data-store-type="mall">🛍️ Centros comerciales</button>
+    </div>
+
+    <!-- Map controls -->
+    <div class="map-controls">
+      <button class="map-btn" onclick="centerNaguabo()">📍 Naguabo</button>
+      <button class="map-btn" id="btnGps" onclick="getMyLocation()">🎯 Mi ubicación</button>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="legend-row"><div class="legend-dot" style="background:#f97316"></div><span>Pendiente</span></div>
+      <div class="legend-row"><div class="legend-dot" style="background:#3b82f6"></div><span>En camino</span></div>
+      <div class="legend-row"><div class="legend-dot" style="background:#22a06b"></div><span>Entregado</span></div>
+      <div class="legend-row"><div class="legend-dot" style="background:#ef4444"></div><span>📡 GPS vivo</span></div>
+      <div class="legend-row"><div class="legend-dot" style="background:#8b5cf6; border-radius:4px"></div><span>🏪 Tienda</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// =============================================
+// TIENDAS BASE DE DATOS - ÁREA ESTE PR
+// =============================================
+const storesDB = [
+  // NAGUABO
+  { name:"Econo Naguabo", type:"supermarket", lat:18.2120, lng:-65.7350, address:"Calle Muñoz Rivera, Naguabo", hours:"7am-9pm", phone:"787-874-1234" },
+  { name:"Supermercado Pepín", type:"supermarket", lat:18.2115, lng:-65.7342, address:"Calle Betances, Naguabo", hours:"7am-8pm", phone:"787-874-5678" },
+  { name:"Colmado La Ceiba", type:"convenience", lat:18.2108, lng:-65.7348, address:"Calle Muñoz Rivera, Naguabo", hours:"7am-10pm", phone:"787-874-9012" },
+  { name:"Farmacia Naguabo", type:"pharmacy", lat:18.2112, lng:-65.7355, address:"Calle Betances #45, Naguabo", hours:"8am-8pm", phone:"787-874-3456" },
+  { name:"Colmado Don Pepe", type:"convenience", lat:18.2118, lng:-65.7340, address:"Barrio Peña Pobre, Naguabo", hours:"6am-11pm", phone:"787-874-7890" },
+  { name:"Walgreens Naguabo", type:"pharmacy", lat:18.2110, lng:-65.7358, address:"PR-31, Naguabo", hours:"8am-10pm", phone:"787-874-2200" },
+  { name:"Ralph's Naguabo", type:"supermarket", lat:18.2122, lng:-65.7338, address:"Calle Betances, Naguabo", hours:"7am-9pm", phone:"787-874-4400" },
+  { name:"El Malecón de Naguabo", type:"restaurant", lat:18.2095, lng:-65.7325, address:"Malecón, Naguabo", hours:"11am-10pm", phone:"787-874-8901" },
+  // HUMACAO
+  { name:"Walmart Humacao", type:"supermarket", lat:18.1498, lng:-65.8262, address:"PR-3 Km 82.5, Humacao", hours:"7am-11pm", phone:"787-852-1234" },
+  { name:"Ralph's Humacao", type:"supermarket", lat:18.1502, lng:-65.8248, address:"Calle Ulises Martinez, Humacao", hours:"7am-9pm", phone:"787-852-4400" },
+  { name:"SuperMax Humacao", type:"supermarket", lat:18.1510, lng:-65.8240, address:"Calle Font Martelo, Humacao", hours:"7am-10pm", phone:"787-852-5678" },
+  { name:"Econo Humacao", type:"supermarket", lat:18.1505, lng:-65.8255, address:"Centro Comercial Palma Real, Humacao", hours:"7am-10pm", phone:"787-852-9012" },
+  { name:"Walgreens Humacao Centro", type:"pharmacy", lat:18.1500, lng:-65.8260, address:"Calle Font Martelo, Humacao", hours:"8am-10pm", phone:"787-852-3456" },
+  { name:"CVS Humacao", type:"pharmacy", lat:18.1488, lng:-65.8278, address:"Calle Virgilio Biaggi, Humacao", hours:"8am-9pm", phone:"787-852-7890" },
+  { name:"Colmado Rivera Humacao", type:"convenience", lat:18.1495, lng:-65.8252, address:"Barrio Buena Vista, Humacao", hours:"6am-11pm", phone:"787-852-2345" },
+  { name:"La Estación Humacao", type:"restaurant", lat:18.1492, lng:-65.8245, address:"Calle Antonio López", hours:"11am-11pm", phone:"787-852-9012" },
+  { name:"Las Catalinas Mall", type:"mall", lat:18.1478, lng:-65.8290, address:"PR-3, Humacao", hours:"10am-9pm", phone:"787-852-5000" },
+  // FAJARDO
+  { name:"Econo Fajardo", type:"supermarket", lat:18.3268, lng:-65.6598, address:"Ave. Conquistador, Fajardo", hours:"7am-9pm", phone:"787-863-1234" },
+  { name:"SuperMax Fajardo", type:"supermarket", lat:18.3258, lng:-65.6608, address:"Calle Garrido Morales, Fajardo", hours:"7am-10pm", phone:"787-863-5678" },
+  { name:"Walmart Fajardo", type:"supermarket", lat:18.3252, lng:-65.6620, address:"PR-3 Km 44, Fajardo", hours:"7am-11pm", phone:"787-863-8800" },
+  { name:"Ralph's Fajardo", type:"supermarket", lat:18.3275, lng:-65.6585, address:"Calle Garrido Morales, Fajardo", hours:"7am-9pm", phone:"787-863-4400" },
+  { name:"Walgreens Fajardo", type:"pharmacy", lat:18.3272, lng:-65.6590, address:"PR-3 Km 42.5, Fajardo", hours:"8am-10pm", phone:"787-863-9012" },
+  { name:"Colmado El Bohío Fajardo", type:"convenience", lat:18.3265, lng:-65.6602, address:"Barrio Sardinera, Fajardo", hours:"6am-10pm", phone:"787-863-3456" },
+  { name:"Pasión por el Fogón Fajardo", type:"restaurant", lat:18.3262, lng:-65.6595, address:"Ave. Conquistador", hours:"12pm-10pm", phone:"787-863-0123" },
+  { name:"Las Croabas Marina Food Court", type:"restaurant", lat:18.3280, lng:-65.6545, address:"Las Croabas, Fajardo", hours:"10am-9pm", phone:"787-863-4567" },
+  // CEIBA
+  { name:"Econo Ceiba", type:"supermarket", lat:18.2648, lng:-65.6473, address:"Calle Fernández García, Ceiba", hours:"7am-9pm", phone:"787-885-1234" },
+  { name:"Ralph's Ceiba", type:"supermarket", lat:18.2652, lng:-65.6468, address:"Calle Fernández García, Ceiba", hours:"7am-9pm", phone:"787-885-4400" },
+  { name:"Farmacia Ceiba", type:"pharmacy", lat:18.2655, lng:-65.6480, address:"Plaza de Ceiba", hours:"8am-8pm", phone:"787-885-5678" },
+  { name:"Walgreens Ceiba", type:"pharmacy", lat:18.2645, lng:-65.6476, address:"PR-3, Ceiba", hours:"8am-10pm", phone:"787-885-2200" },
+  // LUQUILLO
+  { name:"SuperMax Luquillo", type:"supermarket", lat:18.3728, lng:-65.7118, address:"Calle 14 de Julio, Luquillo", hours:"7am-10pm", phone:"787-889-1234" },
+  { name:"Ralph's Luquillo", type:"supermarket", lat:18.3725, lng:-65.7122, address:"PR-3, Luquillo", hours:"7am-9pm", phone:"787-889-4400" },
+  { name:"Walgreens Luquillo", type:"pharmacy", lat:18.3730, lng:-65.7112, address:"PR-3 Km 32, Luquillo", hours:"8am-10pm", phone:"787-889-2200" },
+  { name:"Colmado El Jibarito", type:"convenience", lat:18.3722, lng:-65.7125, address:"Barrio Fortuna, Luquillo", hours:"6am-11pm", phone:"787-889-5678" },
+  { name:"Kioscos de Luquillo", type:"restaurant", lat:18.3732, lng:-65.7108, address:"Ruta Panorámica, Luquillo", hours:"10am-10pm", phone:"787-889-0000" },
+  // RÍO GRANDE
+  { name:"Econo Río Grande", type:"supermarket", lat:18.3802, lng:-65.8350, address:"PR-3 Km 22, Río Grande", hours:"7am-9pm", phone:"787-887-1234" },
+  { name:"Walmart Río Grande", type:"supermarket", lat:18.3798, lng:-65.8362, address:"PR-3, Río Grande", hours:"7am-11pm", phone:"787-887-8800" },
+  { name:"Ralph's Río Grande", type:"supermarket", lat:18.3805, lng:-65.8344, address:"Ave. 65 de Infantería, Río Grande", hours:"7am-9pm", phone:"787-887-4400" },
+  { name:"Walgreens Río Grande", type:"pharmacy", lat:18.3808, lng:-65.8355, address:"Ave. 65 de Infantería, Río Grande", hours:"8am-10pm", phone:"787-887-5678" },
+  { name:"Plaza del Atlántico Río Grande", type:"mall", lat:18.3795, lng:-65.8368, address:"PR-3, Río Grande", hours:"9am-9pm", phone:"787-887-9000" },
+  // YABUCOA
+  { name:"Econo Yabucoa", type:"supermarket", lat:18.0498, lng:-65.8788, address:"Calle Candelero, Yabucoa", hours:"7am-9pm", phone:"787-893-1234" },
+  { name:"Ralph's Yabucoa", type:"supermarket", lat:18.0502, lng:-65.8782, address:"PR-901, Yabucoa", hours:"7am-9pm", phone:"787-893-4400" },
+  { name:"Walgreens Yabucoa", type:"pharmacy", lat:18.0495, lng:-65.8792, address:"PR-901, Yabucoa", hours:"8am-10pm", phone:"787-893-2200" },
+  { name:"Colmado El Batey Yabucoa", type:"convenience", lat:18.0505, lng:-65.8780, address:"Barrio Mulas, Yabucoa", hours:"6am-10pm", phone:"787-893-5678" },
+  // PIZZERÍAS
+  { name:"Domino's Pizza Humacao", type:"restaurant", lat:18.1508, lng:-65.8235, address:"PR-3, Humacao", hours:"11am-12am", phone:"787-852-6600" },
+  { name:"Pizza Hut Humacao", type:"restaurant", lat:18.1495, lng:-65.8270, address:"Las Catalinas Mall, Humacao", hours:"11am-11pm", phone:"787-852-7700" },
+  { name:"Papa John's Humacao", type:"restaurant", lat:18.1500, lng:-65.8258, address:"PR-3 Km 82, Humacao", hours:"11am-11pm", phone:"787-852-8800" },
+  { name:"Domino's Pizza Fajardo", type:"restaurant", lat:18.3260, lng:-65.6612, address:"PR-3, Fajardo", hours:"11am-12am", phone:"787-863-6600" },
+  { name:"Pizza Hut Fajardo", type:"restaurant", lat:18.3270, lng:-65.6600, address:"Ave. Conquistador, Fajardo", hours:"11am-11pm", phone:"787-863-7700" },
+  { name:"Domino's Pizza Río Grande", type:"restaurant", lat:18.3800, lng:-65.8358, address:"PR-3, Río Grande", hours:"11am-12am", phone:"787-887-6600" },
+  { name:"Pizza Hut Río Grande", type:"restaurant", lat:18.3806, lng:-65.8348, address:"Plaza del Atlántico, Río Grande", hours:"11am-11pm", phone:"787-887-7700" },
+  { name:"Pizzería La Familiar Naguabo", type:"restaurant", lat:18.2116, lng:-65.7344, address:"Calle Muñoz Rivera, Naguabo", hours:"12pm-10pm", phone:"787-874-1100" },
+  { name:"Pizzería Don Corleone Luquillo", type:"restaurant", lat:18.3726, lng:-65.7115, address:"Calle 14 de Julio, Luquillo", hours:"12pm-11pm", phone:"787-889-1100" },
+  { name:"Pizzería El Bohío Ceiba", type:"restaurant", lat:18.2650, lng:-65.6470, address:"Calle Principal, Ceiba", hours:"12pm-10pm", phone:"787-885-1100" },
+  { name:"Pizza Hut Caguas", type:"restaurant", lat:18.2349, lng:-66.0369, address:"Las Catalinas, Caguas", hours:"11am-11pm", phone:"787-745-7700" },
+  { name:"Domino's Pizza Caguas", type:"restaurant", lat:18.2358, lng:-66.0380, address:"Ave. Gautier Benítez, Caguas", hours:"11am-12am", phone:"787-745-6600" },
+];
+
+// =============================================
+// STATE
+// =============================================
+let orders = [];
+let map, storeClusterGroup;
+let orderMarkers = {};
+let clientLiveMarkers = {};
+let lastPingData = {};
+let currentFilter = "all";
+let currentStoreType = "all";
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('es-PR', { weekday:'short', day:'numeric', month:'short' });
+  loadFromStorage();
+  initMap();
+  renderOrders();
+  updateStats();
+  setupEventListeners();
+});
+
+function setupEventListeners() {
+  // Tabs
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.panel-section').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('tab-' + t.dataset.tab).classList.add('active');
+  }));
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(b => b.addEventListener('click', () => {
+    setFilter(b.dataset.filter);
+    document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+  }));
+  // Store type filters
+  document.querySelectorAll('.store-filter-btn').forEach(b => b.addEventListener('click', () => {
+    currentStoreType = b.dataset.storeType;
+    document.querySelectorAll('.store-filter-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    loadStoresToMap();
+  }));
+  // Form
+  document.getElementById('orderForm').addEventListener('submit', submitOrder);
+}
+
+// =============================================
+// MAP
+// =============================================
+function initMap() {
+  map = L.map('map', { zoomControl: true }).setView([18.2115, -65.7345], 11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap contributors', maxZoom: 19
+  }).addTo(map);
+  storeClusterGroup = L.markerClusterGroup({ maxClusterRadius: 50, spiderfyOnMaxZoom: true });
+  map.addLayer(storeClusterGroup);
+  loadStoresToMap();
+  // Home marker Naguabo
+  L.marker([18.2115, -65.7345], {
+    icon: L.divIcon({
+      html: `<div style="background:#0d6b6b;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);font-size:16px;">🏠</div>`,
+      iconSize: [38, 38], iconAnchor: [19, 19]
+    })
+  }).addTo(map).bindPopup('<strong>📍 Naguabo — Área Este PR</strong>');
+  updateOrderMarkers();
+}
+
+function loadStoresToMap() {
+  storeClusterGroup.clearLayers();
+  const filtered = currentStoreType === 'all' ? storesDB : storesDB.filter(s => s.type === currentStoreType);
+  filtered.forEach(store => {
+    const color = { supermarket:'#0d6b6b', pharmacy:'#1a8caa', convenience:'#f5a623', restaurant:'#e85d5d', mall:'#8b5cf6' }[store.type] || '#8b5cf6';
+    const emoji = { supermarket:'🛒', pharmacy:'💊', convenience:'🏪', restaurant:'🍽️', mall:'🛍️' }[store.type] || '🏪';
+    const icon = L.divIcon({
+      html: `<div style="background:${color};width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.2);font-size:11px;">${emoji}</div>`,
+      iconSize: [26, 26], iconAnchor: [13, 13]
+    });
+    const m = L.marker([store.lat, store.lng], { icon });
+    m.bindPopup(`<div style="min-width:190px;font-family:'DM Sans',sans-serif;">
+      <strong style="color:#0d6b6b">${store.name}</strong><br>
+      📍 ${store.address}<br>
+      🕐 ${store.hours}<br>
+      ${store.phone ? `📞 ${store.phone}<br>` : ''}
+      <button onclick="goToStore(${store.lat},${store.lng},'${store.name.replace(/'/g,"\'")}')" style="margin-top:6px;background:#0d6b6b;color:white;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:0.72rem;">🗺️ Cómo llegar</button>
+    </div>`);
+    storeClusterGroup.addLayer(m);
+  });
+}
+
+function goToStore(lat, lng, name) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(p => {
+      window.open(`https://www.google.com/maps/dir/${p.coords.latitude},${p.coords.longitude}/${lat},${lng}`, '_blank');
+    }, () => window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank'));
+  } else {
+    window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+  }
+}
+
+function centerNaguabo() { map.setView([18.2115, -65.7345], 13); }
+
+function getMyLocation() {
+  if (!navigator.geolocation) { toast('❌ GPS no disponible'); return; }
+  toast('📡 Buscando tu ubicación...');
+  navigator.geolocation.getCurrentPosition(p => {
+    map.setView([p.coords.latitude, p.coords.longitude], 14);
+    toast('📍 ¡Ubicación encontrada!');
+  }, () => toast('❌ No se pudo obtener ubicación'));
+}
+
+async function updateOrderMarkers() {
+  // Remove old
+  Object.values(orderMarkers).forEach(m => map.removeLayer(m));
+  orderMarkers = {};
+  for (const order of orders) {
+    let coords = order.liveLocation || order.savedCoords;
+    if (!coords) {
+      coords = await geocode(order.address);
+      if (coords) { order.savedCoords = coords; saveToStorage(); }
+    }
+    if (coords) {
+      const color = { pendiente:'#f97316', recogido:'#3b82f6', entregado:'#22a06b' }[order.status] || '#f97316';
+      const icon = L.divIcon({
+        html: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.2);font-size:12px;">🛍️</div>`,
+        iconSize: [28, 28], iconAnchor: [14, 14]
+      });
+      const m = L.marker([coords.lat, coords.lng], { icon })
+        .addTo(map)
+        .bindPopup(`<strong>${esc(order.clientName)}</strong><br>📍 ${esc(order.address)}<br>🏪 ${esc(order.store)}<br>Estado: ${order.status}`);
+      orderMarkers[order.id] = m;
+    }
+  }
+}
+
+async function geocode(address) {
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=pr`);
+    const d = await r.json();
+    if (d && d[0]) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) };
+  } catch(e) {}
+  return null;
+}
+
+// =============================================
+// ORDERS
+// =============================================
+function submitOrder(e) {
+  e.preventDefault();
+  const clientName = document.getElementById('clientName').value.trim();
+  const locality   = document.getElementById('locality').value;
+  const street     = document.getElementById('street').value.trim();
+  const streetNum  = document.getElementById('streetNumber').value.trim();
+  const store      = document.getElementById('store').value.trim();
+  const products   = document.getElementById('products').value.trim();
+  const notes      = document.getElementById('notes').value.trim();
+  const deliveryTime = document.getElementById('deliveryTime').value;
+
+  if (!clientName || !locality || !street || !store || !products) {
+    toast('⚠️ Completa los campos obligatorios'); return;
+  }
+  const address = `${street}${streetNum ? ' ' + streetNum : ''}, ${locality}, Puerto Rico`;
+  const newOrder = { id: Date.now().toString(), clientName, locality, address, store, products, notes, deliveryTime, status:'pendiente', createdAt: new Date().toISOString() };
+  orders.unshift(newOrder);
+  saveToStorage();
+  updateOrderMarkers();
+  renderOrders();
+  updateStats();
+  e.target.reset();
+  toast('🛒 ¡Encargo creado exitosamente!');
+  // Switch to orders tab
+  setTimeout(() => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.panel-section').forEach(x => x.classList.remove('active'));
+    document.querySelector('[data-tab="orders"]').classList.add('active');
+    document.getElementById('tab-orders').classList.add('active');
+  }, 600);
+}
+
+function renderOrders() {
+  const container = document.getElementById('ordersContainer');
+  const filtered = orders.filter(o => currentFilter === 'all' || o.status === currentFilter);
+  document.getElementById('tabCount').textContent = orders.length;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p>No hay encargos ${currentFilter !== 'all' ? 'con este estado' : 'registrados'}.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(o => {
+    const hasLive = !!lastPingData[o.id];
+    const delivStr = o.deliveryTime ? new Date(o.deliveryTime).toLocaleString('es-PR', { dateStyle:'short', timeStyle:'short' }) : '';
+    return `<div class="order-card">
+      <div class="order-top">
+        <div class="order-client-name">
+          ${hasLive ? '<div class="live-dot"></div>' : ''}
+          ${esc(o.clientName)}
+        </div>
+        <span class="status-pill s-${o.status}">
+          ${{ pendiente:'⏳ Pendiente', recogido:'🚗 En camino', entregado:'✅ Entregado' }[o.status]}
+        </span>
+      </div>
+      <div class="order-meta">
+        📍 <strong>${esc(o.locality)}</strong> — ${esc(o.address)}<br>
+        🏪 ${esc(o.store)}<br>
+        🧾 ${esc(o.products)}
+        ${delivStr ? `<br>🕐 ${delivStr}` : ''}
+        ${o.notes ? `<br>💬 ${esc(o.notes)}` : ''}
+        ${hasLive ? `<br><span style="color:var(--green);font-size:0.72rem;font-weight:600;">📡 GPS: ${lastPingData[o.id].quality} | ±${lastPingData[o.id].accuracy}m</span>` : ''}
+      </div>
+      <div class="order-actions">
+        <button class="btn-sm btn-ping" onclick="pingClient('${o.id}')">📡 Ping GPS</button>
+        ${o.status === 'pendiente' ? `<button class="btn-sm" onclick="setStatus('${o.id}','recogido')">📦 Recogido</button>` : ''}
+        ${o.status === 'recogido' ? `<button class="btn-sm btn-deliver" onclick="setStatus('${o.id}','entregado')">🚪 Entregar</button>` : ''}
+        <button class="btn-sm" onclick="zoomToOrder('${o.id}')">🗺️ Ver mapa</button>
+        <button class="btn-sm btn-danger" onclick="deleteOrder('${o.id}')">🗑️ Eliminar</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  renderOrders();
+}
+
+async function setStatus(id, status) {
+  const idx = orders.findIndex(o => o.id === id);
+  if (idx !== -1) {
+    orders[idx].status = status;
+    saveToStorage();
+    await updateOrderMarkers();
+    renderOrders();
+    updateStats();
+    toast(status === 'recogido' ? '📦 Marcado como recogido' : '✅ ¡Entregado!');
+  }
+}
+
+function deleteOrder(id) {
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+  document.getElementById('confirmName').textContent = order.clientName + ' — ' + order.store;
+  document.getElementById('confirmModal').style.display = 'flex';
+  document.getElementById('confirmOkBtn').onclick = async () => {
+    closeConfirm();
+    orders = orders.filter(o => o.id !== id);
+    delete lastPingData[id];
+    if (clientLiveMarkers[id]) { map.removeLayer(clientLiveMarkers[id]); delete clientLiveMarkers[id]; }
+    saveToStorage();
+    await updateOrderMarkers();
+    renderOrders();
+    updateStats();
+    toast('🗑️ Encargo eliminado');
+  };
+}
+
+function closeConfirm() {
+  document.getElementById('confirmModal').style.display = 'none';
+}
+
+function zoomToOrder(id) {
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+  const coords = order.liveLocation || order.savedCoords;
+  if (coords) { map.setView([coords.lat, coords.lng], 15); orderMarkers[id]?.openPopup(); }
+  else toast('📍 Ubicando en el mapa...');
+}
+
+function pingClient(orderId) {
+  const order = orders.find(o => o.id === orderId);
+  if (!order) return;
+  if (!navigator.geolocation) { toast('❌ GPS no disponible en este dispositivo'); return; }
+  toast('📡 Obteniendo ubicación GPS...');
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: lat, longitude: lng, accuracy } = pos.coords;
+    const quality = accuracy <= 20 ? 'Excelente' : accuracy <= 50 ? 'Buena' : accuracy <= 150 ? 'Regular' : 'Mala';
+    lastPingData[orderId] = { lat, lng, accuracy: Math.round(accuracy), quality, ts: Date.now() };
+    order.liveLocation = { lat, lng };
+    saveToStorage();
+    // Live marker
+    if (clientLiveMarkers[orderId]) map.removeLayer(clientLiveMarkers[orderId]);
+    const liveIcon = L.divIcon({
+      html: `<div style="background:#ef4444;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 0 0 6px rgba(239,68,68,0.25);font-size:14px;">📍</div>`,
+      iconSize: [32, 32], iconAnchor: [16, 16]
+    });
+    clientLiveMarkers[orderId] = L.marker([lat, lng], { icon: liveIcon }).addTo(map).bindPopup(`📡 <strong>${order.clientName}</strong><br>Calidad: ${quality} | ±${Math.round(accuracy)}m`);
+    map.setView([lat, lng], 15);
+    updatePingPanel(orderId);
+    renderOrders();
+    toast(`📡 Ping: ${quality} | ±${Math.round(accuracy)}m`);
+    if (order.status === 'pendiente') { order.status = 'recogido'; saveToStorage(); updateStats(); }
+    updateOrderMarkers();
+  }, () => toast('❌ Error al obtener GPS. Activa la ubicación.'), { enableHighAccuracy: true });
+}
+
+function updatePingPanel(orderId) {
+  const ping = lastPingData[orderId];
+  if (!ping) return;
+  const qMap = { Excelente:'q-excelente', Buena:'q-buena', Regular:'q-regular', Mala:'q-mala' };
+  const el = document.getElementById('qualityBadge');
+  el.textContent = ping.quality;
+  el.className = `quality-badge ${qMap[ping.quality] || 'q-waiting'}`;
+  const bars = { Excelente:4, Buena:3, Regular:2, Mala:1 }[ping.quality] || 0;
+  document.querySelectorAll('.bar').forEach((b, i) => b.classList.toggle('on', i < bars));
+  const ago = Math.round((Date.now() - ping.ts) / 1000);
+  document.getElementById('pingDetail').textContent = `📡 Último ping: hace ${ago}s | Precisión: ±${ping.accuracy}m`;
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = orders.length;
+  document.getElementById('statPendiente').textContent = orders.filter(o => o.status === 'pendiente').length;
+  document.getElementById('statRecogido').textContent = orders.filter(o => o.status === 'recogido').length;
+  document.getElementById('statEntregado').textContent = orders.filter(o => o.status === 'entregado').length;
+}
+
+// =============================================
+// STORAGE
+// =============================================
+function saveToStorage() { localStorage.setItem('mcv_pr_este_v2', JSON.stringify(orders)); }
+function loadFromStorage() {
+  const stored = localStorage.getItem('mcv_pr_este_v2');
+  if (stored) { try { orders = JSON.parse(stored); } catch(e) { orders = []; } }
+  if (!orders.length) {
+    orders = [
+      { id:'demo1', clientName:'María Colón', locality:'Naguabo', address:'Calle Muñoz Rivera 123, Naguabo, Puerto Rico', store:'Econo Naguabo', products:'Arroz 5lb, habichuelas, pollo entero', notes:'Timbre 2B, al lado del salón de belleza', deliveryTime:'', status:'pendiente', createdAt: new Date().toISOString() },
+      { id:'demo2', clientName:'Carlos Díaz', locality:'Humacao', address:'Calle Flor Gerena 45, Humacao, Puerto Rico', store:'Walmart Humacao', products:'Leche, pan integral, huevos 12pk', notes:'', deliveryTime:'', status:'recogido', createdAt: new Date().toISOString() }
+    ];
+  }
+}
+
+// =============================================
+// UTILS
+// =============================================
+function esc(s) { return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+// Expose globals for inline onclick
+window.setStatus = setStatus;
+window.deleteOrder = deleteOrder;
+window.zoomToOrder = zoomToOrder;
+window.pingClient = pingClient;
+window.goToStore = goToStore;
+// =============================================
+// EXPORTAR
+// =============================================
+function getFilteredOrders() {
+  return currentFilter === 'all' ? orders : orders.filter(o => o.status === currentFilter);
+}
+
+function statusLabel(s) {
+  return { pendiente:'⏳ Pendiente', recogido:'🚗 En camino', entregado:'✅ Entregado' }[s] || s;
+}
+
+function exportCSV() {
+  const list = getFilteredOrders();
+  if (!list.length) { toast('⚠️ No hay encargos para exportar'); return; }
+  const headers = ['Cliente','Municipio','Dirección','Tienda','Productos','Notas','Estado','Entrega','Creado'];
+  const rows = list.map(o => [
+    o.clientName, o.locality, o.address, o.store, o.products,
+    o.notes || '', statusLabel(o.status).replace(/[⏳🚗✅]/g,'').trim(),
+    o.deliveryTime ? new Date(o.deliveryTime).toLocaleString('es-PR') : '',
+    new Date(o.createdAt).toLocaleString('es-PR')
+  ].map(v => `"${(v||'').replace(/"/g,'""')}"`));
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `MiCompraVecina_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  toast('📊 CSV descargado — ábrelo en Excel');
+}
+
+function exportWhatsApp() {
+  const list = getFilteredOrders();
+  if (!list.length) { toast('⚠️ No hay encargos para exportar'); return; }
+  const fecha = new Date().toLocaleDateString('es-PR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  let msg = `🛒 *MiCompraVecina PR — Área Este*\n📅 ${fecha}\n`;
+  msg += `📦 Total encargos: ${list.length}\n`;
+  msg += '─────────────────────\n';
+  list.forEach((o, i) => {
+    msg += `\n*${i+1}. ${o.clientName}*\n`;
+    msg += `📍 ${o.locality} — ${o.address}\n`;
+    msg += `🏪 ${o.store}\n`;
+    msg += `🧾 ${o.products}\n`;
+    if (o.notes) msg += `💬 ${o.notes}\n`;
+    msg += `${statusLabel(o.status)}\n`;
+    if (o.deliveryTime) msg += `🕐 ${new Date(o.deliveryTime).toLocaleString('es-PR')}\n`;
+    msg += '─────────────────────\n';
+  });
+  msg += `\n_Exportado desde MiCompraVecina PR_ 🇵🇷`;
+  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  toast('💬 Abriendo WhatsApp...');
+}
+
+function exportPDF() {
+  const list = getFilteredOrders();
+  if (!list.length) { toast('⚠️ No hay encargos para exportar'); return; }
+  const fecha = new Date().toLocaleDateString('es-PR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const statusColors = { pendiente:'#b45309', recogido:'#1d4ed8', entregado:'#15803d' };
+  const statusBg = { pendiente:'#fef3c7', recogido:'#dbeafe', entregado:'#dcfce7' };
+
+  const rows = list.map((o, i) => `
+    <tr style="page-break-inside:avoid;">
+      <td style="padding:10px 8px; border-bottom:1px solid #e2e8f0; font-weight:700; color:#0d6b6b; vertical-align:top;">${i+1}. ${o.clientName}</td>
+      <td style="padding:10px 8px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-size:12px;">
+        📍 ${o.locality}<br><span style="color:#607070">${o.address}</span>
+      </td>
+      <td style="padding:10px 8px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-size:12px;">🏪 ${o.store}</td>
+      <td style="padding:10px 8px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-size:12px;">${o.products}</td>
+      <td style="padding:10px 8px; border-bottom:1px solid #e2e8f0; vertical-align:top; text-align:center;">
+        <span style="background:${statusBg[o.status]};color:${statusColors[o.status]};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">
+          ${statusLabel(o.status).replace(/[⏳🚗✅]/g,'').trim()}
+        </span>
+      </td>
+    </tr>
+  `).join('');
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; color: #1a2e2e; margin: 0; padding: 0; }
+    .header { background: linear-gradient(135deg,#0d6b6b,#0a4f4f); color:white; padding:24px 32px; }
+    .header h1 { font-size:22px; margin:0 0 4px; } .header p { margin:0; opacity:0.8; font-size:13px; }
+    .summary { display:flex; gap:16px; padding:16px 32px; background:#f4f7f6; border-bottom:1px solid #d0e4e4; }
+    .sum-box { background:white; border-radius:10px; padding:10px 18px; border:1px solid #d0e4e4; text-align:center; }
+    .sum-num { font-size:22px; font-weight:700; color:#0d6b6b; } .sum-lbl { font-size:11px; color:#607070; }
+    .content { padding:24px 32px; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th { background:#0d6b6b; color:white; padding:10px 8px; text-align:left; font-size:12px; }
+    tr:nth-child(even) { background:#f8fafa; }
+    .footer { margin-top:32px; text-align:center; font-size:11px; color:#999; border-top:1px solid #e2e8f0; padding-top:12px; }
+  </style></head><body>
+  <div class="header">
+    <h1>🛒 MiCompraVecina PR — Área Este</h1>
+    <p>Reporte de encargos · ${fecha}</p>
+  </div>
+  <div class="summary">
+    <div class="sum-box"><div class="sum-num">${list.length}</div><div class="sum-lbl">Total</div></div>
+    <div class="sum-box"><div class="sum-num">${list.filter(o=>o.status==='pendiente').length}</div><div class="sum-lbl">Pendientes</div></div>
+    <div class="sum-box"><div class="sum-num">${list.filter(o=>o.status==='recogido').length}</div><div class="sum-lbl">En camino</div></div>
+    <div class="sum-box"><div class="sum-num">${list.filter(o=>o.status==='entregado').length}</div><div class="sum-lbl">Entregados</div></div>
+  </div>
+  <div class="content">
+    <table>
+      <thead><tr><th>Cliente</th><th>Dirección</th><th>Tienda</th><th>Productos</th><th style="text-align:center">Estado</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="footer">Generado por MiCompraVecina PR 🇵🇷 · ${new Date().toLocaleString('es-PR')}</div>
+  </div>
+  
+<div id="floatingExport" style="
+  position: fixed; bottom: 20px; right: 20px; z-index: 99999;
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+">
+  <div style="background:rgba(13,107,107,0.9); color:white; padding:5px 12px; border-radius:20px; font-size:0.72rem; font-weight:700; margin-bottom:2px;">
+    📤 Exportar encargos
+  </div>
+  <button onclick="exportPDF()" style="
+    background:#ef4444; color:white; border:none; padding:10px 18px;
+    border-radius:30px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:6px;
+  ">📄 PDF</button>
+  <button onclick="exportCSV()" style="
+    background:#16a34a; color:white; border:none; padding:10px 18px;
+    border-radius:30px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:6px;
+  ">📊 Excel / CSV</button>
+  <button onclick="exportWhatsApp()" style="
+    background:#25d366; color:white; border:none; padding:10px 18px;
+    border-radius:30px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:6px;
+  ">💬 WhatsApp</button>
+</div>
+
+
+<div id="confirmModal" style="
+  display:none; position:fixed; inset:0; z-index:99998;
+  background:rgba(0,0,0,0.45); align-items:center; justify-content:center;
+">
+  <div style="
+    background:white; border-radius:20px; padding:28px 28px 20px;
+    max-width:320px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.2);
+    font-family:'DM Sans',sans-serif; text-align:center;
+  ">
+    <div style="font-size:2rem; margin-bottom:10px;">🗑️</div>
+    <div style="font-size:1rem; font-weight:700; color:#1a2e2e; margin-bottom:6px;">¿Eliminar encargo?</div>
+    <div id="confirmName" style="font-size:0.85rem; color:#607070; margin-bottom:20px;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button onclick="closeConfirm()" style="
+        padding:10px 22px; border-radius:30px; border:1.5px solid #d0e4e4;
+        background:white; font-weight:600; font-size:0.85rem; cursor:pointer; color:#607070;
+      ">Cancelar</button>
+      <button id="confirmOkBtn" style="
+        padding:10px 22px; border-radius:30px; border:none;
+        background:#ef4444; color:white; font-weight:700; font-size:0.85rem; cursor:pointer;
+      ">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+</body></html>`;
+
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => { win.print(); }, 400);
+  toast('📄 PDF listo para imprimir / guardar');
+}
+
+window.closeConfirm = closeConfirm;
+window.exportPDF = exportPDF;
+window.exportCSV = exportCSV;
+window.exportWhatsApp = exportWhatsApp;
+
+</script>
+
+<div id="floatingExport" style="
+  position: fixed; bottom: 20px; right: 20px; z-index: 99999;
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+">
+  <div style="background:rgba(13,107,107,0.9); color:white; padding:5px 12px; border-radius:20px; font-size:0.72rem; font-weight:700; margin-bottom:2px;">
+    📤 Exportar encargos
+  </div>
+  <button onclick="exportPDF()" style="
+    background:#ef4444; color:white; border:none; padding:10px 18px;
+    border-radius:30px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:6px;
+  ">📄 PDF</button>
+  <button onclick="exportCSV()" style="
+    background:#16a34a; color:white; border:none; padding:10px 18px;
+    border-radius:30px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:6px;
+  ">📊 Excel / CSV</button>
+  <button onclick="exportWhatsApp()" style="
+    background:#25d366; color:white; border:none; padding:10px 18px;
+    border-radius:30px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:6px;
+  ">💬 WhatsApp</button>
+</div>
+
+
+<div id="confirmModal" style="
+  display:none; position:fixed; inset:0; z-index:99998;
+  background:rgba(0,0,0,0.45); align-items:center; justify-content:center;
+">
+  <div style="
+    background:white; border-radius:20px; padding:28px 28px 20px;
+    max-width:320px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.2);
+    font-family:'DM Sans',sans-serif; text-align:center;
+  ">
+    <div style="font-size:2rem; margin-bottom:10px;">🗑️</div>
+    <div style="font-size:1rem; font-weight:700; color:#1a2e2e; margin-bottom:6px;">¿Eliminar encargo?</div>
+    <div id="confirmName" style="font-size:0.85rem; color:#607070; margin-bottom:20px;"></div>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button onclick="closeConfirm()" style="
+        padding:10px 22px; border-radius:30px; border:1.5px solid #d0e4e4;
+        background:white; font-weight:600; font-size:0.85rem; cursor:pointer; color:#607070;
+      ">Cancelar</button>
+      <button id="confirmOkBtn" style="
+        padding:10px 22px; border-radius:30px; border:none;
+        background:#ef4444; color:white; font-weight:700; font-size:0.85rem; cursor:pointer;
+      ">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
