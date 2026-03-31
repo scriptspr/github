@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ColorDetector Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#080b0e;
+  --surface:#0e1317;
+  --surface2:#141a1f;
+  --border:#1e272f;
+  --border2:#263040;
+  --green:#00e896;
+  --green-dim:rgba(0,232,150,0.12);
+  --blue:#3b82f6;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --text:#d4dde8;
+  --muted:#4a5a6a;
+}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;padding:16px;min-height:100vh;}
+.container{max-width:1440px;margin:0 auto;}
+
+/* HEADER */
+.header{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  padding:16px 24px;margin-bottom:16px;
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:36px;height:36px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.logo h1{font-size:1.3rem;font-weight:800;color:var(--green);}
+.logo p{font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.upload-btn{
+  background:var(--green);color:#000;padding:10px 22px;border-radius:40px;
+  font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;border:none;font-size:0.85rem;
+  transition:transform .15s,opacity .15s;
+}
+.upload-btn:hover{transform:translateY(-1px);opacity:.9;}
+
+/* API KEY BAR */
+.apikey-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 18px;margin-bottom:16px;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+}
+.apikey-bar label{font-size:0.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.apikey-input{
+  flex:1;min-width:200px;background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text);padding:8px 12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:0.8rem;outline:none;
+}
+.apikey-save{background:var(--blue);color:white;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:0.8rem;}
+.apikey-status{font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+/* GRID */
+.main-grid{display:grid;grid-template-columns:1fr 320px;gap:16px;}
+@media(max-width:900px){.main-grid{grid-template-columns:1fr;}}
+
+/* CANVAS AREA */
+.canvas-area{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;
+}
+.canvas-toolbar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;
+}
+.toolbar-btn{
+  background:var(--surface2);border:1px solid var(--border2);color:var(--text);
+  padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.75rem;font-family:'Syne',sans-serif;font-weight:600;
+  transition:border-color .15s,color .15s;
+}
+.toolbar-btn:hover{border-color:var(--green);color:var(--green);}
+.toolbar-btn.active{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+.canvas-wrapper{
+  background:#000;border-radius:10px;text-align:center;
+  max-height:56vh;overflow:auto;position:relative;
+}
+#mainCanvas{max-width:100%;height:auto;cursor:crosshair;display:block;margin:0 auto;}
+.canvas-hint{
+  font-size:0.7rem;color:var(--muted);text-align:center;margin-top:8px;
+  font-family:'JetBrains Mono',monospace;
+}
+.canvas-hint span{color:var(--green);}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:14px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.card-title{font-size:0.65rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;font-family:'JetBrains Mono',monospace;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.stat{text-align:center;padding:10px 6px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);}
+.stat-value{font-size:1.8rem;font-weight:800;color:var(--green);line-height:1;}
+.stat-label{font-size:0.6rem;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;}
+
+/* COLOR PICKER */
+.color-preview-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.color-swatch{width:48px;height:48px;border-radius:10px;border:2px solid var(--border2);background:var(--surface2);}
+.color-info{flex:1;}
+.color-rgb{font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:var(--text);}
+.color-count{font-size:0.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.sample-swatches{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+.sample-swatch{
+  width:20px;height:20px;border-radius:4px;border:2px solid rgba(255,255,255,0.2);
+  cursor:pointer;transition:transform .1s;
+}
+.sample-swatch:hover{transform:scale(1.15);}
+
+/* CONTROLS */
+.ctrl{margin-bottom:12px;}
+.ctrl label{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:4px;font-family:'JetBrains Mono',monospace;}
+.ctrl label span{color:var(--green);}
+input[type="range"]{
+  width:100%;height:4px;background:var(--border2);border-radius:2px;outline:none;-webkit-appearance:none;
+  cursor:pointer;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--green);
+}
+select{
+  width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);
+  padding:7px 10px;border-radius:8px;font-size:0.78rem;outline:none;font-family:'Syne',sans-serif;
+}
+
+/* BUTTONS */
+.btn{
+  width:100%;padding:10px;border-radius:30px;font-weight:700;cursor:pointer;border:none;
+  font-family:'Syne',sans-serif;font-size:0.82rem;transition:transform .15s,opacity .15s;
+}
+.btn:hover{transform:translateY(-1px);opacity:.9;}
+.btn-primary{background:var(--green);color:#000;}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border2);}
+.btn-group{display:flex;gap:6px;margin-top:6px;}
+.btn-group .btn{font-size:0.75rem;padding:8px;}
+
+/* SEPARATION METHOD */
+.sep-method{
+  background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;
+  margin-bottom:10px;font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;
+}
+.sep-method strong{color:var(--green);}
+
+/* LOG */
+.log-area{max-height:130px;overflow-y:auto;}
+.log-entry{font-size:0.68rem;font-family:'JetBrains Mono',monospace;padding:5px 0;border-bottom:1px solid var(--border);}
+.log-entry.success{color:var(--green);}
+.log-entry.error{color:var(--red);}
+.log-entry.info{color:var(--blue);}
+.log-entry.warning{color:var(--amber);}
+
+/* CHAT */
+.chat-messages{max-height:240px;overflow-y:auto;margin-bottom:10px;}
+.message{display:flex;gap:8px;margin-bottom:10px;}
+.message.user{flex-direction:row-reverse;}
+.message.user .bubble{background:var(--green-dim);border:1px solid rgba(0,232,150,0.25);}
+.message.ai .bubble{background:var(--surface2);border:1px solid var(--border2);}
+.bubble{max-width:82%;padding:9px 13px;border-radius:12px;font-size:0.78rem;line-height:1.45;}
+.avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--green-dim);font-size:0.75rem;flex-shrink:0;}
+.chat-input-area{display:flex;gap:6px;}
+.chat-input{
+  flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;
+  padding:9px 14px;color:white;outline:none;font-size:0.78rem;font-family:'Syne',sans-serif;
+}
+.chat-input:focus{border-color:var(--green);}
+.chat-send{background:var(--green);border:none;border-radius:20px;padding:8px 18px;font-weight:700;cursor:pointer;font-size:0.8rem;}
+.quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.quick-btn{
+  background:transparent;border:1px solid var(--border2);border-radius:16px;padding:4px 10px;
+  font-size:0.68rem;color:var(--muted);cursor:pointer;font-family:'Syne',sans-serif;transition:border-color .15s,color .15s;
+}
+.quick-btn:hover{border-color:var(--green);color:var(--green);}
+
+.loading-dots{display:inline-flex;gap:3px;}
+.loading-dots span{animation:blink 1.4s infinite;}
+.loading-dots span:nth-child(2){animation-delay:.2s;}
+.loading-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,60%,100%{opacity:.2}30%{opacity:1}}
+
+/* LENS */
+#lens{position:fixed;width:150px;height:150px;border-radius:50%;border:3px solid var(--green);background:rgba(0,0,0,.85);pointer-events:none;z-index:9999;display:none;overflow:hidden;}
+
+/* PROGRESS BAR */
+.progress-bar{
+  height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin:8px 0;display:none;
+}
+.progress-bar.active{display:block;}
+.progress-fill{height:100%;background:var(--green);width:0%;transition:width .1s;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">🎨</div>
+      <div>
+        <h1>ColorDetector Pro</h1>
+        <p>Detección precisa por color + Gemini AI</p>
+      </div>
+    </div>
+    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">📸 Cargar imagen</button>
+    <input type="file" id="fileInput" accept="image/*" style="display:none">
+  </div>
+
+  <div class="apikey-bar">
+    <label>🔑 GEMINI KEY:</label>
+    <input class="apikey-input" id="apikeyInput" type="password" placeholder="AIzaSy..." autocomplete="off">
+    <button class="apikey-save" onclick="saveApiKey()">Guardar</button>
+    <span class="apikey-status" id="apikeyStatus">Sin clave</span>
+  </div>
+
+  <div class="main-grid">
+    <div class="canvas-area">
+      <div class="canvas-toolbar">
+        <button class="toolbar-btn" id="lensBtn">🔍 Lupa</button>
+        <button class="toolbar-btn" onclick="undoLast()">↩ Deshacer</button>
+        <button class="toolbar-btn" onclick="clearAll()">🗑 Limpiar</button>
+        <button class="toolbar-btn" onclick="exportImage()">📷 PNG</button>
+        <button class="toolbar-btn" onclick="exportToExcel()">📊 Excel</button>
+      </div>
+      <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="canvas-wrapper">
+        <canvas id="mainCanvas"></canvas>
+      </div>
+      <p class="canvas-hint">
+        <span>Clic izq</span> = tomar muestra de color &nbsp;|&nbsp;
+        <span>Shift+clic</span> = agregar manual &nbsp;|&nbsp;
+        <span>Clic der</span> = eliminar detección
+      </p>
+    </div>
+
+    <div class="sidebar">
+      <!-- STATS -->
+      <div class="card">
+        <div class="card-title">Resultados</div>
+        <div class="stats-row">
+          <div class="stat"><div class="stat-value" id="totalCount">0</div><div class="stat-label">TOTAL</div></div>
+          <div class="stat"><div class="stat-value" id="autoCount">0</div><div class="stat-label">AUTO</div></div>
+          <div class="stat"><div class="stat-value" id="manualCount">0</div><div class="stat-label">MANUAL</div></div>
+        </div>
+      </div>
+
+      <!-- CONTROLES -->
+      <div class="card">
+        <div class="card-title">Color seleccionado</div>
+        <div class="color-preview-row">
+          <div class="color-swatch" id="colorPreview"></div>
+          <div class="color-info">
+            <div class="color-rgb" id="selectedColorText">Sin muestra</div>
+            <div class="color-count" id="sampleCount"></div>
+          </div>
+        </div>
+        <div id="sampleSwatchesRow" style="display:none;margin-bottom:8px;">
+          <div class="sample-swatches" id="sampleSwatches"></div>
+          <button onclick="clearSamples()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:0.68rem;padding:3px 10px;border-radius:12px;cursor:pointer;">✕ Limpiar muestras</button>
+        </div>
+
+        <div class="card-title" style="margin-top:8px;">Ajustes de detección</div>
+
+        <div class="ctrl">
+          <label>Modo color <span id="colorModeLabel">HSV</span></label>
+          <select id="colorMode" onchange="document.getElementById('colorModeLabel').textContent=this.options[this.selectedIndex].text.split(' ')[0]">
+            <option value="hsv">HSV (recomendado)</option>
+            <option value="rgb">RGB</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label>Tolerancia de color <span id="toleranceVal">35%</span></label>
+          <input type="range" id="tolerance" min="5" max="100" value="35" oninput="toleranceVal.textContent=this.value+'%'">
+        </div>
+        <div class="ctrl">
+          <label>Tamaño mínimo objeto <span id="minSizeVal">25px</span></label>
+          <input type="range" id="minSize" min="5" max="120" value="25" oninput="minSizeVal.textContent=this.value+'px'">
+        </div>
+        <div class="ctrl">
+          <label>Separación mínima entre objs <span id="sepDistVal">20px</span></label>
+          <input type="range" id="sepDist" min="0" max="80" value="20" oninput="sepDistVal.textContent=this.value+'px'">
+        </div>
+
+        <div class="sep-method" id="sepInfo">
+          Método: <strong>Flood-fill + filtro por proximidad</strong>
+        </div>
+
+        <button class="btn btn-primary" id="scanBtn" onclick="scanByColor()">🔍 ESCANEAR</button>
+
+      </div>
+
+      <!-- LOG -->
+      <div class="card">
+        <div class="card-title">Registro</div>
+        <div class="log-area" id="logArea">
+          <div class="log-entry">⚡ Listo. Carga una imagen.</div>
+        </div>
+      </div>
+
+      <!-- CHAT -->
+      <div class="card">
+        <div class="card-title">🤖 Gemini AI — Conteo asistido</div>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="askGemini('Cuenta exactamente cuántos palos/tubos/barras hay en la imagen. Dame solo el número.')">📊 Contar palos</button>
+          <button class="quick-btn" onclick="askGemini('Describe todos los objetos que ves y estima cuántos hay de cada tipo.')">👁️ Describir</button>
+          <button class="quick-btn" onclick="askGemini('¿Cuántos objetos de color diferente puedes identificar? Lista cada color y cantidad.')">🎨 Por color</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message ai">
+            <div class="avatar">🤖</div>
+            <div class="bubble">¡Hola! Carga una imagen y pregúntame cuántos objetos hay.</div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" class="chat-input" id="chatInput" placeholder="Pregunta sobre la imagen..." disabled>
+          <button class="chat-send" id="chatSend" onclick="sendMessage()" disabled>▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="lens"><canvas id="lensCanvas" width="150" height="150"></canvas></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+// ===== ELEMENTOS =====
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext('2d');
+const fileInput = document.getElementById('fileInput');
+const logArea = document.getElementById('logArea');
+const lens = document.getElementById('lens');
+const lensCanvas = document.getElementById('lensCanvas');
+const lensCtx = lensCanvas.getContext('2d');
+const lensBtn = document.getElementById('lensBtn');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatMessages = document.getElementById('chatMessages');
+const colorPreview = document.getElementById('colorPreview');
+const progressBar = document.getElementById('progressBar');
+const progressFill = document.getElementById('progressFill');
+
+let originalImage = null;
+let imgWidth = 0, imgHeight = 0;
+let displayScale = 1;
+let detectedObjects = [];
+let colorSamples = [];
+let lensActive = false;
+
+// ===== UTILS =====
+function addLog(msg, type='') {
+  const e = document.createElement('div');
+  e.className = 'log-entry' + (type ? ' '+type : '');
+  e.textContent = '› ' + msg;
+  logArea.appendChild(e);
+  e.scrollIntoView({behavior:'smooth',block:'nearest'});
+  if (logArea.children.length > 60) logArea.removeChild(logArea.children[0]);
+}
+
+function updateStats() {
+  const auto = detectedObjects.filter(o=>o.type==='auto').length;
+  const manual = detectedObjects.filter(o=>o.type==='manual').length;
+  document.getElementById('totalCount').textContent = detectedObjects.length;
+  document.getElementById('autoCount').textContent = auto;
+  document.getElementById('manualCount').textContent = manual;
+}
+
+function setProgress(pct) {
+  if (pct <= 0) { progressBar.classList.remove('active'); return; }
+  progressBar.classList.add('active');
+  progressFill.style.width = pct + '%';
+  if (pct >= 100) setTimeout(()=>{ progressBar.classList.remove('active'); progressFill.style.width='0%'; }, 500);
+}
+
+// ===== DIBUJAR CANVAS =====
+function redrawCanvas() {
+  if (!originalImage) return;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+  detectedObjects.forEach((obj, i) => {
+    const x = obj.x * displayScale;
+    const y = obj.y * displayScale;
+    const w = obj.width * displayScale;
+    const h = obj.height * displayScale;
+    const col = obj.type === 'auto' ? '#00e896' : '#f59e0b';
+    const fill = obj.type === 'auto' ? 'rgba(0,232,150,0.08)' : 'rgba(245,158,11,0.12)';
+    ctx.beginPath(); ctx.rect(x,y,w,h);
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = fill; ctx.fill();
+    // Número
+    const fs = Math.max(9, Math.min(14, w*0.3));
+    ctx.font = `bold ${fs}px 'JetBrains Mono', monospace`;
+    ctx.shadowColor='#000'; ctx.shadowBlur=4;
+    ctx.fillStyle = '#fff';
+    ctx.fillText(i+1, x+3, y+fs+1);
+    ctx.shadowBlur=0;
+  });
+}
+
+// ===== COLOR =====
+function rgbToHsv(r,g,b) {
+  r/=255; g/=255; b/=255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b), d=max-min;
+  let h=0, s=max===0?0:d/max, v=max;
+  if(d!==0){
+    if(max===r) h=((g-b)/d+(g<b?6:0))/6;
+    else if(max===g) h=((b-r)/d+2)/6;
+    else h=((r-g)/d+4)/6;
+  }
+  return {h:h*360, s:s*100, v:v*100};
+}
+
+function colorDistance(c1, c2) {
+  if(document.getElementById('colorMode').value==='rgb'){
+    const dr=c1.r-c2.r, dg=c1.g-c2.g, db=c1.b-c2.b;
+    return Math.sqrt(dr*dr+dg*dg+db*db);
+  }
+  const h1=rgbToHsv(c1.r,c1.g,c1.b), h2=rgbToHsv(c2.r,c2.g,c2.b);
+  let dh=Math.abs(h1.h-h2.h); if(dh>180)dh=360-dh;
+  const ds=Math.abs(h1.s-h2.s), dv=Math.abs(h1.v-h2.v);
+  return Math.sqrt((dh/180)**2*0.5+(ds/100)**2*0.3+(dv/100)**2*0.2)*441;
+}
+
+function getColorAt(img, x, y) {
+  const tmp=document.createElement('canvas');
+  tmp.width=img.width; tmp.height=img.height;
+  tmp.getContext('2d').drawImage(img,0,0);
+  const px=tmp.getContext('2d').getImageData(x,y,1,1).data;
+  return {r:px[0],g:px[1],b:px[2]};
+}
+
+function addSample(r,g,b) {
+  colorSamples.push({r,g,b});
+  colorPreview.style.background = `rgb(${r},${g},${b})`;
+  document.getElementById('selectedColorText').textContent = `RGB(${r},${g},${b})`;
+  document.getElementById('sampleCount').textContent = `${colorSamples.length} muestra(s)`;
+  renderSwatches();
+}
+
+function renderSwatches() {
+  const row = document.getElementById('sampleSwatchesRow');
+  const container = document.getElementById('sampleSwatches');
+  container.innerHTML = '';
+  if (!colorSamples.length) { row.style.display='none'; return; }
+  row.style.display = 'block';
+  colorSamples.forEach((c,i) => {
+    const sw = document.createElement('div');
+    sw.className = 'sample-swatch';
+    sw.style.background = `rgb(${c.r},${c.g},${c.b})`;
+    sw.title = `RGB(${c.r},${c.g},${c.b}) — clic para eliminar`;
+    sw.onclick = () => { colorSamples.splice(i,1); renderSwatches(); if(!colorSamples.length)clearSamples(); };
+    container.appendChild(sw);
+  });
+}
+
+function clearSamples() {
+  colorSamples = [];
+  colorPreview.style.background = '';
+  document.getElementById('selectedColorText').textContent = 'Sin muestra';
+  document.getElementById('sampleCount').textContent = '';
+  document.getElementById('sampleSwatchesRow').style.display='none';
+}
+
+// ===== DETECCIÓN MEJORADA =====
+// Algoritmo:
+// 1. Construir máscara de píxeles que coinciden con el color
+// 2. Aplicar erosión morfológica para separar objetos pegados
+// 3. Flood-fill sobre la máscara erosionada para encontrar blobs
+// 4. Filtrar blobs por tamaño mínimo
+// 5. Expandir bounding boxes de vuelta al tamaño original
+// 6. Filtrar duplicados con NMS (Non-Maximum Suppression) por IoU
+
+async function scanByColor() {
+  if (!originalImage) { addLog('❌ Carga una imagen primero','error'); return; }
+  const samples = colorSamples.length ? colorSamples : null;
+  if (!samples) { addLog('❌ Haz clic en la imagen para seleccionar color','warning'); return; }
+
+  const tolerancePct = parseInt(document.getElementById('tolerance').value);
+  const minObjSize = parseInt(document.getElementById('minSize').value);
+  const sepDist = parseInt(document.getElementById('sepDist').value);
+  const maxDist = (tolerancePct/100)*441;
+
+  addLog(`🔍 Escaneando... tolerancia=${tolerancePct}% minSize=${minObjSize}px`, 'info');
+  setProgress(10);
+
+  // Pequeño yield para no bloquear UI
+  await new Promise(r=>setTimeout(r,10));
+
+  // --- Paso 1: Construir máscara ---
+  const tmpC = document.createElement('canvas');
+  tmpC.width=imgWidth; tmpC.height=imgHeight;
+  const tmpCtx = tmpC.getContext('2d');
+  tmpCtx.drawImage(originalImage,0,0);
+  const imgData = tmpCtx.getImageData(0,0,imgWidth,imgHeight);
+  const data = imgData.data;
+
+  const mask = new Uint8Array(imgWidth*imgHeight);
+  for(let i=0; i<imgWidth*imgHeight; i++) {
+    const r=data[i*4], g=data[i*4+1], b=data[i*4+2];
+    for(const s of samples) {
+      if(colorDistance({r,g,b},s) <= maxDist) { mask[i]=1; break; }
+    }
+  }
+  setProgress(35);
+  await new Promise(r=>setTimeout(r,5));
+
+  // --- Paso 2: Erosión morfológica ligera para separar objetos pegados ---
+  // Radio de erosión basado en el tamaño mínimo (ayuda a separar palos tocándose)
+  const erosionRadius = Math.max(1, Math.floor(minObjSize * 0.15));
+  const eroded = erodeMask(mask, imgWidth, imgHeight, erosionRadius);
+  setProgress(55);
+  await new Promise(r=>setTimeout(r,5));
+
+  // --- Paso 3: Flood-fill sobre la máscara erosionada ---
+  const visited = new Uint8Array(imgWidth*imgHeight);
+  const blobs = [];
+
+  for(let y=0; y<imgHeight; y++) {
+    for(let x=0; x<imgWidth; x++) {
+      if(eroded[y*imgWidth+x] && !visited[y*imgWidth+x]) {
+        const blob = floodFill(eroded, visited, x, y, imgWidth, imgHeight);
+        if(blob.pixelCount >= Math.max(4, minObjSize*minObjSize*0.15)) {
+          blobs.push(blob);
+        }
+      }
+    }
+  }
+  setProgress(75);
+
+  // --- Paso 4: Filtrar y escalar bounding boxes ---
+  // Expandir bbox por el radio de erosión para recuperar tamaño real
+  const expanded = blobs.map(b => ({
+    x: Math.max(0, b.minX - erosionRadius),
+    y: Math.max(0, b.minY - erosionRadius),
+    width: Math.min(imgWidth, b.maxX + erosionRadius) - Math.max(0, b.minX - erosionRadius) + 1,
+    height: Math.min(imgHeight, b.maxY + erosionRadius) - Math.max(0, b.minY - erosionRadius) + 1,
+    cx: b.cx, cy: b.cy, area: b.pixelCount,
+  })).filter(b => b.width >= minObjSize || b.height >= minObjSize);
+
+  // --- Paso 5: NMS — eliminar duplicados solapados ---
+  const finalBlobs = nms(expanded, 0.45);
+
+  // --- Paso 6: Filtrar por distancia mínima entre centros ---
+  const filtered = [];
+  for(const b of finalBlobs) {
+    let tooClose = false;
+    for(const f of filtered) {
+      if(Math.hypot(b.cx-f.cx, b.cy-f.cy) < sepDist) { tooClose=true; break; }
+    }
+    if(!tooClose) filtered.push(b);
+  }
+
+  setProgress(90);
+
+  const manual = detectedObjects.filter(o=>o.type==='manual');
+  detectedObjects = [
+    ...manual,
+    ...filtered.map(b => ({x:b.x, y:b.y, width:b.width, height:b.height, cx:b.cx, cy:b.cy, type:'auto'}))
+  ];
+
+  redrawCanvas(); updateStats();
+  setProgress(100);
+  addLog(`✅ ${filtered.length} objetos detectados (${blobs.length} blobs → ${filtered.length} finales)`, 'success');
+}
+
+// Flood-fill iterativo
+function floodFill(mask, visited, sx, sy, W, H) {
+  const stack = [sy*W+sx];
+  let minX=sx, maxX=sx, minY=sy, maxY=sy, count=0;
+  visited[sy*W+sx]=1;
+  while(stack.length) {
+    const idx=stack.pop();
+    const y=Math.floor(idx/W), x=idx%W;
+    if(x<minX)minX=x; if(x>maxX)maxX=x;
+    if(y<minY)minY=y; if(y>maxY)maxY=y;
+    count++;
+    // 8-conectividad para mejor detección
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1],[1,-1],[-1,-1]]) {
+      const nx=x+dx, ny=y+dy;
+      if(nx>=0&&nx<W&&ny>=0&&ny<H) {
+        const ni=ny*W+nx;
+        if(mask[ni]&&!visited[ni]) { visited[ni]=1; stack.push(ni); }
+      }
+    }
+  }
+  return {minX,maxX,minY,maxY,cx:(minX+maxX)/2,cy:(minY+maxY)/2,pixelCount:count};
+}
+
+// Erosión morfológica (cuadrada)
+function erodeMask(mask, W, H, radius) {
+  const out = new Uint8Array(W*H);
+  const r = radius;
+  for(let y=0; y<H; y++) {
+    for(let x=0; x<W; x++) {
+      if(!mask[y*W+x]) continue;
+      // Verificar que todos los vecinos en el radio también están en la máscara
+      let ok=true;
+      outer: for(let dy=-r; dy<=r && ok; dy++) {
+        for(let dx=-r; dx<=r && ok; dx++) {
+          const nx=x+dx, ny=y+dy;
+          if(nx<0||nx>=W||ny<0||ny>=H||!mask[ny*W+nx]) ok=false;
+        }
+      }
+      if(ok) out[y*W+x]=1;
+    }
+  }
+  return out;
+}
+
+// Non-Maximum Suppression por IoU
+function nms(boxes, iouThresh) {
+  // Ordenar por área descendente (cajas más grandes primero)
+  const sorted = [...boxes].sort((a,b)=>b.area-a.area);
+  const keep = [];
+  const suppressed = new Set();
+  for(let i=0; i<sorted.length; i++) {
+    if(suppressed.has(i)) continue;
+    keep.push(sorted[i]);
+    for(let j=i+1; j<sorted.length; j++) {
+      if(suppressed.has(j)) continue;
+      if(iou(sorted[i], sorted[j]) > iouThresh) suppressed.add(j);
+    }
+  }
+  return keep;
+}
+
+function iou(a, b) {
+  const x1=Math.max(a.x,b.x), y1=Math.max(a.y,b.y);
+  const x2=Math.min(a.x+a.width,b.x+b.width), y2=Math.min(a.y+a.height,b.y+b.height);
+  if(x2<x1||y2<y1) return 0;
+  const inter=(x2-x1)*(y2-y1);
+  const union=a.width*a.height+b.width*b.height-inter;
+  return union>0?inter/union:0;
+}
+
+// ===== CARGA DE IMAGEN =====
+function loadImage(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      originalImage = img;
+      imgWidth = img.width; imgHeight = img.height;
+      const maxDisp = 700;
+      displayScale = Math.min(1, maxDisp/Math.max(imgWidth,imgHeight));
+      canvas.width = imgWidth*displayScale;
+      canvas.height = imgHeight*displayScale;
+      detectedObjects = [];
+      redrawCanvas(); updateStats();
+      addLog(`✅ ${imgWidth}×${imgHeight}px — displayScale=${displayScale.toFixed(2)}`, 'success');
+      enableChat();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ===== ACCIONES =====
+function undoLast() {
+  if(detectedObjects.length) { detectedObjects.pop(); redrawCanvas(); updateStats(); addLog('↩ Deshecho','warning'); }
+}
+function clearAll() {
+  detectedObjects=[]; redrawCanvas(); updateStats(); addLog('🗑 Limpiado','warning');
+}
+function exportImage() {
+  if(!originalImage) return;
+  const a=document.createElement('a');
+  a.download=`colordetector_${Date.now()}.png`;
+  a.href=canvas.toDataURL(); a.click();
+  addLog('📷 PNG exportado','success');
+}
+function exportToExcel() {
+  if(!detectedObjects.length) { addLog('❌ No hay datos','error'); return; }
+  const rows=[['ColorDetector Pro — Reporte'],['Fecha:',new Date().toLocaleString()],['Total:',detectedObjects.length],['',''],['#','Tipo','X','Y','Ancho','Alto']];
+  detectedObjects.forEach((o,i)=>rows.push([i+1,o.type,Math.round(o.x),Math.round(o.y),Math.round(o.width),Math.round(o.height)]));
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Detección');
+  XLSX.writeFile(wb,`colordetector_${Date.now()}.xlsx`);
+  addLog('📊 Excel exportado','success');
+}
+
+// ===== LUPA =====
+function toggleLens() {
+  lensActive = !lensActive;
+  lensBtn.classList.toggle('active', lensActive);
+  if(lensActive) canvas.addEventListener('mousemove', lensMove);
+  else { canvas.removeEventListener('mousemove', lensMove); lens.style.display='none'; }
+}
+function lensMove(e) {
+  if(!originalImage) return;
+  const rect=canvas.getBoundingClientRect();
+  const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+  const cx=(e.clientX-rect.left)*sx, cy=(e.clientY-rect.top)*sy;
+  const ix=Math.floor(cx/displayScale), iy=Math.floor(cy/displayScale);
+  if(ix<0||ix>=imgWidth||iy<0||iy>=imgHeight) { lens.style.display='none'; return; }
+  lens.style.display='block';
+  lens.style.left=(e.clientX+20)+'px'; lens.style.top=(e.clientY+20)+'px';
+  const size=150, zoom=4;
+  lensCanvas.width=size; lensCanvas.height=size;
+  const sx2=Math.max(0,Math.min(imgWidth-size/zoom, ix-size/(zoom*2)));
+  const sy2=Math.max(0,Math.min(imgHeight-size/zoom, iy-size/(zoom*2)));
+  const tmp=document.createElement('canvas');
+  tmp.width=size/zoom; tmp.height=size/zoom;
+  tmp.getContext('2d').drawImage(originalImage,sx2,sy2,size/zoom,size/zoom,0,0,size/zoom,size/zoom);
+  lensCtx.clearRect(0,0,size,size);
+  lensCtx.drawImage(tmp,0,0,size/zoom,size/zoom,0,0,size,size);
+  lensCtx.beginPath(); lensCtx.strokeStyle='#00e896'; lensCtx.lineWidth=1.5;
+  lensCtx.moveTo(size/2-10,size/2); lensCtx.lineTo(size/2+10,size/2);
+  lensCtx.moveTo(size/2,size/2-10); lensCtx.lineTo(size/2,size/2+10);
+  lensCtx.stroke();
+}
+lensBtn.onclick = toggleLens;
+
+// ===== CLICKS EN CANVAS =====
+canvas.addEventListener('click', e => {
+  if(!originalImage) return;
+  if(lensActive) toggleLens();
+  const rect=canvas.getBoundingClientRect();
+  const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+  const cx=(e.clientX-rect.left)*sx, cy=(e.clientY-rect.top)*sy;
+  const ix=Math.floor(cx/displayScale), iy=Math.floor(cy/displayScale);
+  if(e.shiftKey) {
+    const sz=parseInt(document.getElementById('minSize').value);
+    detectedObjects.push({x:ix-sz/2,y:iy-sz/2,width:sz,height:sz,cx:ix,cy:iy,type:'manual'});
+    redrawCanvas(); updateStats(); addLog('➕ Manual agregado','success');
+  } else if(ix>=0&&ix<imgWidth&&iy>=0&&iy<imgHeight) {
+    const col=getColorAt(originalImage,ix,iy);
+    addSample(col.r,col.g,col.b);
+    addLog(`🎨 Muestra RGB(${col.r},${col.g},${col.b})`, 'success');
+  }
+});
+
+canvas.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  if(!originalImage||!detectedObjects.length) return;
+  const rect=canvas.getBoundingClientRect();
+  const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+  const cx=(e.clientX-rect.left)*sx/displayScale, cy=(e.clientY-rect.top)*sy/displayScale;
+  let best=-1, bestD=Infinity;
+  detectedObjects.forEach((o,i) => {
+    const d=Math.hypot((o.x+o.width/2)-cx, (o.y+o.height/2)-cy);
+    if(d<bestD){bestD=d;best=i;}
+  });
+  if(best!==-1&&bestD<60) { detectedObjects.splice(best,1); redrawCanvas(); updateStats(); addLog('➖ Eliminado','warning'); }
+});
+
+// Drag & drop
+const dropArea = document.querySelector('.canvas-area');
+dropArea.addEventListener('dragover', e=>{e.preventDefault(); dropArea.style.borderColor='var(--green)';});
+dropArea.addEventListener('dragleave', ()=>dropArea.style.borderColor='var(--border)');
+dropArea.addEventListener('drop', e=>{
+  e.preventDefault(); dropArea.style.borderColor='var(--border)';
+  const f=e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('image/')) loadImage(f);
+});
+fileInput.onchange = e=>{if(e.target.files[0]) loadImage(e.target.files[0]);};
+
+// ===== GEMINI AI =====
+const GEMINI_MODEL = "gemini-2.0-flash";
+
+function getCompressedBase64(maxKB=800) {
+  const maxDim=1024;
+  let w=imgWidth, h=imgHeight;
+  if(w>maxDim||h>maxDim) {
+    if(w>h){h=Math.round(h*maxDim/w);w=maxDim;}
+    else{w=Math.round(w*maxDim/h);h=maxDim;}
+  }
+  const tmp=document.createElement('canvas');
+  tmp.width=w; tmp.height=h;
+  tmp.getContext('2d').drawImage(originalImage,0,0,w,h);
+  let q=0.75, data=tmp.toDataURL('image/jpeg',q);
+  while(data.length>maxKB*1024&&q>0.3){q-=0.1;data=tmp.toDataURL('image/jpeg',q);}
+  addLog(`📸 Imagen enviada: ${w}×${h}px, ${(data.length/1024).toFixed(0)}KB`, 'info');
+  return data.split(',')[1];
+}
+
+function addChatMsg(role, text, loading=false) {
+  const d=document.createElement('div');
+  d.className=`message ${role}`;
+  const av=document.createElement('div'); av.className='avatar'; av.textContent=role==='user'?'👤':'🤖';
+  const b=document.createElement('div'); b.className='bubble';
+  if(loading) b.innerHTML='<div class="loading-dots"><span>●</span><span>●</span><span>●</span></div>';
+  else b.innerHTML=`<p>${text.replace(/\n/g,'<br>')}</p>`;
+  d.appendChild(av); d.appendChild(b);
+  chatMessages.appendChild(d);
+  chatMessages.scrollTop=chatMessages.scrollHeight;
+  return b;
+}
+
+async function askGemini(question) {
+  if(!originalImage){addChatMsg('ai','Primero carga una imagen.');return;}
+  const apiKey=document.getElementById('apikeyInput').value.trim();
+  if(!apiKey){addChatMsg('ai','⚠️ Ingresa tu API key de Gemini arriba.');return;}
+  addChatMsg('user',question);
+  const lb=addChatMsg('ai','',true);
+  try {
+    const b64=getCompressedBase64(800);
+    const url=`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    const body={
+      contents:[{parts:[
+        {text:`Eres un experto en inventario visual. Analiza la imagen con precisión y responde en español de forma concisa. Si te piden contar objetos, da el número exacto primero, luego explica brevemente. Pregunta: ${question}`},
+        {inline_data:{mime_type:"image/jpeg",data:b64}}
+      ]}],
+      generationConfig:{temperature:0.1,maxOutputTokens:512}
+    };
+    addLog(`📡 Enviando a Gemini...`,'info');
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok){const t=await res.text();throw new Error(`HTTP ${res.status}: ${t.substring(0,150)}`);}
+    const json=await res.json();
+    const answer=json.candidates?.[0]?.content?.parts?.[0]?.text||'Sin respuesta.';
+    lb.innerHTML=`<p>${answer.replace(/\n/g,'<br>')}</p>`;
+    addLog('✅ Respuesta recibida','success');
+  } catch(err) {
+    lb.innerHTML=`<p style="color:var(--red)">❌ ${err.message}</p>`;
+    addLog(`❌ ${err.message}`,'error');
+  }
+}
+
+function sendMessage() {
+  const msg=chatInput.value.trim();
+  if(msg){askGemini(msg);chatInput.value='';}
+}
+function enableChat() {
+  chatInput.disabled=false; chatSend.disabled=false;
+  chatInput.placeholder='Pregunta sobre la imagen...';
+}
+
+// API key
+function saveApiKey() {
+  const k=document.getElementById('apikeyInput').value.trim();
+  if(k){localStorage.setItem('geminiKey',k);document.getElementById('apikeyStatus').textContent='✅ Guardada';addLog('🔑 API key guardada','success');}
+}
+(function loadKey(){
+  const k=localStorage.getItem('geminiKey');
+  if(k){document.getElementById('apikeyInput').value=k;document.getElementById('apikeyStatus').textContent='✅ Cargada';}
+})();
+
+chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') sendMessage(); });
+
+addLog('🚀 ColorDetector Pro listo. Usa Gemini: gemini-2.0-flash', 'success');
+</script>
+</body>
+</html>

@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Contador de Materiales - Almacén Profesional</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e293b;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.light-mode {
+            background: #f1f5f9;
+        }
+        body.light-mode .container {
+            background: #ffffff;
+        }
+        body.light-mode .toolbar,
+        body.light-mode .info-bar,
+        body.light-mode .drawing-tools,
+        body.light-mode .material-counters,
+        body.light-mode .mode-buttons {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+        body.light-mode .counter-panel {
+            background: #ffffff;
+        }
+        body.light-mode .counter-value {
+            background: #f1f5f9;
+            color: #3b82f6;
+        }
+        body.light-mode .canvas-container {
+            background: #f8fafc;
+        }
+        body.light-mode .material-card {
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 1600px;
+            width: 100%;
+            background: #0f172a;
+            border-radius: 24px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.5);
+            padding: 20px;
+            transition: background 0.3s;
+        }
+
+        .toolbar {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #334155;
+        }
+
+        .controls-left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .counter-panel {
+            background: #000000;
+            padding: 8px 20px;
+            border-radius: 40px;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .counter-panel span:first-child {
+            font-size: 1rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .counter-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #facc15;
+            font-family: monospace;
+            padding: 0 12px;
+            border-radius: 20px;
+            background: #0f172a;
+        }
+
+        button {
+            background: #3b82f6;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            filter: brightness(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-danger { background: #ef4444; }
+        .btn-warning { background: #eab308; color: #0f172a; }
+        .btn-success { background: #10b981; }
+        .btn-secondary { background: #475569; }
+        .btn-info { background: #06b6d4; }
+        .btn-active { background: #facc15; color: #0f172a; box-shadow: 0 0 0 2px #facc15; }
+
+        input[type="file"] {
+            background: #334155;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mode-buttons {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            border: 1px solid #334155;
+        }
+
+        .mode-buttons h4 {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .drawing-tools {
+            background: #334155;
+            padding: 8px 16px;
+            border-radius: 48px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .drawing-tools label {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #brushSize {
+            width: 70px;
+            padding: 4px;
+            border-radius: 20px;
+            border: none;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+        }
+
+        #brushColor {
+            width: 40px;
+            height: 35px;
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .size-preview {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .material-counters {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+
+        .material-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .material-header h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .material-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .material-card {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #0f172a;
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+        }
+
+        .material-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .material-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        .material-card span.count {
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 35px;
+            text-align: center;
+            color: #facc15;
+        }
+
+        .material-card span.name {
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .material-card button {
+            padding: 4px 8px;
+            font-size: 0.7rem;
+        }
+
+        .add-material {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-material input {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 40px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .add-material-color {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #0f172a;
+            padding: 5px 12px;
+            border-radius: 40px;
+        }
+
+        .add-material-color label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        #newMaterialColor {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            background: #ef4444;
+        }
+
+        .material-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .canvas-container {
+            background: #020617;
+            border-radius: 20px;
+            padding: 10px;
+            overflow: auto;
+            text-align: center;
+            border: 2px solid #334155;
+            position: relative;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            cursor: crosshair;
+            border-radius: 12px;
+            background: #1e1e2f;
+        }
+
+        .lens-container {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid #facc15;
+            background: rgba(0,0,0,0.8);
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .lens-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .info-bar {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .shortcuts {
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 2000;
+        }
+
+        .default-badge {
+            font-size: 0.6rem;
+            background: #334155;
+            padding: 2px 6px;
+            border-radius: 20px;
+            margin-left: 4px;
+        }
+
+        .btn-lens-off {
+            background: #ef4444;
+        }
+        .btn-lens-off:hover {
+            background: #dc2626;
+        }
+
+        @media (max-width: 1000px) {
+            .toolbar, .material-counters, .mode-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .material-card {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="toolbar">
+        <div class="controls-left">
+            <input type="file" id="imageUpload" accept="image/jpeg, image/jpg, image/png">
+            <div class="counter-panel">
+                <span>📦 TOTAL:</span>
+                <span class="counter-value" id="totalCount">0</span>
+            </div>
+            
+            <div class="drawing-tools">
+                <label>✏️ Punta:
+                    <input type="range" id="brushSize" min="3" max="24" value="10" step="1">
+                    <span id="sizeValue">10px</span>
+                    <span class="size-preview" id="previewDot"></span>
+                </label>
+                <label>🎨 Color temporal:
+                    <input type="color" id="brushColor" value="#ef4444">
+                </label>
+            </div>
+            
+            <div class="btn-group">
+                <button id="undoBtn" class="btn-warning">↩️ Deshacer</button>
+                <button id="resetCountBtn" class="btn-danger">🗑️ Reiniciar todo</button>
+                <button id="saveImageBtn" class="btn-success">💾 Guardar imagen</button>
+                <button id="exportBtn" class="btn-info">📎 Exportar</button>
+                <button id="themeToggle" class="btn-secondary">🌓 Modo</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mode-buttons">
+        <h4>🔧 MODO DE CONTEO:</h4>
+        <button id="modePointBtn" class="btn-active">✏️ Punto (clic individual)</button>
+        <button id="modeDragBtn" class="btn-secondary">🖱️ Arrastre continuo</button>
+        <button id="modeAreaBtn" class="btn-secondary">📐 Área (selecciona región)</button>
+        <button id="modeLensBtn" class="btn-secondary">🔍 Lupa activa</button>
+        <button id="disableLensBtn" class="btn-lens-off" style="display: none;">❌ Desactivar lupa</button>
+    </div>
+
+    <div class="material-counters">
+        <div class="material-header">
+            <h3>📋 CONTADORES POR MATERIAL:</h3>
+            <div style="display: flex; gap: 8px;">
+                <button id="resetCustomMaterialsBtn" class="btn-warning" style="padding: 5px 12px;">🗑️ Eliminar personalizados</button>
+                <button id="resetAllMaterialsBtn" class="btn-danger" style="padding: 5px 12px;">⟳ Solo por defecto</button>
+            </div>
+        </div>
+        <div class="material-buttons" id="materialList"></div>
+        
+        <div class="add-material">
+            <input type="text" id="newMaterialName" placeholder="Nuevo material (ej. perfiles, ángulos)" maxlength="25">
+            <div class="add-material-color">
+                <label>🎨 Color:</label>
+                <input type="color" id="newMaterialColor" value="#3b82f6">
+            </div>
+            <button id="addMaterialBtn" class="btn-success">➕ Agregar y guardar</button>
+        </div>
+        
+        <div class="material-actions">
+            <button id="backupMaterialsBtn" class="btn-secondary">💾 Exportar lista</button>
+            <button id="restoreMaterialsBtn" class="btn-secondary">📂 Importar lista</button>
+        </div>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="materialCanvas"></canvas>
+    </div>
+    <div class="info-bar">
+        <span id="modeStatus">✏️ Modo: Punto individual - Haz clic sobre cada pieza</span>
+        <span class="shortcuts">⌨️ Ctrl+Z (deshacer) | Ctrl+R (reiniciar todo) | Ctrl+S (guardar imagen) | Esc (desactivar lupa)</span>
+    </div>
+</div>
+
+<div id="lens" class="lens-container">
+    <canvas id="lensCanvas" class="lens-canvas"></canvas>
+</div>
+<div id="saveIndicator" class="save-indicator">💾 Guardado</div>
+
+<script>
+    // Elementos
+    const canvas = document.getElementById('materialCanvas');
+    const ctx = canvas.getContext('2d');
+    const imageUpload = document.getElementById('imageUpload');
+    const totalCountSpan = document.getElementById('totalCount');
+    const undoBtn = document.getElementById('undoBtn');
+    const resetCountBtn = document.getElementById('resetCountBtn');
+    const saveImageBtn = document.getElementById('saveImageBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const brushSizeInput = document.getElementById('brushSize');
+    const brushColorInput = document.getElementById('brushColor');
+    const sizeValue = document.getElementById('sizeValue');
+    const previewDot = document.getElementById('previewDot');
+    const materialListDiv = document.getElementById('materialList');
+    const newMaterialName = document.getElementById('newMaterialName');
+    const newMaterialColor = document.getElementById('newMaterialColor');
+    const addMaterialBtn = document.getElementById('addMaterialBtn');
+    const modeStatus = document.getElementById('modeStatus');
+    const resetAllMaterialsBtn = document.getElementById('resetAllMaterialsBtn');
+    const resetCustomMaterialsBtn = document.getElementById('resetCustomMaterialsBtn');
+    const backupMaterialsBtn = document.getElementById('backupMaterialsBtn');
+    const restoreMaterialsBtn = document.getElementById('restoreMaterialsBtn');
+    const saveIndicator = document.getElementById('saveIndicator');
+    const disableLensBtn = document.getElementById('disableLensBtn');
+    
+    // Modos
+    const modePointBtn = document.getElementById('modePointBtn');
+    const modeDragBtn = document.getElementById('modeDragBtn');
+    const modeAreaBtn = document.getElementById('modeAreaBtn');
+    const modeLensBtn = document.getElementById('modeLensBtn');
+    
+    // Lupa
+    const lens = document.getElementById('lens');
+    const lensCanvas = document.getElementById('lensCanvas');
+    const lensCtx = lensCanvas.getContext('2d');
+    let lensActive = false;
+    let lensMoveHandlerRef = null;
+    
+    // Variables de estado
+    let img = new Image();
+    let marks = [];
+    let currentScale = 1;
+    let canvasNaturalWidth = 0;
+    let canvasNaturalHeight = 0;
+    let currentBrushSize = 10;
+    let currentBrushColor = "#ef4444";
+    
+    // Estructura de materiales: cada material tiene contador y color
+    let materials = {};
+    let currentMaterial = "";
+    
+    // Materiales por defecto (para identificar)
+    const defaultMaterials = ["tubos", "planchas", "varillas"];
+    
+    // Modos de conteo
+    let currentMode = "point";
+    let isDragging = false;
+    let lastDragPoint = null;
+    let dragDistance = 10;
+    let isSelectingArea = false;
+    let areaStart = null;
+    let areaEnd = null;
+    
+    // ========== FUNCIONES DE PERSISTENCIA ==========
+    
+    function showSaveIndicator() {
+        saveIndicator.style.opacity = "1";
+        setTimeout(() => {
+            saveIndicator.style.opacity = "0";
+        }, 1500);
+    }
+    
+    function saveToStorage() {
+        const dataToSave = {
+            materials: materials,
+            currentMaterial: currentMaterial,
+            version: "2.0"
+        };
+        localStorage.setItem('contador_materiales_v2', JSON.stringify(dataToSave));
+        showSaveIndicator();
+    }
+    
+    function loadFromStorage() {
+        const saved = localStorage.getItem('contador_materiales_v2');
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                if (data.materials && typeof data.materials === 'object') {
+                    materials = data.materials;
+                }
+                if (data.currentMaterial && materials[data.currentMaterial]) {
+                    currentMaterial = data.currentMaterial;
+                }
+            } catch(e) {
+                console.error("Error al cargar:", e);
+            }
+        }
+        
+        // Si no hay materiales guardados, crear los por defecto con colores
+        if (Object.keys(materials).length === 0) {
+            materials = {
+                tubos: { count: 0, color: "#ef4444" },
+                planchas: { count: 0, color: "#10b981" },
+                varillas: { count: 0, color: "#facc15" }
+            };
+            currentMaterial = "tubos";
+            saveToStorage();
+        }
+        
+        // Asegurar que currentMaterial existe
+        if (!materials[currentMaterial]) {
+            currentMaterial = Object.keys(materials)[0];
+        }
+        
+        renderMaterialList();
+        updateTotalUI();
+        updateBrushColorFromCurrentMaterial();
+    }
+    
+    function updateBrushColorFromCurrentMaterial() {
+        if (materials[currentMaterial]) {
+            currentBrushColor = materials[currentMaterial].color;
+            brushColorInput.value = currentBrushColor;
+            previewDot.style.backgroundColor = currentBrushColor;
+        }
+    }
+    
+    function updateTotalUI() {
+        let total = 0;
+        for (let m in materials) {
+            total += materials[m].count;
+        }
+        totalCountSpan.innerText = total;
+    }
+    
+    // Función para resetear a SOLO materiales por defecto (elimina todos los personalizados)
+    function resetToDefaultMaterialsOnly() {
+        if (confirm("⚠️ ¿Restablecer SOLO a materiales por defecto?\n\nSe eliminarán TODOS los materiales personalizados que hayas creado.\nLos contadores actuales se reiniciarán a cero.\n\nLos materiales por defecto son: tubos, planchas, varillas.")) {
+            materials = {
+                tubos: { count: 0, color: "#ef4444" },
+                planchas: { count: 0, color: "#10b981" },
+                varillas: { count: 0, color: "#facc15" }
+            };
+            currentMaterial = "tubos";
+            marks = [];
+            currentBrushColor = materials.tubos.color;
+            brushColorInput.value = currentBrushColor;
+            previewDot.style.backgroundColor = currentBrushColor;
+            saveToStorage();
+            renderMaterialList();
+            updateTotalUI();
+            redrawCanvas();
+            modeStatus.innerText = "✅ Materiales restablecidos a los 3 por defecto (tubos, planchas, varillas)";
+        }
+    }
+    
+    // Función para eliminar SOLO materiales personalizados (conserva los por defecto y sus contadores)
+    function resetCustomMaterialsOnly() {
+        const customMaterials = Object.keys(materials).filter(m => !defaultMaterials.includes(m));
+        if (customMaterials.length === 0) {
+            modeStatus.innerText = "ℹ️ No hay materiales personalizados para eliminar";
+            return;
+        }
+        
+        if (confirm(`⚠️ ¿Eliminar SOLO materiales personalizados?\n\nSe eliminarán: ${customMaterials.join(", ")}\n\nLos materiales por defecto (tubos, planchas, varillas) se mantendrán.\nLos contadores de estos materiales se reiniciarán a cero.`)) {
+            // Eliminar marcas de materiales personalizados
+            marks = marks.filter(mark => defaultMaterials.includes(mark.material));
+            
+            // Crear nuevo objeto solo con materiales por defecto
+            const newMaterials = {};
+            defaultMaterials.forEach(m => {
+                if (materials[m]) {
+                    newMaterials[m] = { count: 0, color: materials[m].color };
+                } else {
+                    newMaterials[m] = { count: 0, color: m === "tubos" ? "#ef4444" : (m === "planchas" ? "#10b981" : "#facc15") };
+                }
+            });
+            materials = newMaterials;
+            
+            if (!defaultMaterials.includes(currentMaterial)) {
+                currentMaterial = "tubos";
+            }
+            
+            currentBrushColor = materials[currentMaterial].color;
+            brushColorInput.value = currentBrushColor;
+            previewDot.style.backgroundColor = currentBrushColor;
+            saveToStorage();
+            renderMaterialList();
+            updateTotalUI();
+            redrawCanvas();
+            modeStatus.innerText = `🗑️ Eliminados ${customMaterials.length} materiales personalizados. Solo quedan los por defecto.`;
+        }
+    }
+    
+    function renderMaterialList() {
+        materialListDiv.innerHTML = '';
+        for (let material in materials) {
+            const materialDiv = document.createElement('div');
+            materialDiv.className = 'material-card';
+            materialDiv.setAttribute('data-material', material);
+            
+            const color = materials[material].color;
+            const count = materials[material].count;
+            const isDefault = defaultMaterials.includes(material);
+            
+            let icon = "📦";
+            if (material === "tubos") icon = "📏";
+            else if (material === "planchas") icon = "📐";
+            else if (material === "varillas") icon = "⚙️";
+            
+            materialDiv.innerHTML = `
+                <div class="material-color" style="background: ${color};" title="Cambiar color"></div>
+                <span class="name">${icon} ${material}:</span>
+                <span class="count" id="count_${material}">${count}</span>
+                <button class="inc-material" data-material="${material}">+1</button>
+                <button class="dec-material" data-material="${material}" style="background:#ef4444;">-1</button>
+                <button class="reset-material" data-material="${material}" style="background:#eab308; color:#0f172a;">⟳</button>
+                <button class="remove-material" data-material="${material}" style="background:#475569;" title="${isDefault ? 'Eliminar material por defecto' : 'Eliminar material'}">✖️</button>
+                ${isDefault ? '<span class="default-badge">predet.</span>' : '<span class="default-badge" style="background:#3b82f6;">custom</span>'}
+            `;
+            materialListDiv.appendChild(materialDiv);
+            
+            // Resaltar material activo
+            if (currentMaterial === material) {
+                materialDiv.style.border = '2px solid #3b82f6';
+                materialDiv.style.background = '#1e3a5f';
+            } else {
+                materialDiv.style.border = '1px solid #334155';
+                materialDiv.style.background = '#0f172a';
+            }
+        }
+        
+        // Agregar eventos
+        document.querySelectorAll('.material-color').forEach((colorDiv, idx) => {
+            const material = Object.keys(materials)[idx];
+            colorDiv.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const newColor = prompt("Ingresa el color en formato hexadecimal (ej. #ff0000):", materials[material].color);
+                if (newColor && /^#[0-9A-Fa-f]{6}$/.test(newColor)) {
+                    materials[material].color = newColor;
+                    if (currentMaterial === material) {
+                        currentBrushColor = newColor;
+                        brushColorInput.value = newColor;
+                        previewDot.style.backgroundColor = newColor;
+                    }
+                    saveToStorage();
+                    renderMaterialList();
+                    redrawCanvas();
+                    modeStatus.innerText = `🎨 Color de "${material}" cambiado a ${newColor}`;
+                } else if (newColor) {
+                    alert("Formato inválido. Usa #RRGGBB (ej. #ff0000 para rojo)");
+                }
+            });
+        });
+        
+        document.querySelectorAll('.inc-material').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const material = btn.getAttribute('data-material');
+                if (material) {
+                    currentMaterial = material;
+                    updateBrushColorFromCurrentMaterial();
+                    highlightCurrentMaterial();
+                    modeStatus.innerText = `📦 Material activo: ${currentMaterial} (color: ${materials[currentMaterial].color})`;
+                }
+            });
+        });
+        
+        document.querySelectorAll('.dec-material').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const material = btn.getAttribute('data-material');
+                if (material && materials[material].count > 0) {
+                    for (let i = marks.length - 1; i >= 0; i--) {
+                        if (marks[i].material === material) {
+                            marks.splice(i, 1);
+                            materials[material].count--;
+                            break;
+                        }
+                    }
+                    updateTotalUI();
+                    saveToStorage();
+                    renderMaterialList();
+                    redrawCanvas();
+                    modeStatus.innerText = `↩️ Decrementado ${material}. Total: ${materials[material].count}`;
+                }
+            });
+        });
+        
+        document.querySelectorAll('.reset-material').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const material = btn.getAttribute('data-material');
+                if (material && materials[material].count > 0) {
+                    if (confirm(`¿Reiniciar el contador de "${material}"? Se perderán ${materials[material].count} marcas de este material.`)) {
+                        marks = marks.filter(mark => mark.material !== material);
+                        materials[material].count = 0;
+                        updateTotalUI();
+                        saveToStorage();
+                        renderMaterialList();
+                        redrawCanvas();
+                        modeStatus.innerText = `⟳ Contador de "${material}" reiniciado a 0`;
+                    }
+                } else if (material) {
+                    modeStatus.innerText = `📦 "${material}" ya está en 0`;
+                }
+            });
+        });
+        
+        document.querySelectorAll('.remove-material').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const material = btn.getAttribute('data-material');
+                const isDefault = defaultMaterials.includes(material);
+                
+                let confirmMessage = `¿Eliminar el material "${material}"?`;
+                if (materials[material].count > 0) {
+                    confirmMessage = `El material "${material}" tiene ${materials[material].count} piezas contadas. Se perderán esas marcas. ¿Eliminar de todas formas?`;
+                }
+                if (isDefault) {
+                    confirmMessage = `⚠️ ATENCIÓN: "${material}" es un material por defecto.\n\n${confirmMessage}\n\nSi lo eliminas, podrás volver a crearlo más tarde.`;
+                }
+                
+                if (confirm(confirmMessage)) {
+                    marks = marks.filter(mark => mark.material !== material);
+                    delete materials[material];
+                    if (currentMaterial === material) {
+                        currentMaterial = Object.keys(materials)[0];
+                        if (currentMaterial) {
+                            updateBrushColorFromCurrentMaterial();
+                        }
+                    }
+                    // Si no quedan materiales, crear uno por defecto
+                    if (Object.keys(materials).length === 0) {
+                        materials = {
+                            material_principal: { count: 0, color: "#3b82f6" }
+                        };
+                        currentMaterial = "material_principal";
+                        updateBrushColorFromCurrentMaterial();
+                    }
+                    saveToStorage();
+                    renderMaterialList();
+                    updateTotalUI();
+                    redrawCanvas();
+                    modeStatus.innerText = `🗑️ Material "${material}" eliminado`;
+                }
+            });
+        });
+    }
+    
+    function highlightCurrentMaterial() {
+        const cards = document.querySelectorAll('.material-card');
+        const materialsList = Object.keys(materials);
+        cards.forEach((card, idx) => {
+            const material = materialsList[idx];
+            if (material === currentMaterial) {
+                card.style.border = '2px solid #3b82f6';
+                card.style.background = '#1e3a5f';
+            } else {
+                card.style.border = '1px solid #334155';
+                card.style.background = '#0f172a';
+            }
+        });
+    }
+    
+    function resetAllCounters() {
+        if (confirm("¿Reiniciar TODOS los contadores? Se perderán todas las marcas.")) {
+            marks = [];
+            for (let m in materials) {
+                materials[m].count = 0;
+            }
+            updateTotalUI();
+            saveToStorage();
+            renderMaterialList();
+            redrawCanvas();
+            modeStatus.innerText = "🧹 Todos los contadores reiniciados";
+        }
+    }
+    
+    function addNewMaterial() {
+        const name = newMaterialName.value.trim();
+        if (!name) {
+            alert("Escribe un nombre para el material");
+            return;
+        }
+        if (materials[name]) {
+            alert("Este material ya existe");
+            return;
+        }
+        const color = newMaterialColor.value;
+        materials[name] = { count: 0, color: color };
+        saveToStorage();
+        renderMaterialList();
+        updateTotalUI();
+        newMaterialName.value = '';
+        modeStatus.innerText = `✅ Material "${name}" agregado con color ${color}`;
+    }
+    
+    function backupMaterials() {
+        const data = {
+            materials: materials,
+            version: "2.0",
+            fecha: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `materiales_${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        modeStatus.innerText = "💾 Lista de materiales exportada";
+    }
+    
+    function restoreMaterials() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (data.materials && typeof data.materials === 'object') {
+                        materials = data.materials;
+                        currentMaterial = Object.keys(materials)[0];
+                        marks = [];
+                        currentBrushColor = materials[currentMaterial]?.color || "#ef4444";
+                        brushColorInput.value = currentBrushColor;
+                        previewDot.style.backgroundColor = currentBrushColor;
+                        saveToStorage();
+                        renderMaterialList();
+                        updateTotalUI();
+                        redrawCanvas();
+                        modeStatus.innerText = "📂 Lista de materiales importada correctamente";
+                    } else {
+                        alert("Archivo no válido");
+                    }
+                } catch(err) {
+                    alert("Error al leer el archivo");
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+    
+    // ========== FUNCIONES DE LUPA ==========
+    
+    function disableLens() {
+        if (lensActive) {
+            canvas.removeEventListener('mousemove', lensMoveHandlerRef);
+            lens.style.display = "none";
+            lensActive = false;
+            disableLensBtn.style.display = "none";
+            if (currentMode === "lens") {
+                setMode("point");
+            }
+            modeStatus.innerText = "🔍 Lupa desactivada";
+        }
+    }
+    
+    function enableLens() {
+        if (!img.src || img.width === 0) {
+            modeStatus.innerText = "⚠️ Primero carga una imagen para usar la lupa";
+            setMode("point");
+            return;
+        }
+        
+        if (lensMoveHandlerRef) {
+            canvas.removeEventListener('mousemove', lensMoveHandlerRef);
+        }
+        
+        lensActive = true;
+        disableLensBtn.style.display = "inline-flex";
+        
+        lensMoveHandlerRef = function(e) {
+            if (!lensActive) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const scaleXCanvas = canvas.width / rect.width;
+            const scaleYCanvas = canvas.height / rect.height;
+            
+            let mouseX = (e.clientX - rect.left) * scaleXCanvas;
+            let mouseY = (e.clientY - rect.top) * scaleYCanvas;
+            
+            if (mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height) {
+                const natural = canvasToNatural(mouseX, mouseY);
+                lens.style.display = "block";
+                lens.style.left = (e.clientX + 20) + "px";
+                lens.style.top = (e.clientY + 20) + "px";
+                
+                const lensSize = 200;
+                lensCanvas.width = lensSize;
+                lensCanvas.height = lensSize;
+                
+                const zoom = 3;
+                const regionSize = lensSize / zoom;
+                const startX = natural.x - regionSize / 2;
+                const startY = natural.y - regionSize / 2;
+                
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = regionSize;
+                tempCanvas.height = regionSize;
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.drawImage(img, startX, startY, regionSize, regionSize, 0, 0, regionSize, regionSize);
+                
+                lensCtx.clearRect(0, 0, lensSize, lensSize);
+                lensCtx.drawImage(tempCanvas, 0, 0, regionSize, regionSize, 0, 0, lensSize, lensSize);
+                
+                for (let mark of marks) {
+                    const dx = (mark.x - startX) * zoom;
+                    const dy = (mark.y - startY) * zoom;
+                    if (dx >= 0 && dx <= lensSize && dy >= 0 && dy <= lensSize) {
+                        lensCtx.beginPath();
+                        lensCtx.arc(dx, dy, (mark.size || 10) * zoom * 0.6, 0, 2 * Math.PI);
+                        lensCtx.fillStyle = mark.color || "#ef4444";
+                        lensCtx.fill();
+                        lensCtx.beginPath();
+                        lensCtx.arc(dx, dy, (mark.size || 10) * zoom * 0.3, 0, 2 * Math.PI);
+                        lensCtx.fillStyle = "#ffffff";
+                        lensCtx.fill();
+                    }
+                }
+                
+                lensCtx.beginPath();
+                lensCtx.strokeStyle = "#facc15";
+                lensCtx.lineWidth = 2;
+                lensCtx.moveTo(lensSize/2 - 10, lensSize/2);
+                lensCtx.lineTo(lensSize/2 + 10, lensSize/2);
+                lensCtx.moveTo(lensSize/2, lensSize/2 - 10);
+                lensCtx.lineTo(lensSize/2, lensSize/2 + 10);
+                lensCtx.stroke();
+            } else {
+                lens.style.display = "none";
+            }
+        };
+        
+        canvas.addEventListener('mousemove', lensMoveHandlerRef);
+        modeStatus.innerText = "🔍 Modo: Lupa activa - Mueve el mouse para ampliar, haz clic para contar";
+    }
+    
+    // ========== FUNCIONES DE DIBUJO ==========
+    
+    function redrawCanvas() {
+        if (!img.src || img.width === 0) return;
+        
+        canvasNaturalWidth = img.width;
+        canvasNaturalHeight = img.height;
+        
+        const container = document.querySelector('.canvas-container');
+        const maxWidth = container.clientWidth - 20;
+        const maxHeight = window.innerHeight * 0.55;
+        
+        let scaleX = maxWidth / canvasNaturalWidth;
+        let scaleY = maxHeight / canvasNaturalHeight;
+        currentScale = Math.min(scaleX, scaleY, 1);
+        if (currentScale < 0.1) currentScale = 0.1;
+        
+        const displayWidth = canvasNaturalWidth * currentScale;
+        const displayHeight = canvasNaturalHeight * currentScale;
+        
+        canvas.width = displayWidth;
+        canvas.height = displayHeight;
+        
+        ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
+        
+        for (let mark of marks) {
+            const scaledX = mark.x * currentScale;
+            const scaledY = mark.y * currentScale;
+            const scaledSize = (mark.size || 10) * currentScale;
+            const color = mark.color || "#ef4444";
+            
+            ctx.beginPath();
+            ctx.arc(scaledX, scaledY, scaledSize * 0.6, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(scaledX, scaledY, scaledSize * 0.3, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(scaledX, scaledY, scaledSize * 0.15, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(scaledX, scaledY, scaledSize * 0.7, 0, 2 * Math.PI);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+        }
+        
+        if (currentMode === "area" && isSelectingArea && areaStart && areaEnd) {
+            ctx.save();
+            ctx.strokeStyle = "#facc15";
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 2;
+            ctx.strokeRect(areaStart.x, areaStart.y, areaEnd.x - areaStart.x, areaEnd.y - areaStart.y);
+            ctx.fillStyle = "rgba(250, 204, 21, 0.1)";
+            ctx.fillRect(areaStart.x, areaStart.y, areaEnd.x - areaStart.x, areaEnd.y - areaStart.y);
+            ctx.restore();
+        }
+    }
+    
+    function canvasToNatural(canvasX, canvasY) {
+        return {
+            x: canvasX / currentScale,
+            y: canvasY / currentScale
+        };
+    }
+    
+    function addMark(naturalX, naturalY) {
+        marks.push({ 
+            x: naturalX, 
+            y: naturalY, 
+            size: currentBrushSize, 
+            color: currentBrushColor,
+            material: currentMaterial
+        });
+        materials[currentMaterial].count++;
+        updateTotalUI();
+        saveToStorage();
+        redrawCanvas();
+    }
+    
+    function countArea(startX, startY, endX, endY) {
+        const left = Math.min(startX, endX);
+        const right = Math.max(startX, endX);
+        const top = Math.min(startY, endY);
+        const bottom = Math.max(startY, endY);
+        
+        const step = Math.max(currentBrushSize * 1.5, 15);
+        const cols = Math.floor((right - left) / step) + 1;
+        const rows = Math.floor((bottom - top) / step) + 1;
+        
+        let addedCount = 0;
+        for (let i = 0; i <= cols; i++) {
+            for (let j = 0; j <= rows; j++) {
+                const naturalX = left + (i * step);
+                const naturalY = top + (j * step);
+                if (naturalX <= right && naturalY <= bottom) {
+                    marks.push({ 
+                        x: naturalX, 
+                        y: naturalY, 
+                        size: currentBrushSize, 
+                        color: currentBrushColor,
+                        material: currentMaterial
+                    });
+                    materials[currentMaterial].count++;
+                    addedCount++;
+                }
+            }
+        }
+        
+        updateTotalUI();
+        saveToStorage();
+        redrawCanvas();
+        modeStatus.innerText = `📐 Área contada: ${addedCount} piezas añadidas a "${currentMaterial}"`;
+        setTimeout(() => {
+            if (currentMode === "area") modeStatus.innerText = `📐 Modo Área - Haz clic y arrastra para seleccionar región`;
+        }, 3000);
+    }
+    
+    // ========== EVENTOS DEL CANVAS ==========
+    
+    function handleCanvasMouseDown(e) {
+        if (!img.src || img.width === 0) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const scaleXCanvas = canvas.width / rect.width;
+        const scaleYCanvas = canvas.height / rect.height;
+        
+        let mouseX = (e.clientX - rect.left) * scaleXCanvas;
+        let mouseY = (e.clientY - rect.top) * scaleYCanvas;
+        mouseX = Math.min(Math.max(0, mouseX), canvas.width);
+        mouseY = Math.min(Math.max(0, mouseY), canvas.height);
+        
+        const natural = canvasToNatural(mouseX, mouseY);
+        
+        if (currentMode === "point") {
+            addMark(natural.x, natural.y);
+            modeStatus.innerText = `✏️ ${currentMaterial}: ${materials[currentMaterial].count} | Total: ${totalCountSpan.innerText}`;
+        } 
+        else if (currentMode === "drag") {
+            isDragging = true;
+            lastDragPoint = { x: natural.x, y: natural.y };
+            addMark(natural.x, natural.y);
+        }
+        else if (currentMode === "area") {
+            isSelectingArea = true;
+            areaStart = { x: mouseX, y: mouseY };
+            areaEnd = { x: mouseX, y: mouseY };
+        }
+        else if (currentMode === "lens") {
+            addMark(natural.x, natural.y);
+            modeStatus.innerText = `🔍 ${currentMaterial}: ${materials[currentMaterial].count} | Total: ${totalCountSpan.innerText}`;
+        }
+    }
+    
+    function handleCanvasMouseMove(e) {
+        if (!img.src || img.width === 0) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const scaleXCanvas = canvas.width / rect.width;
+        const scaleYCanvas = canvas.height / rect.height;
+        
+        let mouseX = (e.clientX - rect.left) * scaleXCanvas;
+        let mouseY = (e.clientY - rect.top) * scaleYCanvas;
+        mouseX = Math.min(Math.max(0, mouseX), canvas.width);
+        mouseY = Math.min(Math.max(0, mouseY), canvas.height);
+        
+        const natural = canvasToNatural(mouseX, mouseY);
+        
+        if (currentMode === "drag" && isDragging && lastDragPoint) {
+            const dist = Math.hypot(natural.x - lastDragPoint.x, natural.y - lastDragPoint.y);
+            if (dist >= dragDistance) {
+                addMark(natural.x, natural.y);
+                lastDragPoint = { x: natural.x, y: natural.y };
+            }
+        }
+        else if (currentMode === "area" && isSelectingArea && areaStart) {
+            areaEnd = { x: mouseX, y: mouseY };
+            redrawCanvas();
+        }
+    }
+    
+    function handleCanvasMouseUp(e) {
+        if (currentMode === "drag") {
+            isDragging = false;
+            lastDragPoint = null;
+            modeStatus.innerText = `🖱️ Arrastre finalizado. Total: ${totalCountSpan.innerText}`;
+        }
+        else if (currentMode === "area" && isSelectingArea && areaStart && areaEnd) {
+            const startNatural = canvasToNatural(areaStart.x, areaStart.y);
+            const endNatural = canvasToNatural(areaEnd.x, areaEnd.y);
+            countArea(startNatural.x, startNatural.y, endNatural.x, endNatural.y);
+            isSelectingArea = false;
+            areaStart = null;
+            areaEnd = null;
+            redrawCanvas();
+        }
+        isSelectingArea = false;
+    }
+    
+    // ========== FUNCIONES DE CONTROL ==========
+    
+    function setMode(mode) {
+        if (lensActive) {
+            disableLens();
+        }
+        
+        currentMode = mode;
+        isDragging = false;
+        isSelectingArea = false;
+        areaStart = null;
+        areaEnd = null;
+        
+        [modePointBtn, modeDragBtn, modeAreaBtn, modeLensBtn].forEach(btn => btn.classList.remove('btn-active'));
+        
+        if (mode === "point") {
+            modePointBtn.classList.add('btn-active');
+            modeStatus.innerText = "✏️ Modo: Punto individual - Haz clic sobre cada pieza";
+            lens.style.display = "none";
+        } else if (mode === "drag") {
+            modeDragBtn.classList.add('btn-active');
+            modeStatus.innerText = "🖱️ Modo: Arrastre continuo - Mantén clic y arrastra sobre las piezas";
+            lens.style.display = "none";
+        } else if (mode === "area") {
+            modeAreaBtn.classList.add('btn-active');
+            modeStatus.innerText = "📐 Modo: Área - Haz clic y arrastra para seleccionar región a contar";
+            lens.style.display = "none";
+        } else if (mode === "lens") {
+            modeLensBtn.classList.add('btn-active');
+            enableLens();
+        }
+        redrawCanvas();
+    }
+    
+    function loadImageFromFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            img.onload = () => {
+                marks = [];
+                for (let m in materials) {
+                    materials[m].count = 0;
+                }
+                updateTotalUI();
+                saveToStorage();
+                renderMaterialList();
+                redrawCanvas();
+                modeStatus.innerText = `📸 Imagen cargada. Modo: ${currentMode}`;
+                if (currentMode === "lens") {
+                    disableLens();
+                    setMode("point");
+                }
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    function undoLastMark() {
+        if (marks.length === 0) return;
+        const lastMark = marks.pop();
+        if (lastMark.material && materials[lastMark.material]) {
+            materials[lastMark.material].count--;
+        }
+        updateTotalUI();
+        saveToStorage();
+        renderMaterialList();
+        redrawCanvas();
+    }
+    
+    function saveImageWithMarks() {
+        if (!img.src || img.width === 0) {
+            alert("Primero carga una imagen");
+            return;
+        }
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvasNaturalWidth;
+        tempCanvas.height = canvasNaturalHeight;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.drawImage(img, 0, 0, canvasNaturalWidth, canvasNaturalHeight);
+        for (let mark of marks) {
+            const size = mark.size || 10;
+            const color = mark.color || "#ef4444";
+            tempCtx.beginPath();
+            tempCtx.arc(mark.x, mark.y, size * 0.6, 0, 2 * Math.PI);
+            tempCtx.fillStyle = color;
+            tempCtx.fill();
+            tempCtx.beginPath();
+            tempCtx.arc(mark.x, mark.y, size * 0.3, 0, 2 * Math.PI);
+            tempCtx.fillStyle = "#ffffff";
+            tempCtx.fill();
+        }
+        const link = document.createElement('a');
+        link.download = `conteo_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.png`;
+        link.href = tempCanvas.toDataURL();
+        link.click();
+    }
+    
+    function exportReport() {
+        if (marks.length === 0 && Object.values(materials).reduce((a,b) => a + b.count, 0) === 0) {
+            alert("No hay datos para exportar");
+            return;
+        }
+        let report = "===== INFORME DE CONTEO DE MATERIALES =====\n";
+        report += `Fecha: ${new Date().toLocaleString()}\n`;
+        report += `TOTAL DE PIEZAS: ${totalCountSpan.innerText}\n`;
+        report += `----------------------------------------\n`;
+        report += `DESGLOSE POR MATERIAL:\n`;
+        for (let material in materials) {
+            if (materials[material].count > 0) {
+                report += `  • ${material.toUpperCase()} (${materials[material].color}): ${materials[material].count} piezas\n`;
+            }
+        }
+        report += `----------------------------------------\n`;
+        report += `DETALLE DE MARCAS:\n`;
+        marks.forEach((mark, idx) => {
+            report += `${idx+1}. [${mark.material}] Pos (${Math.round(mark.x)}, ${Math.round(mark.y)}) | Color: ${mark.color}\n`;
+        });
+        report += `----------------------------------------\n`;
+        report += `Herramienta: Contador Profesional de Materiales v4.0\n`;
+        
+        const blob = new Blob([report], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `conteo_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+    }
+    
+    // ========== INICIALIZACIÓN ==========
+    
+    brushSizeInput.addEventListener('input', (e) => {
+        currentBrushSize = parseInt(e.target.value);
+        sizeValue.innerText = currentBrushSize + "px";
+        previewDot.style.width = (currentBrushSize * 0.8) + "px";
+        previewDot.style.height = (currentBrushSize * 0.8) + "px";
+        previewDot.style.backgroundColor = currentBrushColor;
+    });
+    
+    brushColorInput.addEventListener('input', (e) => {
+        currentBrushColor = e.target.value;
+        if (materials[currentMaterial]) {
+            materials[currentMaterial].color = currentBrushColor;
+            saveToStorage();
+            renderMaterialList();
+        }
+        previewDot.style.backgroundColor = currentBrushColor;
+    });
+    
+    undoBtn.addEventListener('click', () => undoLastMark());
+    resetCountBtn.addEventListener('click', () => resetAllCounters());
+    saveImageBtn.addEventListener('click', () => saveImageWithMarks());
+    exportBtn.addEventListener('click', () => exportReport());
+    themeToggle.addEventListener('click', () => toggleTheme());
+    addMaterialBtn.addEventListener('click', () => addNewMaterial());
+    resetAllMaterialsBtn.addEventListener('click', () => resetToDefaultMaterialsOnly());
+    resetCustomMaterialsBtn.addEventListener('click', () => resetCustomMaterialsOnly());
+    backupMaterialsBtn.addEventListener('click', () => backupMaterials());
+    restoreMaterialsBtn.addEventListener('click', () => restoreMaterials());
+    disableLensBtn.addEventListener('click', () => disableLens());
+    newMaterialName.addEventListener('keypress', (e) => { if (e.key === 'Enter') addNewMaterial(); });
+    
+    modePointBtn.addEventListener('click', () => setMode('point'));
+    modeDragBtn.addEventListener('click', () => setMode('drag'));
+    modeAreaBtn.addEventListener('click', () => setMode('area'));
+    modeLensBtn.addEventListener('click', () => setMode('lens'));
+    
+    imageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file && (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png')) {
+            marks = [];
+            for (let m in materials) materials[m].count = 0;
+            updateTotalUI();
+            saveToStorage();
+            loadImageFromFile(file);
+        } else alert("Selecciona JPG o PNG");
+    });
+    
+    canvas.addEventListener('mousedown', handleCanvasMouseDown);
+    canvas.addEventListener('mousemove', handleCanvasMouseMove);
+    canvas.addEventListener('mouseup', handleCanvasMouseUp);
+    window.addEventListener('resize', () => { if (img.src && img.width) redrawCanvas(); });
+    window.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undoLastMark(); }
+        else if (e.ctrlKey && e.key === 'r') { e.preventDefault(); resetAllCounters(); }
+        else if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveImageWithMarks(); }
+        else if (e.key === 'Escape' && lensActive) { disableLens(); setMode("point"); }
+    });
+    
+    // Cargar datos guardados
+    loadFromStorage();
+    previewDot.style.backgroundColor = currentBrushColor;
+    previewDot.style.width = "16px";
+    previewDot.style.height = "16px";
+    setMode('point');
+    
+    modeStatus.innerText = "✅ Herramienta lista. Los materiales y colores se guardan automáticamente";
+</script>
+</body>
+</html>
