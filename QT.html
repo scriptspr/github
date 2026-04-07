@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Quality Training - Registro Completo de Clientes</title>
+    <title>Quality Training - Registro de Clientes</title>
     <style>
         * {
             margin: 0;
@@ -387,18 +387,6 @@
             gap: 15px;
         }
 
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
         .form-group {
             margin-bottom: 15px;
         }
@@ -434,6 +422,27 @@
         .form-group input::placeholder,
         .form-group textarea::placeholder {
             color: #888;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #40D32A;
         }
 
         .photo-section {
@@ -478,43 +487,18 @@
             cursor: pointer;
         }
 
-        .checkbox-group {
+        .info-box {
             background: rgba(0,0,0,0.3);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 10px;
             margin: 15px 0;
-            border: 1px solid rgba(99,49,138,0.5);
+            border-left: 3px solid #40D32A;
         }
 
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 8px;
-            border: 1px solid rgba(99,49,138,0.5);
+        .info-box p {
             color: #ccc;
-        }
-
-        .checkbox-item input[type="checkbox"],
-        .checkbox-item input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #40D32A;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .radio-group label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
+            font-size: 0.85em;
+            line-height: 1.5;
         }
 
         .btn {
@@ -847,27 +831,8 @@
             text-align: center;
         }
 
-        /* Sección de firmas */
-        .signature-line {
-            border-bottom: 1px solid #40D32A;
-            margin-top: 5px;
-            padding-bottom: 5px;
-        }
-
-        .inline-input {
-            display: inline-block;
-            width: auto;
-            min-width: 150px;
-        }
-
         @media screen and (max-width: 768px) {
-            .grid-3, .grid-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .grid-2, .grid-3, .grid-4 {
+            .grid-2 {
                 grid-template-columns: 1fr;
             }
         }
@@ -888,7 +853,7 @@
                     Inicio
                 </div>
                 <div class="menu-item" onclick="showSection('planes', this)">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content; center; color: white;">🏋️</div>
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🏋️</div>
                     Planes y Ofertas
                 </div>
                 <div class="menu-item" onclick="showSection('registro', this)">
@@ -1071,9 +1036,11 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN REGISTRO - NUEVO FORMULARIO COMPLETO -->
+            <!-- SECCIÓN REGISTRO - NUEVO FORMULARIO SIMPLE BILINGÜE -->
             <div id="registro" class="section">
-                <h2 class="form-title">📝 CUESTIONARIO DE SALUD Y ACTIVIDAD FÍSICA</h2>
+                <h2 class="form-title">📝 CUESTIONARIO DE SALUD Y RELEVO DE RESPONSABILIDAD</h2>
+                <h2 class="form-title" style="font-size: 1.2em; margin-top: -15px;">HEALTH QUESTIONNAIRE & LIABILITY WAIVER</h2>
+                
                 <form id="clientForm">
                     <!-- FOTO -->
                     <div class="photo-section">
@@ -1081,419 +1048,190 @@
                             <div class="photo-placeholder">📸</div>
                         </div>
                         <input type="file" id="photoInput" class="photo-input" accept="image/*" onchange="previewImage(this)">
-                        <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto</button>
+                        <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">Subir foto / Upload photo</button>
                     </div>
 
-                    <!-- ===== DATOS PERSONALES ===== -->
-                    <h3 class="form-subtitle">📋 DATOS PERSONALES</h3>
+                    <!-- INFORMACIÓN DEL MIEMBRO / MEMBER INFORMATION -->
+                    <h3 class="form-subtitle">📋 INFORMACIÓN DEL MIEMBRO / MEMBER INFORMATION</h3>
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>Fecha de Comienzo *</label>
+                            <label>Nombre / Name *</label>
+                            <input type="text" id="nombre" required placeholder="Nombre completo">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Fecha de comienzo / Starting Date *</label>
                             <input type="date" id="fechaComienzo" required>
                         </div>
                         <div class="form-group">
-                            <label>Núm. Socio *</label>
-                            <input type="text" id="numSocio" required placeholder="Ej: SOC-001">
+                            <label>Fecha de Nacimiento / Date of Birth *</label>
+                            <input type="date" id="fechaNacimiento" required>
                         </div>
                     </div>
 
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>Nombre completo *</label>
-                            <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                            <label>Edad / Age</label>
+                            <input type="number" id="edad" readonly>
                         </div>
                         <div class="form-group">
-                            <label>Sexo *</label>
-                            <select id="sexo" required>
-                                <option value="">Seleccionar...</option>
-                                <option value="M">Masculino</option>
-                                <option value="F">Femenino</option>
+                            <label>Sexo / Gender</label>
+                            <select id="sexo">
+                                <option value="">Seleccionar / Select</option>
+                                <option value="M">Masculino / Male</option>
+                                <option value="F">Femenino / Female</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>Fecha de nacimiento *</label>
-                            <input type="date" id="fechaNacimiento" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Edad *</label>
-                            <input type="number" id="edad" readonly>
-                        </div>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>Peso (kg)</label>
-                            <input type="text" id="peso" placeholder="Ej: 70 kg">
-                        </div>
-                        <div class="form-group">
-                            <label>Estatura (m)</label>
-                            <input type="text" id="estatura" placeholder="Ej: 1.75 m">
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label>Dirección</label>
+                        <label>Dirección / Address</label>
                         <input type="text" id="direccion" placeholder="Calle, ciudad, código postal">
                     </div>
 
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>Teléfono / Celular</label>
+                            <label>Teléfono / Phone</label>
                             <input type="tel" id="telefono" placeholder="123-456-7890">
                         </div>
                         <div class="form-group">
-                            <label>Email *</label>
+                            <label>Correo electrónico / Email *</label>
                             <input type="email" id="email" required placeholder="ejemplo@email.com">
                         </div>
                     </div>
 
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>Contacto de emergencia (nombre)</label>
+                            <label>Contacto de Emergencia / Emergency Contact</label>
                             <input type="text" id="contactoEmergencia" placeholder="Nombre completo">
                         </div>
                         <div class="form-group">
-                            <label>Teléfono de emergencia</label>
+                            <label>Teléfono / Phone</label>
                             <input type="tel" id="telEmergencia" placeholder="123-456-7890">
                         </div>
                     </div>
 
-                    <!-- ===== HISTORIAL MÉDICO PASADO/PRESENTE ===== -->
-                    <h3 class="form-subtitle">🏥 HISTORIAL MÉDICO PASADO Y/O PRESENTE</h3>
-                    <div class="checkbox-group">
-                        <div class="grid-3">
-                            <label class="checkbox-item"><input type="checkbox" id="histAltaPresion" value="Alta Presión"> Alta Presión</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histAtaqueCorazon" value="Ataque al Corazón"> Ataque al Corazón</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histArtritis" value="Artritis"> Artritis</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histArterias" value="Enfermedad de las arterias"> Enfermedad de las arterias</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histPulmonar" value="Enfermedad Pulmonar"> Enfermedad Pulmonar</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histEpilepsia" value="Epilepsia"> Epilepsia</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histEspalda" value="Espalda Lastimada"> Espalda Lastimada</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histReumatica" value="Fiebre Reumática"> Fiebre Reumática</label>
-                            <label class="checkbox-item"><input type="checkbox" id="histOperaciones" value="Operaciones"> Operaciones</label>
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label>Explique lo marcado (si es necesario):</label>
-                        <textarea id="explicacionHistorial" rows="2" placeholder="Detalles adicionales..."></textarea>
+                        <label>Ocupación & Compañía / Occupation & Company</label>
+                        <input type="text" id="ocupacion" placeholder="Ej: Ingeniero - ABC Corp">
                     </div>
 
-                    <!-- ===== HISTORIAL FAMILIAR ===== -->
-                    <h3 class="form-subtitle">👨‍👩‍👧‍👦 HISTORIAL FAMILIAR</h3>
-                    <div class="checkbox-group">
-                        <div class="grid-3">
-                            <label class="checkbox-item"><input type="checkbox" id="famAltaPresion" value="Alta Presión"> Alta Presión</label>
-                            <label class="checkbox-item"><input type="checkbox" id="famDiabetes" value="Diabetes Mellitus"> Diabetes Mellitus</label>
-                            <label class="checkbox-item"><input type="checkbox" id="famCorazon" value="Enfermedad del Corazón"> Enfermedad del Corazón</label>
-                            <label class="checkbox-item"><input type="checkbox" id="famOperacionCorazon" value="Operación del Corazón"> Operación del Corazón</label>
-                            <label class="checkbox-item"><input type="checkbox" id="famOtras" value="Otras enfermedades"> Otras enfermedades de cuidado</label>
-                            <label class="checkbox-item"><input type="checkbox" id="famTobillos" value="Tobillos o rodillas lastimados"> Tobillos o rodillas lastimados</label>
-                        </div>
-                    </div>
-
-                    <!-- ===== SÍNTOMAS PRESENTES ===== -->
-                    <h3 class="form-subtitle">⚠️ SÍNTOMAS PRESENTES</h3>
-                    <div class="checkbox-group">
-                        <div class="grid-3">
-                            <label class="checkbox-item"><input type="checkbox" id="sinArtritis" value="Artritis"> Artritis</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinDificultadRespirar" value="Dificultad al respirar"> Dificultad al respirar</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinDificultadDormir" value="Dificultad al dormir"> Dificultad al respirar mientras duerme</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinDolorCadera" value="Dolor de cadera"> Dolor en la cadera</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinDolorPecho" value="Dolor de pecho"> Dolor de pecho</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinDolorRodillas" value="Dolor de rodillas"> Dolor de las rodillas o tobillo</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinFatiga" value="Fatiga"> Fatiga inusual o falta de aliento</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinFlema" value="Flema con sangre"> Flema con sangre</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinMareos" value="Mareos"> Mareos o Desmayos</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinAlmohada" value="Necesita almohada extra"> Necesita más de una almohada para dormir</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinPalpitaciones" value="Palpitaciones"> Palpitaciones</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinPulsoAcelerado" value="Pulso acelerado"> Pulso acelerado</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinSoplo" value="Soplo en el Corazón"> Soplo en el Corazón</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinTos" value="Tos o Fatiga"> Tos o Fatiga</label>
-                            <label class="checkbox-item"><input type="checkbox" id="sinTobillosInflamados" value="Tobillos inflamados"> Tobillos Inflamados</label>
-                        </div>
-                    </div>
-
-                    <!-- ===== DESCRIPCIÓN DEL TRABAJO ===== -->
-                    <h3 class="form-subtitle">💼 DESCRIPCIÓN DE SU TRABAJO</h3>
+                    <!-- CUESTIONARIO DE SALUD / HEALTH QUESTIONNAIRE -->
+                    <h3 class="form-subtitle">🏥 CUESTIONARIO DE SALUD / HEALTH QUESTIONNAIRE</h3>
+                    
                     <div class="form-group">
-                        <label>Compañía o Empresa</label>
-                        <input type="text" id="compania" placeholder="Nombre de la empresa">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Tipo de trabajo</label>
+                        <label>1. ¿Tiene alguna condición médica? / Do you have any medical condition?</label>
                         <div class="radio-group">
-                            <label><input type="radio" name="tipoTrabajo" value="Sedentario"> Sedentario</label>
-                            <label><input type="radio" name="tipoTrabajo" value="Activo"> Activo</label>
+                            <label><input type="radio" name="condicionMedica" value="Si"> Sí / Yes</label>
+                            <label><input type="radio" name="condicionMedica" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Si respondió sí, explique / If yes, explain:</label>
+                        <textarea id="condicionMedicaTexto" rows="2" placeholder="Explique..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>2. ¿Realiza ejercicio regularmente? / Do you exercise regularly?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="ejercicioRegular" value="Si"> Sí / Yes</label>
+                            <label><input type="radio" name="ejercicioRegular" value="No"> No</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Durante su vida activa, siente que ha sido:</label>
-                        <select id="nivelActividad">
-                            <option value="">Seleccione...</option>
-                            <option value="Sedentario">Sedentario</option>
-                            <option value="Fines de semana">Se ejercita los fines de semana</option>
-                            <option value="Activo 1-2 semana">Físicamente activo (1-2 veces por semana)</option>
-                            <option value="Activo 3+ semana">Físicamente activo (3 o más veces por semana)</option>
-                        </select>
+                        <label>3. ¿Toma algún medicamento? / Are you taking any medication?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="tomaMedicamento" value="Si"> Sí / Yes</label>
+                            <label><input type="radio" name="tomaMedicamento" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Si respondió sí, anote los medicamentos / If yes, explain:</label>
+                        <textarea id="medicamentosTexto" rows="2" placeholder="Lista de medicamentos..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>4. ¿Alguna lesión, alergia o limitación? / Any injuries, allergies, or limitations?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="lesionAlergia" value="Si"> Sí / Yes</label>
+                            <label><input type="radio" name="lesionAlergia" value="No"> No</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Si respondió sí, explique / If yes, explain:</label>
+                        <textarea id="lesionAlergiaTexto" rows="2" placeholder="Explique..."></textarea>
+                    </div>
+
+                    <!-- INFORMACIÓN IMPORTANTE -->
+                    <div class="info-box">
+                        <p><strong>🔑 High Quality Training LLC</strong> le hace entrega de una llave para el registro diario de sus visitas. Si pierde o se le daña la llave, deberá reemplazarla por un costo de $10.00. El uso de esta llave es obligatorio. Si se le queda la llave, se permitirá la entrada hasta un máximo de 3 veces. Luego de eso, deberá comprar una nueva llave o se le negará la entrada.</p>
+                        <p style="margin-top: 10px;"><strong>🔑 High Quality Training LLC</strong> provides you with a key for daily check-in access. If the key is lost or damaged, it must be replaced at a cost of $10.00. The use of this key is required. If you forget your key, entry will be allowed up to a maximum of 3 times. After that, a new key must be purchased or entry will be denied.</p>
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>💰</strong> Existe una cuota anual de matrícula de $30.00, la cual será cobrada automáticamente cada año.</p>
+                        <p style="margin-top: 5px;"><strong>💰</strong> There is an annual registration fee of $30.00, which will be automatically charged each year.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Si usted no desea evaluación ni rutina, favor de colocar sus iniciales aquí / If you do not want an evaluation or workout plan, please initial here:</label>
+                        <input type="text" id="inicialesNoEvaluacion" placeholder="Iniciales">
+                    </div>
+
+                    <div class="info-box" style="border-left-color: #ff4d4d;">
+                        <p><strong>🧴 SE REQUIEREN DOS TOALLAS / TWO TOWELS REQUIRED</strong></p>
+                        <p>• Una para equipos / One for equipment</p>
+                        <p>• Una para limpiar / One for cleaning</p>
+                        <p style="margin-top: 5px;">High Quality Training LLC se reserva el derecho de admisión.</p>
+                        <p>High Quality Training LLC reserves the right of admission.</p>
+                    </div>
+
+                    <!-- RELEVO DE RESPONSABILIDAD / LIABILITY WAIVER -->
+                    <h3 class="form-subtitle">📄 RELEVO DE RESPONSABILIDAD / LIABILITY WAIVER</h3>
+                    
+                    <div class="info-box">
+                        <p>Entiendo que el ejercicio físico conlleva riesgos incluyendo lesiones, enfermedad o muerte. Confirmo que estoy apto físicamente o que he consultado un médico.</p>
+                        <p style="margin-top: 8px;">I understand that physical exercise involves risks including injury, illness, or death. I confirm that I am physically able to participate or have consulted a physician.</p>
+                        <p style="margin-top: 8px;">Asumo voluntariamente todos los riesgos y libero a High Quality Training LLC, sus dueños, entrenadores y empleados de toda responsabilidad por lesiones o daños.</p>
+                        <p style="margin-top: 8px;">I voluntarily assume all risks and release High Quality Training LLC, its owners, trainers, and staff from any liability for injuries or damages.</p>
+                        <p style="margin-top: 8px;">Acepto seguir todas las reglas e instrucciones del gimnasio.</p>
+                        <p style="margin-top: 8px;">I agree to follow all gym rules and instructions.</p>
                     </div>
 
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>¿Cuánto camina diariamente?</label>
-                            <input type="text" id="minutosCamina" placeholder="Minutos">
+                            <label>Firma del Miembro / Member Signature *</label>
+                            <input type="text" id="firma" required placeholder="Firma completa">
                         </div>
                         <div class="form-group">
-                            <label>&nbsp;</label>
-                            <input type="text" id="millasCamina" placeholder="Millas">
+                            <label>Fecha / Date *</label>
+                            <input type="date" id="fechaFirma" required>
                         </div>
                     </div>
 
+                    <!-- MEMBRESÍA -->
+                    <h3 class="form-subtitle">💳 SELECCIONA TU PLAN / SELECT YOUR PLAN</h3>
                     <div class="form-group">
-                        <label>¿Actualmente se encuentra en algún programa de ejercicio?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="programaEjercicio" value="Si"> Sí</label>
-                            <label><input type="radio" name="programaEjercicio" value="No"> No</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Le gustaría comenzar?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="gustariaComenzar" value="Si"> Sí</label>
-                            <label><input type="radio" name="gustariaComenzar" value="No"> No</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Se toma el pulso al hacer ejercicio?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="tomaPulso" value="Si"> Sí</label>
-                            <label><input type="radio" name="tomaPulso" value="No"> No</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Cuánto es el pulso por minuto?</label>
-                        <input type="text" id="pulsoMinuto" placeholder="Ej: 72">
-                    </div>
-
-                    <!-- ===== AL EJERCITARSE ===== -->
-                    <h3 class="form-subtitle">🏃 AL EJERCITARSE (incluye subir escaleras)</h3>
-                    <div class="checkbox-group">
-                        <div class="grid-3">
-                            <label class="checkbox-item"><input type="checkbox" id="ejerDolorPecho" value="Dolor de Pecho"> Dolor de Pecho</label>
-                            <label class="checkbox-item"><input type="checkbox" id="ejerDolorPiernas" value="Dolor en las piernas"> Dolor en las piernas</label>
-                            <label class="checkbox-item"><input type="checkbox" id="ejerFaltaRespiración" value="Falta de respiración"> Falta de respiración</label>
-                            <label class="checkbox-item"><input type="checkbox" id="ejerMareo" value="Mareo"> Mareo</label>
-                            <label class="checkbox-item"><input type="checkbox" id="ejerPresion" value="Presión en el Corazón"> Presión en el Corazón</label>
-                            <label class="checkbox-item"><input type="checkbox" id="ejerCansancio" value="Sensación de cansancio"> Sensación de cansancio</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Cuánto tiempo después de ejercitarse recupera la respiración normal?</label>
-                        <select id="tiempoRecuperacion">
-                            <option value="">Seleccione...</option>
-                            <option value="1-2 min">1-2 minutos</option>
-                            <option value="pocos min">Pocos minutos</option>
-                            <option value="mas de 5 min">Más de 5 minutos</option>
+                        <select id="membresia" required>
+                            <option value=>Plan Básico 1 Mes - $45.00</option>
+                            <option value=>3 Mese - $114.00</option>
+                            <option value=>6 Mese - $210.00</option>
+                            <option value=>1 AÑO - $360.00</option>
+							<option value=>Membresia especial - Policías, Bomberos, Paramédicos, Militares, Seniors 65+ - $35.00 Mensual</option>
+							<option value=>Menbresias Grupales - 2 Personas - $40.00 Cada uno</option>
+							<option value=>Menbresias Grupales - 3 Personas - $35.00 Cada uno</option>
+							<option value=>Pases Especiales - daypass - $8.97</option>
+							<option value=>Pases Especiales - weekpass - $23.00</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Tiene alguna lesión en los huesos o músculos que pueda interferir con un programa de ejercicios?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="tieneLesion" value="Si"> Sí</label>
-                            <label><input type="radio" name="tieneLesion" value="No"> No</label>
-                        </div>
-                    </div>
-
-                    <!-- ===== HÁBITOS ===== -->
-                    <h3 class="form-subtitle">🚬 HÁBITOS</h3>
-                    <div class="form-group">
-                        <label>¿Fuma?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="fuma" value="Si" onclick="toggleFumador()"> Sí</label>
-                            <label><input type="radio" name="fuma" value="No" onclick="toggleFumador()"> No</label>
-                        </div>
-                    </div>
-
-                    <div id="fumadorDetalles" style="display: none;">
-                        <div class="grid-2">
-                            <div class="form-group">
-                                <label>¿Qué cantidad diaria?</label>
-                                <input type="text" id="cantidadFuma" placeholder="Ej: 1 cajetilla">
-                            </div>
-                            <div class="form-group">
-                                <label>¿A qué edad comenzó a fumar?</label>
-                                <input type="text" id="edadComenzoFumar" placeholder="Edad">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Años fumando</label>
-                            <input type="text" id="anosFumando" placeholder="Años">
-                        </div>
-                        <div class="form-group">
-                            <label>¿Ya no fuma?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="dejoFumar" value="Si" onclick="toggleDejoFumar()"> Sí</label>
-                                <label><input type="radio" name="dejoFumar" value="No" onclick="toggleDejoFumar()"> No</label>
-                            </div>
-                        </div>
-                        <div id="dejoFumarDetalles" style="display: none;">
-                            <div class="form-group">
-                                <label>¿Cuándo dejó de fumar?</label>
-                                <input type="text" id="cuandoDejoFumar" placeholder="Fecha">
-                            </div>
-                            <div class="form-group">
-                                <label>¿Por qué dejó de fumar?</label>
-                                <textarea id="porqueDejoFumar" rows="2" placeholder="Motivo..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Cuánto pesaba usted cuando tenía 21 años?</label>
-                        <input type="text" id="peso21" placeholder="Libras">
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Estás actualmente a dieta?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="dieta" value="Si" onclick="toggleDieta()"> Sí</label>
-                            <label><input type="radio" name="dieta" value="No" onclick="toggleDieta()"> No</label>
-                        </div>
-                    </div>
-
-                    <div id="tipoDietaContainer" style="display: none;">
-                        <div class="form-group">
-                            <label>¿Qué clase de dieta?</label>
-                            <textarea id="tipoDieta" rows="2" placeholder="Describa su dieta..."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- ===== MEDICAMENTOS ===== -->
-                    <h3 class="form-subtitle">💊 MEDICAMENTOS</h3>
-                    <div class="form-group">
-                        <label>¿Usa nitroglicerina o equivalente?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="usaNitroglicerina" value="Si" onclick="toggleNitroglicerina()"> Sí</label>
-                            <label><input type="radio" name="usaNitroglicerina" value="No" onclick="toggleNitroglicerina()"> No</label>
-                        </div>
-                    </div>
-
-                    <div id="nitroglicerinaDetalles" style="display: none;">
-                        <div class="grid-2">
-                            <div class="form-group">
-                                <label>¿Cuántas tabletas?</label>
-                                <input type="text" id="cantidadNitroglicerina" placeholder="Cantidad">
-                            </div>
-                            <div class="form-group">
-                                <label>Por día</label>
-                                <input type="text" id="nitroPorDia" placeholder="Día">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Por semana</label>
-                            <input type="text" id="nitroPorSemana" placeholder="Semana">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Condición actual de salud</label>
-                        <textarea id="condicionSalud" rows="2" placeholder="Describa su condición actual..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Escriba los medicamentos que está usando actualmente:</label>
-                        <textarea id="medicamentos" rows="3" placeholder="Lista de medicamentos..."></textarea>
-                    </div>
-
-                    <!-- ===== CONSENTIMIENTOS Y RELEVOS ===== -->
-                    <h3 class="form-subtitle">📄 RELEVO Y CONSENTIMIENTO</h3>
-                    
-                    <div class="info-box" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                        <p style="color: #ccc; font-size: 0.9em;">Doy mi consentimiento voluntario para participar de una evaluación física con el propósito de determinar mi condición física actual y un plan de acondicionamiento individualizado. Todas son realizadas por un Capacitador Físico, Entrenador Personal Certificado. Cualquier prueba puede ser detenida en cualquier momento por signos de fatiga o agotamiento.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nombre del participante</label>
-                        <input type="text" id="consentimientoNombre" placeholder="Nombre completo">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="consentimientoFecha">
-                    </div>
-
-                    <div class="info-box" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px; margin-top: 15px;">
-                        <p style="color: #ffd700; font-size: 0.9em;"><strong>¡¡¡¡SE REQUIERE EL USO DE 2 TOALLAS!!!!</strong></p>
-                        <p style="color: #ccc;">• TOALLA #1 ES PARA PONER EN LAS MAQUINAS.<br>• TOALLA #2 ES PARA DESINFECTAR LAS MAQUINAS.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>¿Acepta los reglamentos del gimnasio?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="aceptaReglamentos" value="Si"> Sí, acepto</label>
-                            <label><input type="radio" name="aceptaReglamentos" value="No"> No, no acepto</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Firma (escriba su nombre completo)</label>
-                        <input type="text" id="firmaReglamentos" placeholder="Firma">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="fechaReglamentos">
-                    </div>
-
-                    <div class="info-box" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px; margin-top: 15px;">
-                        <p style="color: #ccc; font-size: 0.9em;"><strong>AUTORIZACIÓN:</strong> Concedo al High Quality Training LLC, el permiso irrevocable de capturar imágenes de mi persona a través de fotografías, videos, grabaciones o cualquier otro medio electrónico o impreso en relación a promociones del gimnasio.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nombre en letra de molde</label>
-                        <input type="text" id="autorizacionNombre" placeholder="Nombre completo">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Firma</label>
-                        <input type="text" id="autorizacionFirma" placeholder="Firma">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Solo aplica clases grupales: Estoy consciente que, de no existir quorum de 4 o más, la clase grupal se suspenderá.</label>
-                        <input type="text" id="inicialesClases" placeholder="Sus iniciales" style="width: 100px;">
-                    </div>
-
-                    <div class="info-box" style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px; margin-top: 15px;">
-                        <p style="color: #ccc; font-size: 0.9em;"><strong>RELEVO Y LIBERACION DE RESPONSABILIDAD</strong><br>
-                        He leído y comprendido la anterior asunción de riesgo y exención de responsabilidad. Entiendo que al firmar este formulario estoy renunciando a valiosos derechos legales.</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Firma</label>
-                        <input type="text" id="firmaLiberacion" placeholder="Firma completa">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="fechaLiberacion">
                     </div>
 
                     <!-- BOTONES -->
                     <div style="display: flex; gap: 15px; margin-top: 30px;">
-                        <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()" style="flex: 1;">LIMPIAR</button>
-                        <button type="submit" class="btn btn-primary" style="flex: 1;">REGISTRARME</button>
+                        <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()" style="flex: 1;">LIMPIAR / CLEAR</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">REGISTRARME / REGISTER</button>
                     </div>
                 </form>
             </div>
@@ -1523,48 +1261,6 @@
         let sesionClientesActiva = false;
         let intentosFallidos = 0;
         const CONTRASENA_CLIENTES = "gym2024";
-
-        // Funciones de toggle para campos condicionales
-        function toggleFumador() {
-            const fuma = document.querySelector('input[name="fuma"]:checked');
-            const detalles = document.getElementById('fumadorDetalles');
-            if (fuma && fuma.value === 'Si') {
-                detalles.style.display = 'block';
-            } else {
-                detalles.style.display = 'none';
-                document.getElementById('dejoFumarDetalles').style.display = 'none';
-            }
-        }
-
-        function toggleDejoFumar() {
-            const dejo = document.querySelector('input[name="dejoFumar"]:checked');
-            const detalles = document.getElementById('dejoFumarDetalles');
-            if (dejo && dejo.value === 'Si') {
-                detalles.style.display = 'block';
-            } else {
-                detalles.style.display = 'none';
-            }
-        }
-
-        function toggleDieta() {
-            const dieta = document.querySelector('input[name="dieta"]:checked');
-            const container = document.getElementById('tipoDietaContainer');
-            if (dieta && dieta.value === 'Si') {
-                container.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-            }
-        }
-
-        function toggleNitroglicerina() {
-            const usa = document.querySelector('input[name="usaNitroglicerina"]:checked');
-            const detalles = document.getElementById('nitroglicerinaDetalles');
-            if (usa && usa.value === 'Si') {
-                detalles.style.display = 'block';
-            } else {
-                detalles.style.display = 'none';
-            }
-        }
 
         function toggleMenu() {
             const menu = document.getElementById('menuItems');
@@ -1666,113 +1362,53 @@
             if (edadInput) edadInput.value = '';
             const numSocio = document.getElementById('numSocio');
             if (numSocio) numSocio.value = `SOC-${Date.now().toString().slice(-6)}`;
-            document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(cb => cb.checked = false);
-            document.getElementById('fumadorDetalles').style.display = 'none';
-            document.getElementById('dejoFumarDetalles').style.display = 'none';
-            document.getElementById('tipoDietaContainer').style.display = 'none';
-            document.getElementById('nitroglicerinaDetalles').style.display = 'none';
+            const fechaComienzo = document.getElementById('fechaComienzo');
+            if (fechaComienzo) fechaComienzo.value = new Date().toISOString().split('T')[0];
+            const fechaFirma = document.getElementById('fechaFirma');
+            if (fechaFirma) fechaFirma.value = new Date().toISOString().split('T')[0];
         }
 
         document.getElementById('clientForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Recoger todas las condiciones médicas
-            const condiciones = [];
-            document.querySelectorAll('#histAltaPresion:checked, #histAtaqueCorazon:checked, #histArtritis:checked, #histDiabetes:checked, #histArterias:checked, #histPulmonar:checked, #histEpilepsia:checked, #histEspalda:checked, #histReumatica:checked, #histOperaciones:checked').forEach(cb => condiciones.push(cb.value));
-            
-            // Recoger síntomas
-            const sintomas = [];
-            document.querySelectorAll('#sinArtritis:checked, #sinDificultadRespirar:checked, #sinDificultadDormir:checked, #sinDolorCadera:checked, #sinDolorPecho:checked, #sinDolorRodillas:checked, #sinFatiga:checked, #sinFlema:checked, #sinMareos:checked, #sinAlmohada:checked, #sinPalpitaciones:checked, #sinPulsoAcelerado:checked, #sinSoplo:checked, #sinTos:checked, #sinTobillosInflamados:checked').forEach(cb => sintomas.push(cb.value));
 
             const cliente = {
                 id: Date.now(),
-                // Datos personales
+                // Información del miembro
                 numSocio: document.getElementById('numSocio').value,
                 fechaComienzo: document.getElementById('fechaComienzo').value,
                 nombre: document.getElementById('nombre').value,
                 sexo: document.getElementById('sexo').value,
                 fechaNacimiento: document.getElementById('fechaNacimiento').value,
                 edad: document.getElementById('edad').value,
-                peso: document.getElementById('peso').value,
-                estatura: document.getElementById('estatura').value,
                 direccion: document.getElementById('direccion').value,
                 telefono: document.getElementById('telefono').value,
                 email: document.getElementById('email').value,
                 contactoEmergencia: document.getElementById('contactoEmergencia').value,
                 telEmergencia: document.getElementById('telEmergencia').value,
+                ocupacion: document.getElementById('ocupacion').value,
                 foto: document.getElementById('photoPreview').querySelector('img')?.src || '',
                 
-                // Historial médico
-                condiciones: condiciones,
-                observaciones: document.getElementById('explicacionHistorial').value,
-                historialFamiliar: {
-                    altaPresion: document.getElementById('famAltaPresion')?.checked || false,
-                    diabetes: document.getElementById('famDiabetes')?.checked || false,
-                    corazon: document.getElementById('famCorazon')?.checked || false,
-                    operacionCorazon: document.getElementById('famOperacionCorazon')?.checked || false,
-                    otras: document.getElementById('famOtras')?.checked || false,
-                    tobillos: document.getElementById('famTobillos')?.checked || false
-                },
-                sintomas: sintomas,
+                // Cuestionario de salud
+                condicionMedica: document.querySelector('input[name="condicionMedica"]:checked')?.value || '',
+                condicionMedicaTexto: document.getElementById('condicionMedicaTexto').value,
+                ejercicioRegular: document.querySelector('input[name="ejercicioRegular"]:checked')?.value || '',
+                tomaMedicamento: document.querySelector('input[name="tomaMedicamento"]:checked')?.value || '',
+                medicamentosTexto: document.getElementById('medicamentosTexto').value,
+                lesionAlergia: document.querySelector('input[name="lesionAlergia"]:checked')?.value || '',
+                lesionAlergiaTexto: document.getElementById('lesionAlergiaTexto').value,
                 
-                // Trabajo y actividad
-                compania: document.getElementById('compania').value,
-                tipoTrabajo: document.querySelector('input[name="tipoTrabajo"]:checked')?.value || '',
-                nivelActividad: document.getElementById('nivelActividad').value,
-                minutosCamina: document.getElementById('minutosCamina').value,
-                millasCamina: document.getElementById('millasCamina').value,
-                programaEjercicio: document.querySelector('input[name="programaEjercicio"]:checked')?.value || '',
-                gustariaComenzar: document.querySelector('input[name="gustariaComenzar"]:checked')?.value || '',
-                tomaPulso: document.querySelector('input[name="tomaPulso"]:checked')?.value || '',
-                pulsoMinuto: document.getElementById('pulsoMinuto').value,
+                // Información adicional
+                inicialesNoEvaluacion: document.getElementById('inicialesNoEvaluacion').value,
                 
-                // Ejercicio
-                sintomasEjercicio: {
-                    dolorPecho: document.getElementById('ejerDolorPecho')?.checked || false,
-                    dolorPiernas: document.getElementById('ejerDolorPiernas')?.checked || false,
-                    faltaRespiración: document.getElementById('ejerFaltaRespiración')?.checked || false,
-                    mareo: document.getElementById('ejerMareo')?.checked || false,
-                    presion: document.getElementById('ejerPresion')?.checked || false,
-                    cansancio: document.getElementById('ejerCansancio')?.checked || false
-                },
-                tiempoRecuperacion: document.getElementById('tiempoRecuperacion').value,
-                tieneLesion: document.querySelector('input[name="tieneLesion"]:checked')?.value || '',
+                // Firma y relevo
+                firma: document.getElementById('firma').value,
+                fechaFirma: document.getElementById('fechaFirma').value,
                 
-                // Hábitos
-                fuma: document.querySelector('input[name="fuma"]:checked')?.value || '',
-                cantidadFuma: document.getElementById('cantidadFuma').value,
-                edadComenzoFumar: document.getElementById('edadComenzoFumar').value,
-                anosFumando: document.getElementById('anosFumando').value,
-                dejoFumar: document.querySelector('input[name="dejoFumar"]:checked')?.value || '',
-                cuandoDejo: document.getElementById('cuandoDejoFumar').value,
-                porqueDejo: document.getElementById('porqueDejoFumar').value,
-                peso21: document.getElementById('peso21').value,
-                dieta: document.querySelector('input[name="dieta"]:checked')?.value || '',
-                tipoDieta: document.getElementById('tipoDieta').value,
-                
-                // Medicamentos
-                usaNitroglicerina: document.querySelector('input[name="usaNitroglicerina"]:checked')?.value || '',
-                cantidadNitroglicerina: document.getElementById('cantidadNitroglicerina').value,
-                nitroPorDia: document.getElementById('nitroPorDia').value,
-                nitroPorSemana: document.getElementById('nitroPorSemana').value,
-                condicionSalud: document.getElementById('condicionSalud').value,
-                listaMedicamentos: document.getElementById('medicamentos').value,
-                
-                // Consentimientos
-                consentimientoNombre: document.getElementById('consentimientoNombre').value,
-                consentimientoFecha: document.getElementById('consentimientoFecha').value,
-                aceptaReglamentos: document.querySelector('input[name="aceptaReglamentos"]:checked')?.value || '',
-                firmaReglamentos: document.getElementById('firmaReglamentos').value,
-                fechaReglamentos: document.getElementById('fechaReglamentos').value,
-                autorizacionNombre: document.getElementById('autorizacionNombre').value,
-                autorizacionFirma: document.getElementById('autorizacionFirma').value,
-                inicialesClases: document.getElementById('inicialesClases').value,
-                firmaLiberacion: document.getElementById('firmaLiberacion').value,
-                fechaLiberacion: document.getElementById('fechaLiberacion').value,
+                // Membresía
+                membresia: document.getElementById('membresia').value,
                 
                 fechaRegistro: new Date().toLocaleDateString(),
                 activo: true,
-                membresia: document.getElementById('membresia').value,
                 historial: { pagos: [], visitas: [], progreso: [], medico: [], notas: [] }
             };
 
@@ -1823,6 +1459,8 @@
             if(numSocio) numSocio.value = `SOC-${Date.now().toString().slice(-6)}`;
             const fechaComienzo = document.getElementById('fechaComienzo');
             if(fechaComienzo) fechaComienzo.value = new Date().toISOString().split('T')[0];
+            const fechaFirma = document.getElementById('fechaFirma');
+            if(fechaFirma) fechaFirma.value = new Date().toISOString().split('T')[0];
         });
     </script>
 </body>
