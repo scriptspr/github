@@ -15,7 +15,7 @@
             font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             min-height: 100vh;
             color: #e0e0e0;
-            background: #0a0a0a;
+            background: #8c8b8b;
             position: relative;
             overflow-x: hidden;
         }
@@ -32,12 +32,12 @@
                 45deg,
                 transparent,
                 transparent 40px,
-                rgba(99, 49, 138, 0.15) 40px,
+                rgba(99, 49, 138, 0.6) 40px,   /* ← VIOLETA más fuerte */  
                 rgba(99, 49, 138, 0.15) 45px,
                 transparent 45px,
                 transparent 85px,
-                rgba(64, 211, 42, 0.1) 85px,
-                rgba(64, 211, 42, 0.1) 90px
+                rgba(64, 211, 42, 0.6) 85px,    /* ← VERDE más fuerte */
+                rgba(64, 211, 42, 0.6) 90px
             );
             pointer-events: none;
             z-index: 0;
@@ -1084,15 +1084,15 @@
                         <div class="package-name">2 PERSONAS</div>
                         <div class="package-price">$40<span>/c/u mes</span></div>
                         <ul class="package-features">
-                            <li>Puede ser familiar o amigos</li> 
+                            <li>Total: $80/mes</li>
                         </ul>
                         <button class="package-btn">SELECCIONAR</button>
                     </div>
                     <div class="package-card popular" onclick="seleccionarPlan('3personas')">
-                        <div class="package-name">3 PERSONAS</div>
+                        <div class="package-name">3+ PERSONAS</div>
                         <div class="package-price">$35<span>/c/u mes</span></div>
                         <ul class="package-features">
-                            <li>Puede ser familiar o amigos</li> 
+                            <li>Mejor precio por persona</li>
                         </ul>
                         <button class="package-btn">SELECCIONAR</button>
                     </div>
@@ -1246,13 +1246,13 @@
                     </div>
 
                     <div class="info-box">
-                        <p><strong>💰</strong> Existe una cuota anual de matrícula de $30.00, la cual se le estará recordando con anticipación a su vencimiento..</p>
-                        <p style="margin-top: 5px;"><strong>💰</strong> There is an annual registration fee of $30.00, which will be reminded in advance of its expiration..</p>
+                        <p><strong>💰</strong> Existe una cuota anual de matrícula de $30.00, la cual será cobrada automáticamente cada año.</p>
+                        <p style="margin-top: 5px;"><strong>💰</strong> There is an annual registration fee of $30.00, which will be automatically charged each year.</p>
                     </div>
 
                     <div class="form-group">
-                       <!-- <label>Si usted no desea evaluación ni rutina, favor de colocar sus iniciales aquí / If you do not want an evaluation or workout plan, please initial here:</label> 
-                        <input type="text" id="inicialesNoEvaluacion" placeholder="Iniciales / Initials"> -->
+                        <label>Si usted no desea evaluación ni rutina, favor de colocar sus iniciales aquí / If you do not want an evaluation or workout plan, please initial here:</label>
+                        <input type="text" id="inicialesNoEvaluacion" placeholder="Iniciales / Initials">
                     </div>
 
                     <div class="info-box" style="border-left-color: #ff4d4d;">
@@ -1295,7 +1295,7 @@
                             <option value="1 Año - $360.00">1 Año - $360.00</option>
                             <option value="Membresía Especial - $35.00 Mensual">Membresía Especial - $35.00 Mensual</option>
                             <option value="Membresía Grupal 2 Personas - $40.00 c/u">Membresía Grupal 2 Personas - $40.00 c/u</option>
-                            <option value="Membresía Grupal 3+ Personas - $35.00 c/u">Membresía Grupal 3 Personas - $35.00 c/u</option>
+                            <option value="Membresía Grupal 3+ Personas - $35.00 c/u">Membresía Grupal 3+ Personas - $35.00 c/u</option>
                             <option value="Day Pass - $8.97">Day Pass - $8.97</option>
                             <option value="Week Pass - $23.00">Week Pass - $23.00</option>
                         </select>
