@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Quality Training — Fitness Family</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #3EE639;
+            --purple: #7B3FA0;
+            --purple-light: #9B5EC0;
+            --bg: #0A0A0C;
+            --surface: #111115;
+            --surface2: #18181E;
+            --border: rgba(255,255,255,0.07);
+            --border-green: rgba(62,230,57,0.25);
+            --text: #E8E8F0;
+            --muted: #7A7A8C;
+            --radius: 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── NOISE TEXTURE ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── AMBIENT GLOW ─── */
+        .ambient {
+            position: fixed;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(120px);
+        }
+        .ambient-1 { background: rgba(123,63,160,0.12); top: -200px; left: -100px; }
+        .ambient-2 { background: rgba(62,230,57,0.06); bottom: 0; right: -100px; }
+
+        /* ─── NAVBAR ─── */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            z-index: 900;
+            background: rgba(10,10,12,0.85);
+            backdrop-filter: blur(20px) saturate(1.5);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            background: linear-gradient(120deg, #fff 30%, var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-pill {
+            display: flex;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 4px;
+            gap: 2px;
+        }
+
+        .nav-pill button {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+
+        .nav-pill button.active,
+        .nav-pill button:hover {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .nav-pill button.active {
+            background: linear-gradient(135deg, var(--purple), #5A2D80);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(123,63,160,0.4);
+        }
+
+        .hamburger-btn {
+            display: none;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .hamburger-btn:hover { border-color: var(--green); color: var(--green); }
+
+        /* ─── MOBILE DRAWER ─── */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 61px; left: 0; right: 0;
+            background: rgba(10,10,12,0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            z-index: 899;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu button {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-menu button:hover, .mobile-menu button.active {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .mobile-menu button.active { color: var(--green); }
+
+        /* ─── MAIN ─── */
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 20px 40px;
+            position: relative; z-index: 1;
+        }
+
+        /* ─── SECTIONS ─── */
+        .section { display: none; }
+        .section.active {
+            display: block;
+            animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            height: 440px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+        }
+
+        .hero-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(10,10,12,0.95) 0%,
+                rgba(10,10,12,0.5) 50%,
+                rgba(10,10,12,0.1) 100%
+            );
+        }
+
+        .hero-body {
+            position: relative;
+            z-index: 1;
+            padding: 36px 36px 40px;
+            width: 100%;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(62,230,57,0.12);
+            border: 1px solid var(--border-green);
+            color: var(--green);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 50px;
+            margin-bottom: 16px;
+        }
+
+        .hero-tag.closed {
+            background: rgba(224,62,62,0.12);
+            border-color: rgba(224,62,62,0.3);
+            color: #E03E3E;
+        }
+        .hero-tag.closed::before { background: #E03E3E; box-shadow: 0 0 8px #E03E3E; }
+
+        .hero-tag::before {
+            content: '';
+            width: 7px; height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.8rem;
+            letter-spacing: 3px;
+            line-height: 0.95;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .hero-title span { color: var(--green); }
+
+        .hero-sub {
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 400;
+            max-width: 440px;
+            line-height: 1.5;
+        }
+
+        /* ─── CONTACT CARD ─── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .contact-item:hover { border-color: var(--border-green); }
+
+        .contact-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--purple), #5A2D80);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-item h3 { font-size: 0.72rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+        .contact-item p, .contact-item a { font-size: 0.88rem; color: var(--text); text-decoration: none; font-weight: 500; }
+        .contact-item a:hover { color: var(--green); }
+
+        .schedule-grid {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+
+        .schedule-row:last-child { border-bottom: none; }
+        .schedule-row .day { color: var(--muted); font-weight: 500; }
+        .schedule-row .time { color: var(--text); font-weight: 600; }
+        .schedule-row .time.closed { color: #E03E3E; }
+        .schedule-row .badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .badge-open { background: rgba(62,230,57,0.15); color: var(--green); }
+        .badge-closed { background: rgba(224,62,62,0.15); color: #E03E3E; }
+
+        /* ─── PLANES ─── */
+        .section-header {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .section-desc { font-size: 0.88rem; color: var(--muted); }
+
+        .sub-heading {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--green);
+            margin: 32px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sub-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-green);
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .plan-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            position: relative;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--purple), var(--green));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(62,230,57,0.2);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+        }
+
+        .plan-card:hover::before { opacity: 1; }
+
+        .plan-card.featured {
+            border-color: var(--border-green);
+            background: linear-gradient(160deg, var(--surface) 60%, rgba(123,63,160,0.12));
+        }
+
+        .plan-card.featured::before { opacity: 1; }
+
+        .plan-badge {
+            position: absolute;
+            top: 14px; right: 14px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--purple), var(--green));
+            color: #fff;
+        }
+
+        .plan-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 1.5px;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .plan-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            letter-spacing: 1px;
+            background: linear-gradient(120deg, var(--purple-light), var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 14px;
+        }
+
+        .plan-price small {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 18px;
+        }
+
+        .plan-features li {
+            font-size: 0.82rem;
+            color: var(--muted);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-features li:last-child { border-bottom: none; }
+        .plan-features li::before { content: "✓"; color: var(--green); font-weight: 700; font-size: 0.9rem; }
+
+        .plan-btn {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 10px;
+            border-radius: 50px;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* Heroes / Special cards */
+        .special-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            margin-bottom: 14px;
+        }
+
+        .special-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .special-card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .special-price-tag {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            color: var(--green);
+        }
+
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 50px;
+            background: rgba(123,63,160,0.2);
+            border: 1px solid rgba(123,63,160,0.35);
+            color: #C890FF;
+        }
+
+        .notice-bar {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 0.82rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        /* ─── GALERÍA ─── */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            border-color: var(--border-green);
+        }
+
+        .gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+            display: block;
+        }
+
+        .gallery-item:hover img { transform: scale(1.07); }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(10,10,12,0.9));
+            padding: 28px 14px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            transform: translateY(4px);
+            opacity: 0;
+            transition: opacity 0.25s, transform 0.25s;
+        }
+
+        .gallery-item:hover .gallery-caption { opacity: 1; transform: translateY(0); }
+
+        /* ─── LIGHTBOX ─── */
+        .lightbox {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.96);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active { display: flex; }
+
+        .lightbox img {
+            max-width: 92%;
+            max-height: 88vh;
+            border-radius: 16px;
+            box-shadow: 0 0 60px rgba(62,230,57,0.08);
+        }
+
+        .lb-close {
+            position: absolute;
+            top: 20px; right: 24px;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .lb-close:hover { background: var(--green); color: var(--bg); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 640px) {
+            .nav-pill { display: none; }
+            .hamburger-btn { display: flex; }
+
+            .hero { height: 380px; }
+            .hero-title { font-size: 2.6rem; }
+            .hero-body { padding: 24px 24px 32px; }
+
+            .plans-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        }
+
+        @media (min-width: 641px) and (max-width: 900px) {
+            .nav-pill button { padding: 7px 10px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar">
+    <div class="navbar-inner">
+        <div class="logo">Quality Training</div>
+
+        <div class="nav-pill" id="navPill">
+            <button class="active" onclick="showSection('inicio', this)">🏠 Inicio</button>
+            <button onclick="showSection('planes', this)">🏋️ Planes</button>
+            <button onclick="abrirUbicacion()">📍 Ubicación</button>
+            <button onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view','_blank')">✨ Estética</button>
+            <button onclick="showSection('galeria', this)">📷 Galería</button>
+            <button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 ScriptsPR</button>
+        </div>
+
+        <button class="hamburger-btn" id="hambBtn" onclick="toggleMobileMenu()">☰</button>
+    </div>
+</nav>
+
+<!-- ─── MOBILE MENU ─── -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="active" onclick="showSection('inicio', this, true)">🏠 &nbsp;Inicio</button>
+    <button onclick="showSection('planes', this, true)">🏋️ &nbsp;Planes y Ofertas</button>
+    <button onclick="abrirUbicacion()">📍 &nbsp;Ubicación</button>
+    <button onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view','_blank')">✨ &nbsp;Estética</button>
+    <button onclick="showSection('galeria', this, true)">📷 &nbsp;Galería</button>
+    <button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 &nbsp;ScriptsPR</button>
+</div>
+
+<!-- ─── MAIN ─── -->
+<main class="main">
+
+    <!-- INICIO -->
+    <div id="inicio" class="section active">
+
+        <div class="hero">
+            <div class="hero-img"></div>
+            <div class="hero-body">
+                <div class="hero-tag" id="statusTag">Abierto hoy</div>
+                <h1 class="hero-title">Quality<br><span>Training</span><br>Fitness Family</h1>
+                <p class="hero-sub">Más que un gimnasio — una comunidad que te impulsa a ser tu mejor versión.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Contact Us</div>
+
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <h3>Dirección</h3>
+                        <p>315 Ave Lauro Piñero<br>Ceiba, PR</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div>
+                        <h3>Teléfono</h3>
+                        <a href="tel:7876130243">787-613-0243</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div>
+                        <h3>Email</h3>
+                        <a href="#" onclick="abrirEmail()">qualitytrainingsh.md<br>@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-grid">
+                <div class="schedule-row">
+                    <span class="day">Lunes – Jueves</span>
+                    <span class="time">5:00am – 9:00pm</span>
+                    <span class="badge badge-open">Abierto</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="day">Viernes</span>
+                    <span class="time">5:00am – 8:00pm</span>
+                    <span class="badge badge-open">Abierto</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="day">Sábados</span>
+                    <span class="time">8:00am – 2:00pm</span>
+                    <span class="badge badge-open">Abierto</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="day">Domingos</span>
+                    <span class="time closed">Cerrado</span>
+                    <span class="badge badge-closed">Cerrado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLANES -->
+    <div id="planes" class="section">
+        <div class="section-header">
+            <h2 class="section-title">Planes & Ofertas Especiales</h2>
+            <p class="section-desc">Encuentra la membresía ideal para ti. Sin contrato ni débito automático.</p>
+        </div>
+
+        <!-- Individuales -->
+        <div class="sub-heading">📅 Membresías Individuales</div>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="plan-name">1 Mes</div>
+                <div class="plan-price">$45<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 30 días</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card">
+                <div class="plan-name">3 Meses</div>
+                <div class="plan-price">$114<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 90 días</li>
+                    <li>Ahorras $21</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card featured">
+                <span class="plan-badge">Popular</span>
+                <div class="plan-name">6 Meses</div>
+                <div class="plan-price">$210<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 180 días</li>
+                    <li>Ahorras $60</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card featured">
+                <span class="plan-badge">Mejor valor</span>
+                <div class="plan-name">1 Año</div>
+                <div class="plan-price">$360<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 365 días</li>
+                    <li>Ahorras $180</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+        </div>
+
+        <!-- Especial Héroes -->
+        <div class="sub-heading">🎖️ Membresía Especial</div>
+        <div class="special-card">
+            <div class="special-card-header">
+                <div>
+                    <div class="special-card-title">🎖️ Homenaje a Nuestros Héroes</div>
+                    <div style="font-size:0.82rem; color:var(--muted); margin-top:4px;">Verificación requerida al inscribirse</div>
+                </div>
+                <div class="special-price-tag">$35<span style="font-size:1rem; color:var(--muted); font-family:'DM Sans',sans-serif;">/mes</span></div>
+            </div>
+            <div class="tags-row">
+                <span class="tag">👮 Policías</span>
+                <span class="tag">🚒 Bomberos</span>
+                <span class="tag">🚑 Paramédicos</span>
+                <span class="tag">⚕️ Manejo de Emergencias</span>
+                <span class="tag">🎖️ Militares</span>
+                <span class="tag">🪖 Veteranos</span>
+                <span class="tag">👩‍⚕️ Enfermeras</span>
+                <span class="tag">👨‍⚕️ Doctores</span>
+                <span class="tag">👴 Seniors 65+</span>
+            </div>
+            <button class="plan-btn" style="max-width:240px;">Seleccionar</button>
+        </div>
+
+        <!-- Estudiantil -->
+        <div class="sub-heading">🎓 Membresía Estudiantil</div>
+        <div class="special-card">
+            <div class="special-card-header">
+                <div>
+                    <div class="special-card-title">🎓 Membresía Estudiantil</div>
+                    <div style="font-size:0.82rem; color:var(--muted); margin-top:4px;">Matrícula del semestre en curso requerida</div>
+                </div>
+                <div class="special-price-tag">$23<span style="font-size:1rem; color:var(--muted); font-family:'DM Sans',sans-serif;">/mes</span></div>
+            </div>
+            <button class="plan-btn" style="max-width:240px;">Seleccionar</button>
+        </div>
+
+        <!-- Grupales -->
+        <div class="sub-heading">👥 Membresías Grupales</div>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="plan-name">2 Personas</div>
+                <div class="plan-price">$40<small>/c/u mes</small></div>
+                <ul class="plan-features">
+                    <li>Total: $80/mes</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card featured">
+                <span class="plan-badge">Mejor precio</span>
+                <div class="plan-name">3 Personas</div>
+                <div class="plan-price">$35<small>/c/u mes</small></div>
+                <ul class="plan-features">
+                    <li>Mejor precio por persona</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+        </div>
+
+        <!-- Pases -->
+        <div class="sub-heading">🎟️ Pases Especiales</div>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="plan-name">Day Pass</div>
+                <div class="plan-price">$8<small>.97</small></div>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card">
+                <div class="plan-name">Week Pass</div>
+                <div class="plan-price">$23<small>.00</small></div>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+        </div>
+
+        <div class="notice-bar">
+            <span>ℹ️</span>
+            <span>Precios <strong>NO</strong> incluyen IVU &nbsp;·&nbsp; Cuota anual: <strong>$30.00</strong> &nbsp;·&nbsp; Sin contrato ni débito automático</span>
+        </div>
+    </div>
+
+    <!-- GALERÍA -->
+    <div id="galeria" class="section">
+        <div class="section-header">
+            <h2 class="section-title">Nuestra Galería</h2>
+            <p class="section-desc">Conoce nuestras instalaciones y el equipo de Quality Training.</p>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-24d7261b-45a1-451c-8b97-38c414da2196.jpg" alt="Dra. Somayra Hernandez" loading="lazy">
+                <div class="gallery-caption">⚕️ Dra. Somayra Hernandez</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-9e3113e5-4c64-4a8f-bccc-18813e5e991a.jpg" alt="Campeones" loading="lazy">
+                <div class="gallery-caption">🥇 Parte de nuestros campeones</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-41c0c4e9-83d5-4631-a4cc-68065e9c4b88.jpg" alt="Cardio" loading="lazy">
+                <div class="gallery-caption">🏃‍♂️ Área de Cardio</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-8ba1f3dc-a73a-42f1-b09b-6167e29041cb.jpg" alt="Clases grupales" loading="lazy">
+                <div class="gallery-caption">👥 Clases grupales</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-db6d2ec0-ea71-474b-a4af-c9f212fd07e4.jpg" alt="Staff" loading="lazy">
+                <div class="gallery-caption">👊 Staff de Quality Training</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop" alt="Entrenamiento" loading="lazy">
+                <div class="gallery-caption">🏋️ Entrenamiento funcional</div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" onclick="cerrarLightbox()">
+    <button class="lb-close" onclick="cerrarLightbox()">✕</button>
+    <img id="lbImg" src="" alt="">
+</div>
+
+<script>
+    /* ── NAVIGATION ── */
+    function showSection(id, btn, mobile) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+
+        if (mobile) {
+            document.querySelectorAll('.mobile-menu button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            // mirror active on desktop pill
+            const pills = document.querySelectorAll('#navPill button');
+            const idx = Array.from(document.querySelectorAll('.mobile-menu button')).indexOf(btn);
+            pills.forEach(p => p.classList.remove('active'));
+            if (pills[idx]) pills[idx].classList.add('active');
+            closeMobileMenu();
+        } else {
+            document.querySelectorAll('#navPill button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    }
+
+    /* ── MOBILE MENU ── */
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('hambBtn');
+        const open = menu.classList.toggle('open');
+        btn.textContent = open ? '✕' : '☰';
+    }
+
+    function closeMobileMenu() {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('hambBtn').textContent = '☰';
+    }
+
+    /* ── UBICACION / EMAIL ── */
+    function abrirUbicacion() {
+        window.open('https://maps.app.goo.gl/2JhRzgyvQ2m25e9d6', '_blank');
+        closeMobileMenu();
+    }
+
+    function abrirEmail() {
+        window.location.href = 'mailto:qualitytrainingsh.md@gmail.com?subject=Consulta desde Quality Training';
+    }
+
+    /* ── LIGHTBOX ── */
+    function cerrarLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Status tag based on day
+        const tag = document.getElementById('statusTag');
+        const day = new Date().getDay(); // 0=domingo, 6=sabado
+        if (day === 0) {
+            tag.textContent = 'Cerrado hoy';
+            tag.classList.add('closed');
+        } else {
+            tag.textContent = 'Abierto hoy';
+        }
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                if (img) {
+                    document.getElementById('lbImg').src = img.src;
+                    document.getElementById('lightbox').classList.add('active');
+                }
+            });
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') cerrarLightbox();
+        });
+    });
+</script>
+</body>
+</html>
