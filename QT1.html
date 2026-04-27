@@ -11,7 +11,7 @@
             --green: #3EE639;
             --purple: #7B3FA0;
             --purple-light: #9B5EC0;
-            --bg: #0A0A0C;
+            --bg: #4a4949; /*#0A0A0C;*/ /* COLOR DEL FONDO */
             --surface: #111115;
             --surface2: #18181E;
             --border: rgba(255,255,255,0.07);
@@ -247,13 +247,6 @@
             border-radius: 50px;
             margin-bottom: 16px;
         }
-
-        .hero-tag.closed {
-            background: rgba(224,62,62,0.12);
-            border-color: rgba(224,62,62,0.3);
-            color: #E03E3E;
-        }
-        .hero-tag.closed::before { background: #E03E3E; box-shadow: 0 0 8px #E03E3E; }
 
         .hero-tag::before {
             content: '';
@@ -723,7 +716,7 @@
         <div class="hero">
             <div class="hero-img"></div>
             <div class="hero-body">
-                <div class="hero-tag" id="statusTag">Abierto hoy</div>
+                <div class="hero-tag">Abierto hoy</div>
                 <h1 class="hero-title">Quality<br><span>Training</span><br>Fitness Family</h1>
                 <p class="hero-sub">Más que un gimnasio — una comunidad que te impulsa a ser tu mejor versión.</p>
             </div>
@@ -1003,16 +996,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Status tag based on day
-        const tag = document.getElementById('statusTag');
-        const day = new Date().getDay(); // 0=domingo, 6=sabado
-        if (day === 0) {
-            tag.textContent = 'Cerrado hoy';
-            tag.classList.add('closed');
-        } else {
-            tag.textContent = 'Abierto hoy';
-        }
-
         document.querySelectorAll('.gallery-item').forEach(item => {
             item.addEventListener('click', () => {
                 const img = item.querySelector('img');
