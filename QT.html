@@ -3,924 +3,1132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Quality Training - Galería y Planes</title>
+    <title>Quality Training — Fitness Family</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --green: #3EE639;
+            --purple: #7B3FA0;
+            --purple-light: #9B5EC0;
+            --bg: #0A0A0C;
+            --surface: #111115;
+            --surface2: #18181E;
+            --border: rgba(255,255,255,0.07);
+            --border-green: rgba(62,230,57,0.25);
+            --text: #E8E8F0;
+            --muted: #7A7A8C;
+            --radius: 20px;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            color: #e0e0e0;
-            background: #8c8b8b;
-            position: relative;
             overflow-x: hidden;
         }
 
-        /* Patrón de líneas moderno */
+        /* ─── NOISE TEXTURE ─── */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 40px,
-                rgba(99, 49, 138, 0.6) 40px,
-                rgba(99, 49, 138, 0.15) 45px,
-                transparent 45px,
-                transparent 85px,
-                rgba(64, 211, 42, 0.6) 85px,
-                rgba(64, 211, 42, 0.6) 90px
-            );
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.35;
             pointer-events: none;
             z-index: 0;
         }
 
-        body::after {
-            content: '';
+        /* ─── AMBIENT GLOW ─── */
+        .ambient {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 80%, rgba(99,49,138,0.08) 0%, transparent 50%);
+            width: 600px; height: 600px;
+            border-radius: 50%;
             pointer-events: none;
             z-index: 0;
+            filter: blur(120px);
+        }
+        .ambient-1 { background: rgba(123,63,160,0.12); top: -200px; left: -100px; }
+        .ambient-2 { background: rgba(62,230,57,0.06); bottom: 0; right: -100px; }
+
+        /* ─── NAVBAR ─── */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            z-index: 900;
+            background: rgba(10,10,12,0.85);
+            backdrop-filter: blur(20px) saturate(1.5);
+            border-bottom: 1px solid var(--border);
         }
 
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* ===== MENÚ HAMBURGUESA ===== */
-        .menu-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(64, 211, 42, 0.3);
-        }
-
-        .menu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 24px;
-            max-width: 1400px;
+        .navbar-inner {
+            max-width: 1100px;
             margin: 0 auto;
-            position: relative;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
         }
 
-        .menu-logo {
-            font-size: 1.3em;
-            font-weight: 700;
-            background: linear-gradient(135deg, #9b4d96, #40D32A);
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            background: linear-gradient(120deg, #fff 30%, var(--green));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.5px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+        }
+
+        .nav-pill {
+            display: flex;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 4px;
+            gap: 2px;
+        }
+
+        .nav-pill button {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s;
             white-space: nowrap;
         }
 
+        .nav-pill button.active,
+        .nav-pill button:hover {
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .nav-pill button.active {
+            background: linear-gradient(135deg, var(--purple), #5A2D80);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(123,63,160,0.4);
+        }
+
         .hamburger-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(64, 211, 42, 0.3);
-            color: #40D32A;
-            font-size: 1.5em;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: none;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 42px; height: 42px;
             border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .hamburger-btn:hover {
-            background: rgba(64, 211, 42, 0.15);
-            border-color: #40D32A;
-        }
-
-        .hamburger-btn.active {
-            background: rgba(64, 211, 42, 0.2);
-            color: white;
-        }
-
-        .menu-items {
-            display: none;
-            background: rgba(10, 10, 10, 0.98);
-            backdrop-filter: blur(12px);
-            padding: 12px 0;
-            border-top: 1px solid rgba(64, 211, 42, 0.2);
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-        }
-
-        .menu-items.show {
-            display: block;
-            max-height: 600px;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 24px;
-            color: #e0e0e0;
-            font-size: 1em;
-            font-weight: 500;
-            transition: all 0.2s ease;
             cursor: pointer;
-            border-left: 3px solid transparent;
-        }
-
-        .menu-item:hover {
-            background: rgba(64, 211, 42, 0.08);
-            color: #40D32A;
-        }
-
-        .menu-item.active {
-            background: linear-gradient(90deg, rgba(99,49,138,0.15), rgba(64,211,42,0.05));
-            color: #40D32A;
-            border-left-color: #40D32A;
-        }
-
-        /* ===== CONTENIDO PRINCIPAL ===== */
-        .main-content {
-            padding: 100px 24px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* ===== SECCIÓN HERO ===== */
-        .hero-section {
-            position: relative;
-            height: 420px;
-            background: linear-gradient(135deg, rgba(0,0,0,0.75), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
+            font-size: 1.2rem;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            border-radius: 28px;
-            margin-bottom: 40px;
-            border: 1px solid rgba(64, 211, 42, 0.2);
-            overflow: hidden;
+            transition: all 0.2s;
         }
 
-        .hero-content {
-            max-width: 90%;
-            padding: 24px;
-        }
+        .hamburger-btn:hover { border-color: var(--green); color: var(--green); }
 
-        .hero-content h1 {
-            font-size: 2.8em;
-            font-weight: 800;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-            color: white;
-        }
-
-        .hero-content p {
-            font-size: 1.1em;
-            margin-bottom: 32px;
-            opacity: 0.9;
-            line-height: 1.5;
-            color: #ccc;
-        }
-
-        .hero-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            align-items: center;
-        }
-
-        .hero-btn {
-            background: linear-gradient(135deg, #63318A, #40D32A);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 60px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 300px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .hero-btn:hover::before {
-            left: 100%;
-        }
-
-        .hero-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(64, 211, 42, 0.3);
-        }
-
-        .hero-btn:active {
-            transform: translateY(1px);
-        }
-
-        /* ===== SECCIÓN ===== */
-        .section {
+        /* ─── MOBILE DRAWER ─── */
+        .mobile-menu {
             display: none;
-            background: rgba(20, 20, 20, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
-            margin-bottom: 24px;
-            padding: 28px;
-            border: 1px solid rgba(99, 49, 138, 0.3);
-            transition: all 0.3s ease;
+            position: fixed;
+            top: 61px; left: 0; right: 0;
+            background: rgba(10,10,12,0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            z-index: 899;
+            flex-direction: column;
+            gap: 4px;
         }
 
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu button {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-menu button:hover, .mobile-menu button.active {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .mobile-menu button.active { color: var(--green); }
+
+        /* ─── MAIN ─── */
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 20px 40px;
+            position: relative; z-index: 1;
+        }
+
+        /* ─── SECTIONS ─── */
+        .section { display: none; }
         .section.active {
             display: block;
-            animation: fadeInUp 0.5s ease-out;
+            animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .form-title {
-            font-size: 1.6em;
-            font-weight: 700;
-            margin-bottom: 24px;
-            color: white;
-            border-bottom: 2px solid #40D32A;
-            padding-bottom: 12px;
-            display: inline-block;
-        }
-
-        .form-subtitle {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin: 28px 0 16px;
-            background: linear-gradient(135deg, #63318A, #40D32A);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            border-left: 3px solid #40D32A;
-            padding-left: 14px;
-        }
-
-        /* Tarjetas de paquetes */
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .package-card {
-            background: rgba(30, 30, 30, 0.9);
-            border-radius: 24px;
-            padding: 24px;
-            border: 1px solid rgba(99, 49, 138, 0.4);
-            transition: all 0.3s ease;
+        /* ─── HERO ─── */
+        .hero {
             position: relative;
+            border-radius: 28px;
             overflow: hidden;
+            height: 440px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-end;
         }
 
-        .package-card:hover {
-            transform: translateY(-6px);
-            border-color: #40D32A;
-            box-shadow: 0 15px 35px rgba(64, 211, 42, 0.15);
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
         }
 
-        .package-card.popular {
-            border: 1px solid #40D32A;
-            background: linear-gradient(135deg, rgba(30,30,30,0.95), rgba(99,49,138,0.15));
+        .hero-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(10,10,12,0.95) 0%,
+                rgba(10,10,12,0.5) 50%,
+                rgba(10,10,12,0.1) 100%
+            );
         }
 
-        .package-name {
-            font-size: 1.5em;
+        .hero-body {
+            position: relative;
+            z-index: 1;
+            padding: 36px 36px 40px;
+            width: 100%;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(62,230,57,0.12);
+            border: 1px solid var(--border-green);
+            color: var(--green);
+            font-size: 0.75rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            color: white;
-        }
-
-        .package-price {
-            font-size: 2em;
-            font-weight: 800;
-            background: linear-gradient(135deg, #63318A, #40D32A);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 50px;
             margin-bottom: 16px;
         }
 
-        .package-price span {
-            font-size: 0.5em;
+        .hero-tag.closed {
+            background: rgba(224,62,62,0.12);
+            border-color: rgba(224,62,62,0.3);
+            color: #E03E3E;
+        }
+        .hero-tag.closed::before { background: #E03E3E; box-shadow: 0 0 8px #E03E3E; }
+
+        .hero-tag::before {
+            content: '';
+            width: 7px; height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.8rem;
+            letter-spacing: 3px;
+            line-height: 0.95;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .hero-title span { color: var(--green); }
+
+        .hero-sub {
+            font-size: 0.95rem;
+            color: var(--muted);
             font-weight: 400;
-            color: #888;
+            max-width: 440px;
+            line-height: 1.5;
         }
 
-        .package-features {
-            list-style: none;
-            margin: 16px 0;
+        /* ─── CONTACT CARD ─── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 16px;
         }
 
-        .package-features li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            color: #bbb;
+        .card-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .contact-item:hover { border-color: var(--border-green); }
+
+        .contact-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--purple), #5A2D80);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-item h3 { font-size: 0.72rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+        .contact-item p, .contact-item a { font-size: 0.88rem; color: var(--text); text-decoration: none; font-weight: 500; }
+        .contact-item a:hover { color: var(--green); }
+
+        .schedule-grid {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+
+        .schedule-row:last-child { border-bottom: none; }
+        .schedule-row .day { color: var(--muted); font-weight: 500; }
+        .schedule-row .time { color: var(--text); font-weight: 600; }
+        .schedule-row .time.closed { color: #E03E3E; }
+        .schedule-row .badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .badge-open { background: rgba(62,230,57,0.15); color: var(--green); }
+        .badge-closed { background: rgba(224,62,62,0.15); color: #E03E3E; }
+
+        /* ─── PLANES ─── */
+        .section-header {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .section-desc { font-size: 0.88rem; color: var(--muted); }
+
+        .sub-heading {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--green);
+            margin: 32px 0 14px;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.9em;
         }
 
-        .package-features li::before {
-            content: "✓";
-            color: #40D32A;
-            font-weight: bold;
+        .sub-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-green);
         }
 
-        /* Botón completamente deshabilitado - SOLO VISUAL */
-        .package-btn {
-            background: linear-gradient(135deg, #63318A, #40D32A);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 40px;
-            font-size: 0.95em;
-            font-weight: 600;
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .plan-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            position: relative;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--purple), var(--green));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(62,230,57,0.2);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+        }
+
+        .plan-card:hover::before { opacity: 1; }
+
+        .plan-card.featured {
+            border-color: var(--border-green);
+            background: linear-gradient(160deg, var(--surface) 60%, rgba(123,63,160,0.12));
+        }
+
+        .plan-card.featured::before { opacity: 1; }
+
+        .plan-badge {
+            position: absolute;
+            top: 14px; right: 14px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--purple), var(--green));
+            color: #fff;
+        }
+
+        .plan-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 1.5px;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .plan-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            letter-spacing: 1px;
+            background: linear-gradient(120deg, var(--purple-light), var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 14px;
+        }
+
+        .plan-price small {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 18px;
+        }
+
+        .plan-features li {
+            font-size: 0.82rem;
+            color: var(--muted);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-features li:last-child { border-bottom: none; }
+        .plan-features li::before { content: "✓"; color: var(--green); font-weight: 700; font-size: 0.9rem; }
+
+        .plan-btn {
             width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 10px;
+            border-radius: 50px;
             cursor: default;
-            opacity: 0.7;
             pointer-events: none;
         }
 
-        .info-box {
-            background: rgba(0,0,0,0.4);
-            padding: 16px 20px;
-            border-radius: 20px;
-            margin: 20px 0;
-            border-left: 3px solid #40D32A;
-        }
-
-        .info-box p {
-            color: #bbb;
-            font-size: 0.85em;
-            line-height: 1.5;
-        }
-
-        /* Botones modernos */
-        .btn {
-            padding: 14px;
-            border: none;
-            border-radius: 60px;
-            font-size: 0.95em;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #63318A, #40D32A);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(64, 211, 42, 0.3);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.08);
-            color: white;
-            border: 1px solid rgba(99,49,138,0.5);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(64, 211, 42, 0.15);
-            border-color: #40D32A;
-        }
-
-        /* Info cards */
-        .info-card {
-            background: rgba(30,30,30,0.8);
-            border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 28px;
-            border: 1px solid rgba(99,49,138,0.3);
-        }
-
-        .info-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 10px;
-            background: rgba(0,0,0,0.3);
-            padding: 18px;
-            border-radius: 20px;
+        /* Heroes / Special cards */
+        .special-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
             margin-bottom: 14px;
-            transition: all 0.3s ease;
         }
 
-        .info-item:hover {
-            background: rgba(64, 211, 42, 0.08);
-        }
-
-        .info-icon {
-            width: 55px;
-            height: 55px;
-            background: linear-gradient(135deg, #63318A, #40D32A);
-            border-radius: 50%;
+        .special-card-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            color: white;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .horarios-card {
-            background: linear-gradient(135deg, rgba(99,49,138,0.4), rgba(64,211,42,0.2));
-            border-radius: 20px;
-            padding: 20px;
-            color: white;
-            text-align: center;
-            border: 1px solid rgba(64,211,42,0.3);
+        .special-card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
         }
 
-        /* ===== GALERÍA DE FOTOS ===== */
+        .special-price-tag {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            color: var(--green);
+        }
+
+        .tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 50px;
+            background: rgba(123,63,160,0.2);
+            border: 1px solid rgba(123,63,160,0.35);
+            color: #C890FF;
+        }
+
+        .notice-bar {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 0.82rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        /* ─── GALERÍA ─── */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 8px;
         }
 
         .gallery-item {
             position: relative;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
-            cursor: pointer;
             aspect-ratio: 1 / 1;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: scale(1.02);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            border-color: var(--border-green);
         }
 
-        .gallery-item:hover img {
-            transform: scale(1.05);
+        .gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+            display: block;
         }
 
-        .gallery-overlay {
+        .gallery-item:hover img { transform: scale(1.07); }
+
+        .gallery-caption {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            padding: 20px 15px 15px;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-            font-weight: 500;
-            font-size: 0.9em;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(10,10,12,0.9));
+            padding: 28px 14px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            transform: translateY(4px);
+            opacity: 0;
+            transition: opacity 0.25s, transform 0.25s;
         }
 
-        .gallery-item:hover .gallery-overlay {
-            transform: translateY(0);
-        }
+        .gallery-item:hover .gallery-caption { opacity: 1; transform: translateY(0); }
 
-        /* Lightbox */
+        /* ─── LIGHTBOX ─── */
         .lightbox {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 3000;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.96);
+            z-index: 2000;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
+            cursor: zoom-out;
         }
 
-        .lightbox.active {
-            display: flex;
-        }
+        .lightbox.active { display: flex; }
 
         .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 92%;
+            max-height: 88vh;
             border-radius: 16px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 60px rgba(62,230,57,0.08);
         }
 
-        .lightbox-close {
+        .lb-close {
             position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 2.5em;
-            color: white;
+            top: 20px; right: 24px;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
         }
 
-        .lightbox-close:hover {
-            transform: scale(1.1);
-            color: #40D32A;
+        .lb-close:hover { background: var(--green); color: var(--bg); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 640px) {
+            .nav-pill { display: none; }
+            .hamburger-btn { display: flex; }
+
+            .hero { height: 380px; }
+            .hero-title { font-size: 2.6rem; }
+            .hero-body { padding: 24px 24px 32px; }
+
+            .plans-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         }
 
-        .text-center { text-align: center; }
-
-        /* Responsive */
-        @media screen and (max-width: 768px) {
-            .main-content {
-                padding: 90px 16px 30px;
-            }
-            .packages-grid {
-                grid-template-columns: 1fr;
-            }
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                gap: 12px;
-            }
-            .gallery-overlay {
-                font-size: 0.75em;
-                padding: 12px 10px 10px;
-            }
-            .hero-section {
-                height: 360px;
-            }
-            .hero-content h1 {
-                font-size: 2em;
-            }
-            .section {
-                padding: 20px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .menu-logo {
-                font-size: 1em;
-            }
-            .hero-content h1 {
-                font-size: 1.6em;
-            }
+        @media (min-width: 641px) and (max-width: 900px) {
+            .nav-pill button { padding: 7px 10px; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
-    <div class="content-wrapper">
-        <!-- MENÚ HAMBURGUESA -->
-        <div class="menu-container">
-            <div class="menu-header">
-                <div class="menu-logo">QUALITY TRAINING</div>
-                <button class="hamburger-btn" onclick="toggleMenu()" id="menuToggle">☰</button>
-            </div>
-            
-            <div class="menu-items" id="menuItems">
-                <div class="menu-item active" onclick="showSection('inicio', this)">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🏠</div>
-                    Inicio
-                </div>
-                <div class="menu-item" onclick="showSection('planes', this)">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">🏋️</div>
-                    Planes y Ofertas
-                </div>
-                <div class="menu-item" onclick="abrirUbicacion()">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">📍</div>
-                    Localidad
-                </div>
-                <div class="menu-item" onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view', '_blank')">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">G</div>
-                    Estética
-                </div>
-                <div class="menu-item" onclick="showSection('galeria', this)">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">📷</div>
-                    Galería
-                </div>
-				<div class="menu-item" onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html', '_blank')">
-                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #63318A, #40D32A); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">💻</div>
-                    ScriptsPR
-                </div>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar">
+    <div class="navbar-inner">
+        <div class="logo">Quality Training</div>
+
+        <div class="nav-pill" id="navPill">
+            <button class="active" onclick="showSection('inicio', this)">🏠 Inicio</button>
+            <button onclick="showSection('planes', this)">🏋️ Planes</button>
+            <button onclick="abrirUbicacion()">📍 Ubicación</button>
+            <button onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view','_blank')">✨ Estética</button>
+            <button onclick="showSection('soma', this)">👩‍⚕️ Soma</button>
+            <button onclick="showSection('galeria', this)">📷 Galería</button>
+           <!-- <button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 ScriptsPR</button>
+        </div>-->
+
+        <button class="hamburger-btn" id="hambBtn" onclick="toggleMobileMenu()">☰</button>
+    </div>
+</nav>
+
+<!-- ─── MOBILE MENU ─── -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="active" onclick="showSection('inicio', this, true)">🏠 &nbsp;Inicio</button>
+    <button onclick="showSection('planes', this, true)">🏋️ &nbsp;Planes y Ofertas</button>
+    <button onclick="abrirUbicacion()">📍 &nbsp;Ubicación</button>
+    <button onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view','_blank')">✨ &nbsp;Estética</button>
+    <button onclick="showSection('soma', this, true)">👩‍⚕️ &nbsp;¿Quién es Soma?</button>
+    <button onclick="showSection('galeria', this, true)">📷 &nbsp;Galería</button>
+    <!--<button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 &nbsp;ScriptsPR</button>-->
+</div>
+
+<!-- ─── MAIN ─── -->
+<main class="main">
+
+    <!-- INICIO -->
+    <div id="inicio" class="section active">
+
+        <div class="hero">
+            <div class="hero-img"></div>
+            <div class="hero-body">
+                <div class="hero-tag" id="statusTag">Abierto hoy</div>
+                <h1 class="hero-title">Quality<br><span>Training</span><br>Fitness Family</h1>
+                <p class="hero-sub">Más que un gimnasio — una comunidad que te impulsa a ser tu mejor versión.</p>
             </div>
         </div>
 
-        <div class="main-content">
-            <!-- SECCIÓN INICIO -->
-            <div id="inicio" class="section active">
-                <div class="hero-section">
-                    <div class="hero-content">
-                        <h1>QUALITY TRAINING<br>FITNESS FAMILY</h1>
-                        <p>Más que un gimnasio, una comunidad que te impulsa a ser tu mejor versión</p>
-                        <div class="hero-buttons">
-                           <!-- <button class="hero-btn" onclick="showSection('planes', document.querySelector('.menu-item[onclick*=\"planes\"]'))">VER PLANES Y OFERTAS</button> -->
-                           <!-- <button class="hero-btn" onclick="showSection('galeria', document.querySelector('.menu-item[onclick*=\"galeria\"]'))" style="background: linear-gradient(135deg, #40D32A, #63318A);">VER GALERÍA</button> -->
-                        </div>
+        <div class="card">
+            <div class="card-title">Contact Us</div>
+
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <h3>Dirección</h3>
+                        <p>315 Ave Lauro Piñero<br>Ceiba, PR</p>
                     </div>
                 </div>
-
-                <div class="info-card">
-                    <h2 class="text-center" style="color: #40D32A; margin-bottom: 20px; font-size: 1.4em;">CONTACT US</h2>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">📍</div>
-                        <div>
-                            <h3 style="color: white; font-size: 1em;">Dirección</h3>
-                            <p style="color: #aaa; font-size: 0.85em;">315 Ave Lauro Piñero, Ceiba, PR</p>
-                        </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div>
+                        <h3>Teléfono</h3>
+                        <a href="tel:7876130243">787-613-0243</a>
                     </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">📞</div>
-                        <div>
-                            <h3 style="color: white; font-size: 1em;">Teléfono</h3>
-                            <a href="tel:7876130243" style="color: #40D32A; text-decoration: none;">787-613-0243</a>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">✉️</div>
-                        <div>
-                            <h3 style="color: white; font-size: 1em;">Email</h3>
-                            <a href="#" onclick="abrirEmail()" style="color: #40D32A; text-decoration: none;">qualitytrainingsh.md@gmail.com</a>
-                        </div>
-                    </div>
-                    
-                    <div class="horarios-card">
-                        <h3 style="margin-bottom: 12px;">⏰ Horarios</h3>
-                        <div><strong>Lunes a Jueves:</strong> 5:00am - 9:00pm</div>
-                        <div><strong>Viernes:</strong> 5:00am - 8:00pm</div>
-                        <div><strong>Sábados:</strong> 8:00am - 2:00pm</div>
-                        <div style="margin-top: 8px;"><strong>Domingos: CERRADO</strong></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div>
+                        <h3>Email</h3>
+                        <a href="#" onclick="abrirEmail()">qualitytrainingsh.md<br>@gmail.com</a>
                     </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN PLANES Y OFERTAS (BOTONES DESHABILITADOS - SOLO VISUALES) -->
-            <div id="planes" class="section">
-                <h2 class="form-title">🏋️ PLANES Y OFERTAS ESPECIALES</h2>
-                
-                <h3 class="form-subtitle">📅 MEMBRESÍAS INDIVIDUALES</h3>
-                <div class="packages-grid">
-                    <div class="package-card">
-                        <div class="package-name">1 MES</div>
-                        <div class="package-price">$45.00</div>
-                        <ul class="package-features">
-                            <li>Acceso por 30 días</li>
-                        </ul>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
-                    <div class="package-card">
-                        <div class="package-name">3 MESES</div>
-                        <div class="package-price">$114.00</div>
-                        <ul class="package-features">
-                            <li>Acceso por 90 días</li>
-                            <li>Ahorras $21</li>
-                        </ul>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
-                    <div class="package-card">
-                        <div class="package-name">6 MESES</div>
-                        <div class="package-price">$210.00</div>
-                        <ul class="package-features">
-                            <li>Acceso por 180 días</li>
-                            <li>Ahorras $60</li>
-                        </ul>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
-                    <div class="package-card popular">
-                        <div class="package-name">1 AÑO</div>
-                        <div class="package-price">$360.00</div>
-                        <ul class="package-features">
-                            <li>Acceso por 365 días</li>
-                            <li>Ahorras $180</li>
-                        </ul>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
+            <div class="schedule-grid">
+                <div class="schedule-row">
+                    <span class="day">Lunes – Jueves</span>
+                    <span class="time">5:00am – 9:00pm</span>
+                    <span class="badge badge-open">Abierto</span>
                 </div>
-
-                <h3 class="form-subtitle">⭐ MEMBRESÍA ESPECIAL - $35.00/mes</h3>
-                <div class="info-box" style="text-align: center; border-left-color: #40D32A;">
-                    <p style="color: white; margin-bottom: 15px;"><strong>🎖️ ¡Homenaje a nuestros héroes! 🎖️</strong></p>
-                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 15px;">
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">👮 Policías</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">🚒 Bomberos</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">🚑 Paramédicos</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">⚕️ Manejo de Emergencias</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">🎖️ Militares</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">🪖 Veteranos</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">👩‍⚕️ Enfermeras</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">👨‍⚕️ Doctores</span>
-                        <span style="background: rgba(99,49,138,0.4); padding: 6px 14px; border-radius: 30px; color: white; font-size: 0.85em;">👴 Seniors 65+</span>
-                    </div>
-                    <button class="package-btn" style="max-width: 250px; margin: 0 auto;">SELECCIONAR</button>
+                <div class="schedule-row">
+                    <span class="day">Viernes</span>
+                    <span class="time">5:00am – 8:00pm</span>
+                    <span class="badge badge-open">Abierto</span>
                 </div>
-
-                <h3 class="form-subtitle">🎓 MEMBRESÍA ESTUDIANTIL - $23.00/mes</h3>
-                <div class="info-box" style="text-align: center; border-left-color: #63318A;">
-                    <p style="color: white;">Estudiantes con matrícula del semestre en curso</p>
-                    <button class="package-btn" style="max-width: 250px; margin: 15px auto 0;">SELECCIONAR</button>
+                <div class="schedule-row">
+                    <span class="day">Sábados</span>
+                    <span class="time">8:00am – 2:00pm</span>
+                    <span class="badge badge-open">Abierto</span>
                 </div>
-
-                <h3 class="form-subtitle">👥 MEMBRESÍAS GRUPALES</h3>
-                <div class="packages-grid">
-                    <div class="package-card">
-                        <div class="package-name">2 PERSONAS</div>
-                        <div class="package-price">$40<span>/c/u mes</span></div>
-                        <ul class="package-features">
-                            <li>Total: $80/mes</li>
-                        </ul>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
-                    <div class="package-card popular">
-                        <div class="package-name">3 PERSONAS</div>
-                        <div class="package-price">$35<span>/c/u mes</span></div>
-                        <ul class="package-features">
-                            <li>Mejor precio por persona</li>
-                        </ul>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
-                </div>
-
-                <h3 class="form-subtitle">🎟️ PASES ESPECIALES</h3>
-                <div class="packages-grid">
-                    <div class="package-card">
-                        <div class="package-name">DAY PASS</div>
-                        <div class="package-price">$8.97</div>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
-                    <div class="package-card">
-                        <div class="package-name">WEEK PASS</div>
-                        <div class="package-price">$23.00</div>
-                        <button class="package-btn">SELECCIONAR</button>
-                    </div>
-                </div>
-
-                <div class="info-box" style="border-left-color: #40D32A;">
-                    <p style="color: #bbb;">💰 Precios NO incluyen IVU | 📅 Cuota anual: $30.00 | ✅ Sin contrato ni débito automático</p>
-                </div>
-            </div>
-
-            <!-- SECCIÓN GALERÍA -->
-            <div id="galeria" class="section">
-                <h2 class="form-title">📷 Nuestra Galería</h2>
-                <p class="text-center" style="color: #aaa; margin-bottom: 25px;">Conoce nuestras instalaciones y el equipo de Quality Training</p>
-                
-                <div class="gallery-grid" id="galleryGrid">
-                    <div class="gallery-item">
-                        <img src="https://cdn.phototourl.com/free/2026-04-24-24d7261b-45a1-451c-8b97-38c414da2196.jpg" alt="Dra. Somayra Hernandez">
-                        <div class="gallery-overlay">⚕️ Dra. Somayra Hernandez</div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://cdn.phototourl.com/free/2026-04-24-9e3113e5-4c64-4a8f-bccc-18813e5e991a.jpg" alt="Campeones">
-                        <div class="gallery-overlay">🥇 Parte de nuestros campeones</div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://cdn.phototourl.com/free/2026-04-24-41c0c4e9-83d5-4631-a4cc-68065e9c4b88.jpg" alt="Cardio">
-                        <div class="gallery-overlay">🏃‍♂️ Área de Cardio</div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://cdn.phototourl.com/free/2026-04-24-8ba1f3dc-a73a-42f1-b09b-6167e29041cb.jpg" alt="Clases grupales">
-                        <div class="gallery-overlay">👥 Clases grupales</div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://cdn.phototourl.com/free/2026-04-24-db6d2ec0-ea71-474b-a4af-c9f212fd07e4.jpg" alt="Staff">
-                        <div class="gallery-overlay">👊 Staff de Quality Training</div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop" alt="Entrenamiento">
-                        <div class="gallery-overlay">🏋️ Entrenamiento funcional</div>
-                    </div>
+                <div class="schedule-row">
+                    <span class="day">Domingos</span>
+                    <span class="time closed">Cerrado</span>
+                    <span class="badge badge-closed">Cerrado</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- LIGHTBOX PARA GALERÍA -->
-    <div id="lightbox" class="lightbox" onclick="cerrarLightbox()">
-        <span class="lightbox-close" onclick="cerrarLightbox()">✕</span>
-        <img id="lightbox-img" src="" alt="Foto ampliada">
+    <!-- PLANES -->
+    <div id="planes" class="section">
+        <div class="section-header">
+            <h2 class="section-title">Planes & Ofertas Especiales</h2>
+            <p class="section-desc">Encuentra la membresía ideal para ti. Sin contrato ni débito automático.</p>
+        </div>
+
+        <!-- Individuales -->
+        <div class="sub-heading">📅 Membresías Individuales</div>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="plan-name">1 Mes</div>
+                <div class="plan-price">$45<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 30 días</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card">
+                <div class="plan-name">3 Meses</div>
+                <div class="plan-price">$114<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 90 días</li>
+                    <li>Ahorras $21</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card featured">
+                <span class="plan-badge">Popular</span>
+                <div class="plan-name">6 Meses</div>
+                <div class="plan-price">$210<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 180 días</li>
+                    <li>Ahorras $60</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card featured">
+                <span class="plan-badge">Mejor valor</span>
+                <div class="plan-name">1 Año</div>
+                <div class="plan-price">$360<small>.00</small></div>
+                <ul class="plan-features">
+                    <li>Acceso por 365 días</li>
+                    <li>Ahorras $180</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+        </div>
+
+        <!-- Especial Héroes -->
+        <div class="sub-heading">🎖️ Membresía Especial</div>
+        <div class="special-card">
+            <div class="special-card-header">
+                <div>
+                    <div class="special-card-title">🎖️ Homenaje a Nuestros Héroes</div>
+                    <div style="font-size:0.82rem; color:var(--muted); margin-top:4px;">Verificación requerida al inscribirse</div>
+                </div>
+                <div class="special-price-tag">$35<span style="font-size:1rem; color:var(--muted); font-family:'DM Sans',sans-serif;">/mes</span></div>
+            </div>
+            <div class="tags-row">
+                <span class="tag">👮 Policías</span>
+                <span class="tag">🚒 Bomberos</span>
+                <span class="tag">🚑 Paramédicos</span>
+                <span class="tag">⚕️ Manejo de Emergencias</span>
+                <span class="tag">🎖️ Militares</span>
+                <span class="tag">🪖 Veteranos</span>
+                <span class="tag">👩‍⚕️ Enfermeras</span>
+                <span class="tag">👨‍⚕️ Doctores</span>
+                <span class="tag">👴 Seniors 65+</span>
+            </div>
+            <button class="plan-btn" style="max-width:240px;">Seleccionar</button>
+        </div>
+
+        <!-- Estudiantil -->
+        <div class="sub-heading">🎓 Membresía Estudiantil</div>
+        <div class="special-card">
+            <div class="special-card-header">
+                <div>
+                    <div class="special-card-title">🎓 Membresía Estudiantil</div>
+                    <div style="font-size:0.82rem; color:var(--muted); margin-top:4px;">Matrícula del semestre en curso requerida</div>
+                </div>
+                <div class="special-price-tag">$23<span style="font-size:1rem; color:var(--muted); font-family:'DM Sans',sans-serif;">/mes</span></div>
+            </div>
+            <button class="plan-btn" style="max-width:240px;">Seleccionar</button>
+        </div>
+
+        <!-- Grupales -->
+        <div class="sub-heading">👥 Membresías Grupales</div>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="plan-name">2 Personas</div>
+                <div class="plan-price">$40<small>/c/u mes</small></div>
+                <ul class="plan-features">
+                    <li>Total: $80/mes</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card featured">
+                <span class="plan-badge">Mejor precio</span>
+                <div class="plan-name">3 Personas</div>
+                <div class="plan-price">$35<small>/c/u mes</small></div>
+                <ul class="plan-features">
+                    <li>Mejor precio por persona</li>
+                </ul>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+        </div>
+
+        <!-- Pases -->
+        <div class="sub-heading">🎟️ Pases Especiales</div>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="plan-name">Day Pass</div>
+                <div class="plan-price">$8<small>.97</small></div>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+            <div class="plan-card">
+                <div class="plan-name">Week Pass</div>
+                <div class="plan-price">$23<small>.00</small></div>
+                <button class="plan-btn">Seleccionar</button>
+            </div>
+        </div>
+
+        <div class="notice-bar">
+            <span>ℹ️</span>
+            <span>Precios <strong>NO</strong> incluyen IVU &nbsp;·&nbsp; Cuota anual: <strong>$30.00</strong> &nbsp;·&nbsp; Sin contrato ni débito automático</span>
+        </div>
     </div>
 
-    <script>
-        function abrirUbicacion() {
-            window.open("https://maps.app.goo.gl/2JhRzgyvQ2m25e9d6", '_blank');
-            document.getElementById('menuItems').classList.remove('show');
-            document.getElementById('menuToggle').classList.remove('active');
-            document.getElementById('menuToggle').textContent = '☰';
+    <!-- SOMA -->
+    <div id="soma" class="section">
+
+        <div class="hero" style="height:320px; margin-bottom:28px;">
+            <div class="hero-img" style="background-image:url('https://cdn.phototourl.com/free/2026-04-24-24d7261b-45a1-451c-8b97-38c414da2196.jpg');"></div>
+            <div class="hero-body">
+                <div class="hero-tag" style="background:rgba(123,63,160,0.18);border-color:rgba(123,63,160,0.4);color:#C890FF;">
+                    35 años en el fitness
+                </div>
+                <h1 class="hero-title" style="font-size:2.8rem;">Dra. Somayra<br><span>"Soma"</span><br>Hernández Díaz</h1>
+            </div>
+        </div>
+
+        <!-- Quote -->
+        <div style="border-left:3px solid var(--green); padding:16px 22px; margin-bottom:24px; background:var(--surface); border-radius:0 16px 16px 0;">
+            <p style="font-size:1.05rem; font-style:italic; color:var(--text); line-height:1.6;">"Rompiendo barreras — dentro y fuera del gimnasio."</p>
+        </div>
+
+        <!-- Credenciales -->
+        <div class="sub-heading">🎓 Formación Académica</div>
+        <div class="card" style="margin-bottom:16px;">
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <div class="contact-item">
+                    <div class="contact-icon">🩺</div>
+                    <div><p style="font-weight:600;">Doctorado en Medicina</p><h3>Médico General</h3></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🥗</div>
+                    <div><p style="font-weight:600;">Máster en Nutrición</p><h3>Ciencias del ejercicio y nutrición</h3></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🦴</div>
+                    <div><p style="font-weight:600;">Máster en Terapia Física</p><h3>Completado totalmente ciega — <span style="color:var(--green);">una hazaña extraordinaria</span></h3></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🏃</div>
+                    <div><p style="font-weight:600;">Bachillerato en Educación Física Elemental</p></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🏅</div>
+                    <div><p style="font-weight:600;">Grado Asociado en Técnica de Ortopedia</p></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">⚖️</div>
+                    <div><p style="font-weight:600;">Licenciada por el DRD de Puerto Rico</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificaciones -->
+        <div class="sub-heading">💪 Certificaciones & Especialidades</div>
+        <div class="card" style="margin-bottom:16px;">
+            <div class="tags-row" style="margin-bottom:0;">
+                <span class="tag">🏋️ Entrenadora Personal</span>
+                <span class="tag">👥 Ejercicios Grupales</span>
+                <span class="tag">🚴 Spinning</span>
+                <span class="tag">🔥 HIIT</span>
+                <span class="tag">💪 Bodybuilding</span>
+                <span class="tag">🏃 Coach de Running</span>
+                <span class="tag">⚡ Strong</span>
+                <span class="tag">🏃‍♀️ Aeróbicos</span>
+                <span class="tag">👶 Obesidad Infantil</span>
+                <span class="tag">⚖️ Control de Peso</span>
+                <span class="tag">🦴 Manejo de Lesiones</span>
+                <span class="tag">♿ Ejercicios Adaptados</span>
+                <span class="tag">🎲 Instructora de Croupier</span>
+                <span class="tag">🏆 Master Training</span>
+            </div>
+        </div>
+
+        <!-- Carrera atlética -->
+        <div class="sub-heading">🏆 Trayectoria Atlética</div>
+        <div class="card" style="margin-bottom:16px;">
+            <p style="font-size:0.92rem; color:var(--muted); line-height:1.75; margin-bottom:16px;">
+                Con <strong style="color:var(--text);">20 años de carrera en el fisiculturismo</strong>, la Dra. Hernández representó a <strong style="color:var(--green);">Puerto Rico en los Juegos Centroamericanos</strong> en la categoría ligera. Desde la escuela elemental participó en ping pong, salto largo, carreras de 800m y 1,500m, baloncesto y volleyball.
+            </p>
+            <div class="notice-bar" style="margin-top:0; border-color:rgba(62,230,57,0.2);">
+                <span>🌟</span>
+                <span><strong>Pionera:</strong> Primera mujer en competir en fisiculturismo usando espejuelos en Puerto Rico.</span>
+            </div>
+        </div>
+
+        <!-- Superando obstáculos -->
+        <div class="sub-heading">👁️ Rompiendo Barreras</div>
+        <div class="special-card" style="border-color:rgba(123,63,160,0.3); background:linear-gradient(160deg,var(--surface) 60%,rgba(123,63,160,0.1));">
+            <p style="font-size:0.92rem; color:var(--muted); line-height:1.8;">
+                Su condición visual fue deteriorándose con el tiempo — primero compitió con espejuelos, siendo pionera en ello, y eventualmente perdió la vista por completo. Sin embargo, esto <strong style="color:var(--text);">no detuvo su preparación académica</strong>: culminó su Máster en Terapia Física <strong style="color:var(--green);">totalmente ciega</strong>, demostrando una voluntad inquebrantable.
+            </p>
+        </div>
+
+        <!-- Hoy -->
+        <div class="sub-heading">🏠 Hoy en Quality Training</div>
+        <div class="card" style="margin-bottom:0;">
+            <p style="font-size:0.92rem; color:var(--muted); line-height:1.75;">
+                Actualmente dirige <strong style="color:var(--green);">Quality Training</strong> en Ceiba, PR, aplicando su formación multidisciplinaria — médica, nutricional y de terapia física — para ofrecer un enfoque verdaderamente integral del bienestar y el rendimiento deportivo. Con <strong style="color:var(--text);">35 años en la industria del fitness</strong>, Soma es mucho más que una entrenadora: es una inspiración.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- GALERÍA -->
+    <div id="galeria" class="section">
+        <div class="section-header">
+            <h2 class="section-title">Nuestra Galería</h2>
+            <p class="section-desc">Conoce nuestras instalaciones y el equipo de Quality Training.</p>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-24d7261b-45a1-451c-8b97-38c414da2196.jpg" alt="Dra. Somayra Hernandez" loading="lazy">
+                <div class="gallery-caption">⚕️ Dra. Somayra Hernandez</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-9e3113e5-4c64-4a8f-bccc-18813e5e991a.jpg" alt="Campeones" loading="lazy">
+                <div class="gallery-caption">🥇 Parte de nuestros campeones</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-41c0c4e9-83d5-4631-a4cc-68065e9c4b88.jpg" alt="Cardio" loading="lazy">
+                <div class="gallery-caption">🏃‍♂️ Área de Cardio</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-8ba1f3dc-a73a-42f1-b09b-6167e29041cb.jpg" alt="Clases grupales" loading="lazy">
+                <div class="gallery-caption">👥 Clases grupales</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.phototourl.com/free/2026-04-24-db6d2ec0-ea71-474b-a4af-c9f212fd07e4.jpg" alt="Staff" loading="lazy">
+                <div class="gallery-caption">👊 Staff de Quality Training</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop" alt="Entrenamiento" loading="lazy">
+                <div class="gallery-caption">🏋️ Entrenamiento funcional</div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" onclick="cerrarLightbox()">
+    <button class="lb-close" onclick="cerrarLightbox()">✕</button>
+    <img id="lbImg" src="" alt="">
+</div>
+
+<script>
+    /* ── NAVIGATION ── */
+    function showSection(id, btn, mobile) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+
+        if (mobile) {
+            document.querySelectorAll('.mobile-menu button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            // mirror active on desktop pill
+            const pills = document.querySelectorAll('#navPill button');
+            const idx = Array.from(document.querySelectorAll('.mobile-menu button')).indexOf(btn);
+            pills.forEach(p => p.classList.remove('active'));
+            if (pills[idx]) pills[idx].classList.add('active');
+            closeMobileMenu();
+        } else {
+            document.querySelectorAll('#navPill button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    }
+
+    /* ── MOBILE MENU ── */
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const btn = document.getElementById('hambBtn');
+        const open = menu.classList.toggle('open');
+        btn.textContent = open ? '✕' : '☰';
+    }
+
+    function closeMobileMenu() {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('hambBtn').textContent = '☰';
+    }
+
+    /* ── UBICACION / EMAIL ── */
+    function abrirUbicacion() {
+        window.open('https://maps.app.goo.gl/2JhRzgyvQ2m25e9d6', '_blank');
+        closeMobileMenu();
+    }
+
+    function abrirEmail() {
+        window.location.href = 'mailto:qualitytrainingsh.md@gmail.com?subject=Consulta desde Quality Training';
+    }
+
+    /* ── LIGHTBOX ── */
+    function cerrarLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Status tag based on day
+        const tag = document.getElementById('statusTag');
+        const day = new Date().getDay(); // 0=domingo, 6=sabado
+        if (day === 0) {
+            tag.textContent = 'Cerrado hoy';
+            tag.classList.add('closed');
+        } else {
+            tag.textContent = 'Abierto hoy';
         }
 
-        function toggleMenu() {
-            const menu = document.getElementById('menuItems');
-            const btn = document.getElementById('menuToggle');
-            menu.classList.toggle('show');
-            btn.classList.toggle('active');
-            btn.textContent = btn.classList.contains('active') ? '✕' : '☰';
-        }
-
-        function showSection(sectionId, element) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-            document.getElementById('menuItems').classList.remove('show');
-            document.getElementById('menuToggle').classList.remove('active');
-            document.getElementById('menuToggle').textContent = '☰';
-            
-            if (sectionId === 'galeria') {
-                setTimeout(initGallery, 100);
-            }
-        }
-
-        function abrirEmail() { 
-            window.location.href = "mailto:qualitytrainingsh.md@gmail.com?subject=Consulta desde Quality Training"; 
-        }
-        
-        // ===== FUNCIONES PARA LA GALERÍA =====
-        function abrirLightbox(imgSrc) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            lightboxImg.src = imgSrc;
-            lightbox.classList.add('active');
-        }
-
-        function cerrarLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            lightbox.classList.remove('active');
-        }
-
-        function initGallery() {
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach(item => {
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', () => {
                 const img = item.querySelector('img');
                 if (img) {
-                    item.removeEventListener('click', item._clickHandler);
-                    const handler = (e) => {
-                        e.stopPropagation();
-                        abrirLightbox(img.src);
-                    };
-                    item._clickHandler = handler;
-                    item.addEventListener('click', handler);
+                    document.getElementById('lbImg').src = img.src;
+                    document.getElementById('lightbox').classList.add('active');
                 }
             });
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            initGallery();
         });
-    </script>
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') cerrarLightbox();
+        });
+    });
+</script>
 </body>
 </html>
