@@ -128,9 +128,9 @@
             width: 42px; height: 42px;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 1.2rem;
-            align-items: center;
-            justify-content: center;
+            font-size: 1.3rem;
+            line-height: 42px;
+            text-align: center;
             transition: all 0.2s;
         }
 
@@ -666,7 +666,7 @@
         /* ─── RESPONSIVE ─── */
         @media (max-width: 640px) {
             .nav-pill { display: none; }
-            .hamburger-btn { display: flex; }
+            .hamburger-btn { display: block; }
 
             .hero { height: 380px; }
             .hero-title { font-size: 2.6rem; }
@@ -698,8 +698,8 @@
             <button onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view','_blank')">✨ Estética</button>
             <button onclick="showSection('soma', this)">👩‍⚕️ Soma</button>
             <button onclick="showSection('galeria', this)">📷 Galería</button>
-           <!-- <button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 ScriptsPR</button>
-        </div>-->
+           <!-- <button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 ScriptsPR</button>-->
+        </div>
 
         <button class="hamburger-btn" id="hambBtn" onclick="toggleMobileMenu()">☰</button>
     </div>
@@ -713,7 +713,7 @@
     <button onclick="window.open('https://www.canva.com/design/DAGzoaORiFg/1FvhAlGfSlmCrI3mOjV8Zg/view','_blank')">✨ &nbsp;Estética</button>
     <button onclick="showSection('soma', this, true)">👩‍⚕️ &nbsp;¿Quién es Soma?</button>
     <button onclick="showSection('galeria', this, true)">📷 &nbsp;Galería</button>
-    <!--<button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 &nbsp;ScriptsPR</button>-->
+   <!-- <button onclick="window.open('https://scriptspr.github.io/web-pc-services/web.html','_blank')">💻 &nbsp;ScriptsPR</button>-->
 </div>
 
 <!-- ─── MAIN ─── -->
